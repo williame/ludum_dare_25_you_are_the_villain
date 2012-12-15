@@ -70,6 +70,17 @@ function Asset(filename,art) {
 	if(!art) {
 		if(filename.indexOf(".g3d",filename.length-4) != -1)
 			loadFile("g3d",filename,function(art) { asset.art = art; });
+		else if(filename.indexOf(".png",filename.length-4) != -1)
+			loadFile("image",filename,function(art) {
+				asset.art = art;
+				// stuff we need to draw it in the asset manager
+				art.bounds = [[0,0,-1],[art.width,art.height,2]];
+				art.ready = true;
+				art.ctx = UIContext();
+				art.ctx.drawRect(art,[1,1,1,1],0,0,art.width,art.height,0,0,1,1);
+				art.ctx.finish();
+				art.draw = function(t,pMatrix,mvMatrix,nMatrix) { art.ctx.draw(pMatrix); }
+			});
 		else
 			fail("unsupported file extension: "+filename);
 	}
@@ -114,7 +125,7 @@ function removeAsset(asset) {
 		}
 }
 
-function reloadAllData() {
+function reloadAllAssets() {
 	assets = [];
 	assetManager.refresh();
 	loadFile("json","data/assets.json",function(assets) {
@@ -123,7 +134,7 @@ function reloadAllData() {
 	});
 }
 
-reloadAllData();
+reloadAllAssets();
 
 function uploadAsset() {
 	uploadAsset.pending = uploadAsset.pending || [];
@@ -141,6 +152,8 @@ function uploadAsset() {
 		console.log("uploading",filename);
 		if(filename.indexOf(".g3d",filename.length-4) != -1)
 			type = "g3d";
+		else if(filename.indexOf(".png",filename.length-4) != -1)
+			type = "image";
 		else {
 			alert("unsupported upload type:\n"+filename);
 			continue;
@@ -158,7 +171,7 @@ function uploadAsset() {
 			if(!uploadAsset.pending.length) {
 				console.log("assets now:",uploadAsset.assetFilenames);
 				setFile("json","data/assets.json",uploadAsset.assetFilenames);
-				reloadAllData();
+				reloadAllAssets();
 				assetManager.show(active);
 			}
 		};
@@ -175,7 +188,7 @@ function uploadAssets() {
 		form = new FormData();
 	for(var filename in dirty) {
 		var bytes = dirty[filename];
-		form.append(new Blob([bytes]));
+		form.append("files",new Blob([bytes]),filename.slice(filename.indexOf("/")+1));
 		numFiles++;
 	}
 	if(!numFiles) {
@@ -194,3 +207,6 @@ function uploadAssets() {
 if(document.getElementById("saveButton"))
 	document.getElementById("saveButton").onclick = uploadAssets;
 
+if(document.getElementById("upload") && window.location.href.indexOf("github.com/") == -1 && navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
+	document.getElementById("upload").style.display = "block";
+	

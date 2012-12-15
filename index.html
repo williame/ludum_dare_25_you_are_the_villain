@@ -219,10 +219,18 @@ function setFile(type,path,bytes) {
 	} else if(type == "json") {
 		obj = bytes;
 		bytes = JSON.stringify(bytes);
+	} else if(type == "image") {
+		var image = new Image();
+		image.onload = function() {
+			loadFile.loaded[key] = createTexture(null,null,image);
+		};
+		image.src = "data:image/png;base64,"+btoa(bytes);
 	} else
 		fail("unsupported type: "+type+", "+path);
 	getDirtyFiles()[key] = bytes;
-	loadFile.loaded[key] = obj;
+	if(obj)
+		loadFile.loaded[key] = obj;
+
 }
 
 function getDirtyFiles() {
@@ -378,7 +386,7 @@ window.requestAnimFrame =
 <noscript>
 Sorry, you don't have Javascript enabled :(
 </noscript>
-<div id="upload">
+<div id="upload" style="display:none;">
 	&nbsp;Add and update artwork interface:&nbsp;<input id="uploadFiles" type="file" name="files" size="40" multiple=""/>
 	<input id="uploadButton" type="button" value="upload!"/>
 	<input id="saveButton" type="button" value="save on server"/>

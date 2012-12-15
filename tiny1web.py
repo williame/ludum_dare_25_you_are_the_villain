@@ -74,12 +74,12 @@ class UploadHandler(BaseHandler):
         folder = os.path.normpath(folder)
         files = self.request.files["files"]
         filenames = [os.path.join(folder,upload["filename"]) for upload in files]
+        for filename in filenames:
+            self.check_path(filename)
         bodies = [upload["body"] for upload in files]
-        self.check_path(filename)
         # check out the repo to a temporary folder
         working_dir = tempfile.mkdtemp() if bare else home
         print "user",user,"uploading",",".join(filenames),"(%d bytes)"%sum(len(body) for body in bodies),"using",working_dir,"..."
-        return ####
         try:
             if bare:
                 os.chdir(working_dir)
