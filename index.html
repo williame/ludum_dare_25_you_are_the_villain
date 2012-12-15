@@ -226,7 +226,7 @@ function setFile(type,path,bytes) {
 		obj = bytes;
 	} else if(type == "json") {
 		obj = bytes;
-		bytes = JSON.stringify(bytes);
+		bytes = JSON.stringify(bytes,null,"\t");
 	} else if(type == "image") {
 		var image = new Image();
 		image.onload = function() {
