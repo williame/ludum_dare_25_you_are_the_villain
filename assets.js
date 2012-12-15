@@ -2,6 +2,7 @@ function AssetManager() {
 	var	title = UILabel("<active asset name>"),
 		prev = UIButton("prev",function() { mgr._prev(); }),
 		next = UIButton("next",function() { mgr._next(); }),
+		cancel = UIButton("cancel",function() { win.hide(); }),
 		ok = UIButton("OK",function() { mgr.ok(); }),
 		showNormals = UIButton("show normals",function() { showNormals.show = !showNormals.show; }),
 		autoNormals = UIButton("auto normals",function() {
@@ -12,17 +13,22 @@ function AssetManager() {
 		}),
 		active = UIComponent(),
 		win = UIWindow(true,UIPanel([
-				UIPanel([UILabel("asset:"),title]),
+				UIPanel([UIPanel([cancel]),UIPanel([UILabel("asset:"),title])]),
 				active,
-				UIPanel([UIPanel([prev,next,ok]),
-					UIPanel([showNormals,autoNormals])])
-				],
-				UILayoutRows)),
+				UIPanel([UIPanel([showNormals,autoNormals]),UIPanel([prev,next,ok])])
+			],UILayoutRows)),
 		mgr = {
 			show: function(idx) {
 				mgr.ok = function() { win.hide(); }
 				mgr.refresh(idx);
 				win.show();
+			},
+			pick: function(callback) {
+				mgr.show();
+				mgr.ok = function() {
+					win.hide();
+					callback(active.asset);
+				};
 			},
 			refresh: function(idx) {
 				var undefined;
@@ -71,6 +77,7 @@ function AssetManager() {
 		gl.disable(gl.SCISSOR_TEST);
 		gl.viewport(oldViewport[0],oldViewport[1],oldViewport[2],oldViewport[3]);
 	};
+	showNormals.show = false;
 	active.draw = function(ctx) { if(active.asset) ctx.inject(active.render); };
 	return mgr;
 }
@@ -86,7 +93,7 @@ function Asset(filename,art) {
 				art.bounds = [[0,0,-1],[art.width,art.height,2]];
 				art.ready = true;
 				art.ctx = UIContext();
-				art.ctx.drawRect(art,[1,1,1,1],0,0,art.width,art.height,0,0,1,1);
+				art.ctx.drawRect(art,[1,1,1,1],0,0,art.width,art.height,0,1,1,0);
 				art.ctx.finish();
 				art.draw = function(t,pMatrix,mvMatrix,nMatrix) { art.ctx.draw(pMatrix); }
 			});
@@ -216,6 +223,8 @@ function uploadAssets() {
 if(document.getElementById("saveButton"))
 	document.getElementById("saveButton").onclick = uploadAssets;
 
-if(document.getElementById("upload") && window.location.href.indexOf("github.com/") == -1 && navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
+if(document.getElementById("upload") && window.location.href.indexOf("github.com/") == -1 && navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
 	document.getElementById("upload").style.display = "block";
+	window.onresize();
+}
 	
