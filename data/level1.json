@@ -5,8 +5,8 @@
 		{
 			"scale": 1,
 			"asset": "data/fireplace.g3d",
-			"x": 154,
-			"y": 159.8
+			"x": 153,
+			"y": 158.8
 		},
 		{
 			"scale": 1,
@@ -61,6 +61,84 @@
 			"asset": "data/castle1_levelchange1.g3d",
 			"x": 1881,
 			"y": 156.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter6.g3d",
+			"x": 641,
+			"y": 292.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter5.g3d",
+			"x": 851,
+			"y": 294.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter4.g3d",
+			"x": 729,
+			"y": 294.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter3.g3d",
+			"x": 944,
+			"y": 295.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1start.g3d",
+			"x": 320,
+			"y": 149.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1start.g3d",
+			"x": -380,
+			"y": 149.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/pit.g3d",
+			"x": 400,
+			"y": 98.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/spikes.g3d",
+			"x": 400,
+			"y": 105.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/spikes.g3d",
+			"x": 446,
+			"y": 108.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/spikes.g3d",
+			"x": 493,
+			"y": 105.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/spikes_down.g3d",
+			"x": 318,
+			"y": 261.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_right.g3d",
+			"x": 991,
+			"y": 295.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_left.g3d",
+			"x": 607,
+			"y": 295.8
 		}
 	]
 }
