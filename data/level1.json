@@ -191,6 +191,18 @@
 			"asset": "data/props_pikesshield_lighter.g3d",
 			"x": 684,
 			"y": 293.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/wall_simple.g3d",
+			"x": 1451,
+			"y": 159.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1_levelchange1.g3d",
+			"x": 1881,
+			"y": 156.8
 		}
 	]
 }
