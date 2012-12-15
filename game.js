@@ -36,7 +36,8 @@ function Section(asset,x,y,scale) {
 				mat4_translation([section.x,section.y,0]),
 				mat4_multiply(mat4_scale(section.scale*winScale),
 					mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
-			saveLevel();
+			if(modding)
+				saveLevel();
 		},
 		toJSON: function() {
 			return {
@@ -80,7 +81,8 @@ function loadLevel(filename) {
 		ceiling = data.ceiling || [];
 		floor = data.floor || [];
 		sections = [];
-		modMenu.newLine = null;
+		modMenu.newLineStart = null;
+		modMenu.editLinePoint = null;
 		modMenu.active = null;
 		modMenu.linesCtx.clear();
 		modMenu.drawLines();
@@ -122,7 +124,9 @@ modMenu.setMode = function(mode) {
 	});
 	modMenu.dirty();
 	modMenu.active = null;
-	modMenu.newLine = null;
+	modMenu.newLineStart = null;
+	modMenu.editLinePoint = null;
+	modMenu.modeLinesArray = mode == "ceiling"? ceiling: mode == "floor"? floor: null;
 };
 modMenu.setMode("add");
 modMenu.linesCtx = UIContext();
@@ -154,50 +158,100 @@ function pickSection(x,y) {
 	return hit;
 }
 
+function pickPoint(array,x,y) {
+	var pt = [x,y], threshold = 5, best;
+	for(var line in array) {
+		line = array[line];
+		for(var i=0; i<2; i++)
+			if(float_equ(line[i][0],x,threshold) && float_equ(line[i][1],y,threshold))
+				if(!best || vec2_distance_sqrd(line[i],pt) < vec2_distance_sqrd(best,pt))
+					best = line[i];
+	}
+	return best;
+}
+
+function linesForPoint(array,pt) {
+	var lines = [];
+	for(var line in array) {
+		line = array[line];
+		if(line[0] === pt || line[1] === pt)
+			lines.push(line);
+	}
+	return lines;
+}
+
 function onContextMenu(evt,keys) {
 	if(modding) {
-		modMenu.newLine = null;
-		var	pin = winMousePos(evt),
-			hit = pickSection(pin[0],pin[1]);
-			modMenu.active = hit;
-		if(hit) {
-			var	menu = UIPanel([
-						UILabel(hit.asset.filename),
-						UIButton("bring forward",function() {
-							var idx = sections.indexOf(hit);
-							if(idx >= 0 && idx < sections.length-1) {
-								sections.splice(idx,1);
-								sections.splice(idx+1,0,hit);
-							}
-							saveLevel();
-						}),
-						UIButton("send backward",function() {
-							var idx = sections.indexOf(hit);
-							if(idx > 0) {
-								sections.splice(idx,1);
-								sections.splice(idx-1,0,hit);
-							}
-							saveLevel();
-						}),
-						UIButton("remove",function() {
-							var idx = sections.indexOf(hit);
-							if(idx >= 0)
-								sections.splice(idx,1);
-							saveLevel();
-							contextMenu.dismiss();
-						}),
-					],UILayoutRows),
-				contextMenu = UIWindow(true,menu);
-			contextMenu.layout();
-			menu.setPosVisible([(evt.clientX-canvas.offsetLeft)-menu.width(),(evt.clientY-canvas.offsetTop)-menu.height()]);
-			contextMenu.show();
+		modMenu.newLineStart = null;
+		modMenu.editLinePoint = null;
+		var pin = winMousePos(evt);
+		if(modMenu.mode == "add") {
+			var hit = pickSection(pin[0],pin[1]);
+				modMenu.active = hit;
+			if(hit) {
+				var	menu = UIPanel([
+							UILabel(hit.asset.filename),
+							UIButton("bring forward",function() {
+								var idx = sections.indexOf(hit);
+								if(idx >= 0 && idx < sections.length-1) {
+									sections.splice(idx,1);
+									sections.splice(idx+1,0,hit);
+								}
+								saveLevel();
+							}),
+							UIButton("send backward",function() {
+								var idx = sections.indexOf(hit);
+								if(idx > 0) {
+									sections.splice(idx,1);
+									sections.splice(idx-1,0,hit);
+								}
+								saveLevel();
+							}),
+							UIButton("remove",function() {
+								var idx = sections.indexOf(hit);
+								if(idx >= 0)
+									sections.splice(idx,1);
+								saveLevel();
+								contextMenu.dismiss();
+							}),
+						],UILayoutRows),
+					contextMenu = UIWindow(true,menu);
+				contextMenu.layout();
+				menu.setPosVisible([(evt.clientX-canvas.offsetLeft)-menu.width(),(evt.clientY-canvas.offsetTop)-menu.height()]);
+				contextMenu.show();
+			}
+		} else if(modMenu.modeLinesArray) {
+			var lines = linesForPoint(modMenu.modeLinesArray,pickPoint(modMenu.modeLinesArray,pin[0],pin[1]));
+			if(lines.length > 0) {
+				var	menu = UIPanel([
+							UILabel(""+lines.length+" line(s)"),
+							UIButton("remove",function() {
+								for(var line in lines) {
+									var idx = modMenu.modeLinesArray.indexOf(lines[line]);
+									if(idx >= 0)
+										modMenu.modeLinesArray.splice(idx,1);
+								}
+								modMenu.linesCtx.clear();
+								modMenu.drawLines();
+								modMenu.linesCtx.finish();
+								saveLevel();
+								contextMenu.dismiss();
+							}),
+						],UILayoutRows),
+					contextMenu = UIWindow(true,menu);
+				contextMenu.layout();
+				menu.setPosVisible([(evt.clientX-canvas.offsetLeft)-menu.width(),(evt.clientY-canvas.offsetTop)-menu.height()]);
+				contextMenu.show();
+			} else
+				console.log("miss!");
 		}
 	}
 }
 
 function onMouseDown(evt,keys) {
 	modMenu.pin = null;
-	modMenu.newLine = null;
+	modMenu.newLineStart = null;
+	modMenu.editLinePoint = null;
 	if(modding) {
 		console.log("mode",modMenu.mode);
 		var pin = winMousePos(evt);
@@ -206,8 +260,12 @@ function onMouseDown(evt,keys) {
 			modMenu.active= hit;
 			if(hit)
 				modMenu.pin = [pin[0]-hit.x,pin[1]-hit.y];
-		} else if(modMenu.mode == "floor" || modMenu.mode == "ceiling") {
-			modMenu.newLine = [pin,pin];
+		} else if(modMenu.modeLinesArray) {
+			pin = pickPoint(modMenu.modeLinesArray,pin[0],pin[1]) || pin;
+			if(linesForPoint(modMenu.modeLinesArray,pin).length > 1)
+				modMenu.editLinePoint = pin;
+			else
+				modMenu.newLineStart = pin;
 		}
 	}
 }
@@ -223,13 +281,22 @@ function onMouseMove(evt,keys) {
 					(pos[0]-modMenu.pin[0]),
 					(pos[1]-modMenu.pin[1]));
 			}
-		} else if(modMenu.newLine && (modMenu.mode == "floor" || modMenu.mode == "ceiling")) {
-			modMenu.newLine[1] = winMousePos(evt);
+		} else if(modMenu.newLineStart && modMenu.modeLinesArray) {
+			var pin = winMousePos(evt), newPos = pin;
+			pin = pickPoint(modMenu.modeLinesArray,pin[0],pin[1]) || pin;
 			modMenu.linesCtx.clear();
 			modMenu.drawLines();
 			var colour = modMenu.mode == "floor"? [0,1,0,1]: [0,0,1,1];
-			modMenu.linesCtx.drawLine(colour,modMenu.newLine[0][0],modMenu.newLine[0][1],modMenu.newLine[1][0],modMenu.newLine[1][1]);
+			modMenu.linesCtx.drawLine(colour,modMenu.newLineStart[0],modMenu.newLineStart[1],pin[0],pin[1]);
 			modMenu.linesCtx.finish();
+		} else if(modMenu.editLinePoint && modMenu.modeLinesArray) {
+			var pin = winMousePos(evt);
+			modMenu.editLinePoint[0] = pin[0];
+			modMenu.editLinePoint[1] = pin[1];
+			modMenu.linesCtx.clear();
+			modMenu.drawLines();
+			modMenu.linesCtx.finish();
+			saveLevel();
 		}
 	}
 }
@@ -237,12 +304,15 @@ function onMouseMove(evt,keys) {
 function onMouseUp(evt,keys) {
 	modMenu.pin = null;
 	if(modding) {
-		if(modMenu.newLine && (modMenu.mode == "floor" || modMenu.mode == "ceiling")) {
-			modMenu.newLine[1] = winMousePos(evt);
-			if(!float_zero(vec2_distance_sqrd(modMenu.newLine[0],modMenu.newLine[1])))
-				(modMenu.mode == "floor"? floor: ceiling).push(modMenu.newLine);
+		if(modMenu.newLineStart && modMenu.modeLinesArray) {
+			var pin = winMousePos(evt);
+			pin = pickPoint(modMenu.modeLinesArray,pin[0],pin[1]) || pin;
+			if(!float_zero(vec2_distance_sqrd(modMenu.newLineStart,pin)))
+				modMenu.modeLinesArray.push([modMenu.newLineStart,pin]);
 			saveLevel();
 		}
+		modMenu.newLineStart = null;
+		modMenu.editLinePoint = null;
 	}
 }
 

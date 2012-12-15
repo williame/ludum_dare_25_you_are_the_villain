@@ -645,8 +645,8 @@ function plane_point_distance(pos,normal,point) {
 	return vec3_dot(normal,vec3_sub(point,pos));
 }
 
-function float_equ(a,b) {
-	return Math.abs(a-b) < 0.00000001;
+function float_equ(a,b,epsilon) {
+	return Math.abs(a-b) < (epsilon || 0.00000001);
 }
 
 function float_zero(f) {
