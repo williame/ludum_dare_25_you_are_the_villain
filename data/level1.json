@@ -147,8 +147,8 @@
 		{
 			"scale": 1,
 			"asset": "data/fireplace.g3d",
-			"x": 157,
-			"y": 160.8
+			"x": 154,
+			"y": 159.8
 		},
 		{
 			"scale": 1,
@@ -164,9 +164,33 @@
 		},
 		{
 			"scale": 1,
-			"asset": "data/props_pikesshield.g3d",
-			"x": 691,
+			"asset": "data/props_pikesshield_lighter.g3d",
+			"x": 896,
 			"y": 294.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_flagwave.g3d",
+			"x": 934,
+			"y": 431.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/bouncing_bomb.g3d",
+			"x": 1069,
+			"y": 159.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/rolling_bomb.g3d",
+			"x": 558,
+			"y": 159.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter.g3d",
+			"x": 684,
+			"y": 293.8
 		}
 	]
 }
