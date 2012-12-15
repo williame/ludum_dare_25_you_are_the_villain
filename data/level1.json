@@ -18,6 +18,12 @@
 			"asset": "data/fireplace.g3d",
 			"x": 248.4,
 			"y": 137.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1_levelchange1.g3d",
+			"x": 1540.4,
+			"y": 136.8
 		}
 	]
 }
