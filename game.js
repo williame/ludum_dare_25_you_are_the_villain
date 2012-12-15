@@ -162,10 +162,11 @@ function onContextMenu(evt,keys) {
 						UILabel(hit.asset.filename),
 						UIButton("bring forward",function() {
 							var idx = sections.indexOf(hit);
-							if(idx < sections.length-1) {
+							if(idx >= 0 && idx < sections.length-1) {
 								sections.splice(idx,1);
 								sections.splice(idx+1,0,hit);
 							}
+							saveLevel();
 						}),
 						UIButton("send backward",function() {
 							var idx = sections.indexOf(hit);
@@ -173,6 +174,14 @@ function onContextMenu(evt,keys) {
 								sections.splice(idx,1);
 								sections.splice(idx-1,0,hit);
 							}
+							saveLevel();
+						}),
+						UIButton("remove",function() {
+							var idx = sections.indexOf(hit);
+							if(idx >= 0)
+								sections.splice(idx,1);
+							saveLevel();
+							contextMenu.dismiss();
 						}),
 					],UILayoutRows),
 				contextMenu = UIWindow(true,menu);
