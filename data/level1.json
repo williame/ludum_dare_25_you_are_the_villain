@@ -168,7 +168,7 @@
 			"scale": 1,
 			"asset": "data/fireplace.g3d",
 			"x": 153,
-			"y": 158.8
+			"y": 157.8
 		},
 		{
 			"scale": 1,
@@ -313,6 +313,18 @@
 			"asset": "data/guard_stand.g3d",
 			"x": 321,
 			"y": 157.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1start.g3d",
+			"x": 320,
+			"y": 149.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1start.g3d",
+			"x": 320,
+			"y": 149.8
 		}
 	]
 }
