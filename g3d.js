@@ -115,7 +115,7 @@ function G3D(filename,readyCallback) {
 		if(g3d.ready && readyCallback)
 			setTimeout(readyCallback,0);
 	};
-	g3d.draw = function(t,pMatrix,mvMatrix,nMatrix,invert,colour) {
+	g3d.draw = function(t,pMatrix,mvMatrix,nMatrix,normals,invert,colour) {
 		if(!g3d.ready) return;
 		if(!G3D.program) {
 			G3D.program = createProgram(
@@ -177,7 +177,7 @@ function G3D(filename,readyCallback) {
 		gl.frontFace(invert?gl.CW:gl.CCW);
 		gl.uniform4fv(G3D.program.colour,colour||[1,1,1,1]);
 		t = Math.max(0,Math.min(t,1));
-		var showNormals = g3d.showNormals || false;
+		var showNormals = normals || g3d.showNormals || false;
 		for(var i=0; i<g3d.meshes.length; i++) {
 			var mesh = g3d.meshes[i];
 			if(!invert || !mesh.twoSided) {
@@ -210,7 +210,7 @@ function G3D(filename,readyCallback) {
 			gl.uniform4fv(G3D.programNormals.colour,[1,1,1,1]);
 			for(var i=0; i<g3d.meshes.length; i++) {
 				var mesh = g3d.meshes[i];
-				if(g3d.showNormals || mesh.showNormals)
+				if(normals || g3d.showNormals || mesh.showNormals)
 					mesh.drawNormals(G3D.programNormals,t);
 			}
 		}

@@ -3,11 +3,17 @@ function AssetManager() {
 		prev = UIButton("prev",function() { mgr._prev(); }),
 		next = UIButton("next",function() { mgr._next(); }),
 		ok = UIButton("OK",function() { mgr.ok(); }),
+		showNormals = UIButton("show normals",function() { showNormals.show = !showNormals.show; }),
+		autoNormals = UIButton("auto normals",function() {
+			if(active.asset && active.asset.art && active.asset.art.autoNormals)
+				active.asset.art.autoNormals(); }),
 		active = UIComponent(),
 		win = UIWindow(true,UIPanel([
 				UIPanel([UILabel("asset:"),title]),
 				active,
-				UIPanel([prev,next,ok])],
+				UIPanel([UIPanel([prev,next,ok]),
+					UIPanel([showNormals,autoNormals])])
+				],
 				UILayoutRows)),
 		mgr = {
 			show: function(idx) {
@@ -58,7 +64,7 @@ function AssetManager() {
 				0,size[2]),
 			mvMatrix = mat4_translation([0,0,-bounds[1][2]]),
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
-		active.asset.art.draw((now()-active.startTime)%1,pMatrix,mvMatrix,nMatrix);
+		active.asset.art.draw((now()-active.startTime)%1,pMatrix,mvMatrix,nMatrix,showNormals.show);
 		gl.disable(gl.SCISSOR_TEST);
 		gl.viewport(oldViewport[0],oldViewport[1],oldViewport[2],oldViewport[3]);
 	};
