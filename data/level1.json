@@ -383,6 +383,48 @@
 			"asset": "data/spikes.g3d",
 			"x": 1154,
 			"y": 107.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1b.g3d",
+			"x": 2812,
+			"y": 333.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/wall_simple.g3d",
+			"x": 3301,
+			"y": 334.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/pit_short.g3d",
+			"x": 2851,
+			"y": 96.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/spikes.g3d",
+			"x": 2856,
+			"y": 103.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield_lighter6.g3d",
+			"x": 2699,
+			"y": 204.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/wall_simple.g3d",
+			"x": 2811,
+			"y": 157.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/crown1.g3d",
+			"x": 2248,
+			"y": 585.8
 		}
 	]
 }
