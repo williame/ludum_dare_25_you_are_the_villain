@@ -161,6 +161,12 @@
 			"asset": "data/sgt1_stand.g3d",
 			"x": 879,
 			"y": 161.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/props_pikesshield.g3d",
+			"x": 691,
+			"y": 294.8
 		}
 	]
 }

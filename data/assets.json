@@ -28,5 +28,7 @@
 	"data/wall_simple.g3d",
 	"data/props_pikesshield_right.g3d",
 	"data/props_pikesshield_left.g3d",
-	"data/props_pikesshield.g3d"
+	"data/props_pikesshield.g3d",
+	"data/props_flagwave.g3d",
+	"data/props_pikesshield_lighter.g3d"
 ]
