@@ -7,19 +7,19 @@ from tornado.options import define, options, parse_command_line
 
 define("port",default=8888,type=int)
 define("branch",default="master")
-define("enable_upload",default=False,type=bool)
+define("enable_upload",default=None,multiple=True,type=str)
 define("access",type=str,multiple=True)
 
 class BaseHandler(tornado.web.RequestHandler):
-    def check_auth(self):
-        if not options.access:
-            return
+    def check_auth(self,access=None):
+        if access is None: access = options.access
+        if not access: return
         # check authenticated
         auth_header = self.request.headers.get("Authorization") or ""
         if not auth_header.startswith("Basic "):
             raise tornado.web.HTTPError(401)
         user = base64.decodestring(auth_header[6:])
-        if user not in options.access:
+        if user not in access:
             raise tornado.web.HTTPError(401)
         return user[:user.find(":")]
     def check_path(self,path):
@@ -49,8 +49,12 @@ class MainHandler(BaseHandler):
             except subprocess.CalledProcessError:
                 raise tornado.web.HTTPError(404)
         # and set its content-type
-        self.set_header("Content-Type",subprocess.Popen(["file","-i","-b","-"],stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE, stderr=subprocess.STDOUT).communicate(input=body)[0].split(";")[0])
+        if path.endswith(".js"):
+            content_type = "text/javascript"
+        else:
+            content_type = subprocess.Popen(["file","-i","-b","-"],stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE, stderr=subprocess.STDOUT).communicate(input=body)[0].split(";")[0]
+        self.set_header("Content-Type",content_type)
         # serve it
         self.write(body)
         
@@ -65,7 +69,7 @@ class UploadHandler(BaseHandler):
     def post(self):
         if not options.enable_upload:
             raise tornado.web.HTTPError(403,"uploads not allowed")
-        user = self.check_auth()
+        user = self.check_auth(options.enable_upload)
         # get the uploaded file
         message = self.get_argument("message")
         folder = self.get_argument("folder")
@@ -107,8 +111,6 @@ if __name__ == "__main__":
     home = os.getcwd()
     bare = not os.path.isdir(".git")
     parse_command_line()
-    if options.enable_upload and not options.access:
-        sys.exit("cannot enable upload without access control")
     zipballFilename = r"/%s.zip"%(os.path.splitext(os.path.split(home)[1])[0])
     application = tornado.web.Application((
         (r"/upload",UploadHandler),

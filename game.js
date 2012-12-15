@@ -35,8 +35,24 @@ function Section(asset) {
 }
 
 var modMenu = UIWindow(false,UIPanel([
-		UIButton("add",function() { assetManager.pick(function(asset) { modMenu.active = Section(asset); }); }),
+		UIButton("add",function() {
+			modMenu.setMode("add");
+			assetManager.pick(function(asset) {
+				modMenu.active = Section(asset);
+			});
+		},"add"),
+		UIButton("ceiling",function() { modMenu.setMode("ceiling"); },"ceiling"),
+		UIButton("floor",function() { modMenu.setMode("floor"); },"floor"),
 	],UILayoutRows));
+modMenu.setMode = function(mode) {
+	modMenu.mode = mode;
+	modMenu.walk(function(ctrl) {
+		if(ctrl.tag)
+			ctrl.bgColour = ctrl.tag == mode? [1,0,0,1]: UIDefaults.btn.bgColour;
+		return true;
+	});
+	modMenu.dirty();
+};
 
 function pickSection(x,y) {
 	var hit = null;
