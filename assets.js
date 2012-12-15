@@ -34,6 +34,10 @@ function AssetManager() {
 				var undefined;
 				if(idx !== undefined)
 					mgr.active = idx;
+				if(mgr.active < 0)
+					mgr.active = assets.length-1;
+				else if(mgr.active >= assets.length)
+					mgr.active = 0;
 				mgr.active = Math.max(0,Math.min(assets.length-1,mgr.active));
 				active.asset = assets[mgr.active];
 				title.text = active.asset?

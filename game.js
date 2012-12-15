@@ -18,12 +18,15 @@ function Section(asset,x,y,scale) {
 		section = {
 		scale: scale||1,
 		asset: asset,
+		ready: false,
 		setPos: function(x,y) {
 			section.x = x;
 			section.y = y;
-			if(!asset.art.ready) {
+			section.ready = asset.art.ready;
+			if(!section.ready) {
 				asset.art.readyCallbacks.push(function() {
 					section.setPos(x,y);
+					section.ready = true;
 				});
 				return;
 			}
@@ -271,7 +274,7 @@ function render() {
 		mvMatrix, nMatrix, colour;
 	for(var section in sections) {
 		section = sections[section];
-		if(!section.asset.art.ready)
+		if(!section.ready)
 			continue;
 		mvMatrix = section.mvMatrix;
 		nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
