@@ -1,5 +1,23 @@
 {
 	"ceiling": [],
-	"floor": [],
-	"sections": []
+	"floor": [
+		[
+			[
+				245,
+				141
+			],
+			[
+				1551,
+				143
+			]
+		]
+	],
+	"sections": [
+		{
+			"scale": 1,
+			"asset": "data/fireplace.g3d",
+			"x": 248.4,
+			"y": 137.8
+		}
+	]
 }
