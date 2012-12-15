@@ -5,8 +5,11 @@ function AssetManager() {
 		ok = UIButton("OK",function() { mgr.ok(); }),
 		showNormals = UIButton("show normals",function() { showNormals.show = !showNormals.show; }),
 		autoNormals = UIButton("auto normals",function() {
-			if(active.asset && active.asset.art && active.asset.art.autoNormals)
-				active.asset.art.autoNormals(); }),
+			if(active.asset && active.asset.art && active.asset.art.autoNormals) {
+				active.asset.art.autoNormals();
+				alert("later, Will\'ll get around to saving this back to the server");
+			}
+		}),
 		active = UIComponent(),
 		win = UIWindow(true,UIPanel([
 				UIPanel([UILabel("asset:"),title]),
