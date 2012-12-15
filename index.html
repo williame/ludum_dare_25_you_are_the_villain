@@ -9,26 +9,6 @@ html, body { border:0px;margin:0px;padding:0px; color:white; background-color:bl
 
 var gl, canvas, splash, audio, messages, keys = {}, perf;
 
-function game() { // you replace this!
-	game.g3d_test = new G3D("data/test.g3d");
-	var win = UIWindow(true,UIPanel([
-		UIPanel([UILabel("this is a test"),
-			UILabel("this too"),
-			UIButton("click me!",function(evt) { win.hide(); }),]),
-			UIPanel([UILabel("this is a test"),UILabel("this too")]),
-	],UILayoutRows));
-	win.show();
-}
-
-function render() { // you replace this!
-	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-	var zoom = 2,
-		pMatrix = createPerspective(60.0,canvas.offsetWidth/canvas.offsetHeight,0.1,zoom*2),
-		mvMatrix = createLookAt([zoom,zoom*0.8,zoom],[0,0,0],[0,1,0]),
-		nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
-	game.g3d_test.draw((now()/1000)%1,pMatrix,mvMatrix,nMatrix);
-}
-
 function init() {
 	canvas = document.getElementById("game-canvas");
 	try {
@@ -89,8 +69,8 @@ function init() {
 		onContextMenu = function(evt) {
 			evt.cancelBubble = true;
 			evt.preventDefault();
-			if(!baseMouseEvent(evt))
-				return;
+			if(evt.target !== canvas)
+				return false;
 			if(!onContextMenuUI(evt,keys) && window.onContextMenu)
 				window.onContextMenu(evt,keys);
 			schedule.run();
@@ -127,7 +107,10 @@ function init() {
 			window.requestAnimFrame(loop);
 			perf = new Perf();
 			perf.window().show();
-			game();
+			// phase2 loading
+			loaded = Waiter(function() { game(); });
+			loadFile("javascript","game.js",loaded());
+			loadFile("javascript","assets.js",loaded());
 		});
 	loadFile("javascript","glutil.js",loaded());
 	loadFile("javascript","ui.js",loaded());
@@ -222,22 +205,55 @@ function Waiter(readyCallback) {
 	};
 	waiter.outstanding = [];
 	return waiter;
-}         
+}
+
+function setFile(type,path,bytes) {
+	loadFile.loaded = loadFile.loaded || [];
+	var	key = ""+type+":"+path,
+		obj;
+	if(type == "g3d") {
+		setFile("ArrayBuffer",path,bytes);
+		obj = G3D(path);
+	} else if(type == "ArrayBuffer") {
+		obj = bytes;
+	} else if(type == "json") {
+		obj = bytes;
+		bytes = JSON.stringify(bytes);
+	} else
+		fail("unsupported type: "+type+", "+path);
+	getDirtyFiles()[key] = bytes;
+	loadFile.loaded[key] = obj;
+}
+
+function getDirtyFiles() {
+	getDirtyFiles.bytes = getDirtyFiles.bytes || [];
+	return getDirtyFiles.bytes;
+}
+
+function clearCachedFiles() {
+	getDirtyFiles.bytes = [];
+	assert(!loadFile.loading || !loadFile.loading.length);
+	loadFile.loading = [];
+	assert(!loadFile.loadingWait || !loadFile.loading.loadingWait);
+	loadFile.loadingWait = [];
+	loadFile.loaded = [];
+}
 
 function loadFile(type,path,callback) {
 	loadFile.loading = loadFile.loading || [];
 	loadFile.loadingWait = loadFile.loadingWait || null;
 	loadFile.loaded = loadFile.loaded || [];
 	console.log("loading",type,path,"...");
-	if(path in loadFile.loaded) {
-		setTimeout(function() { callback(loadFile.loaded[path]); },0);
+	var key = ""+type+":"+path;
+	if(key in loadFile.loaded) {
+		setTimeout(function() { callback(loadFile.loaded[key]); },0);
 		return;
 	}
-	if(path in loadFile.loading) {
-		loadFile.loading[path].push(callback);
+	if(key in loadFile.loading) {
+		loadFile.loading[key].push(callback);
 		return;
 	}
-	loadFile.loading[path] = [callback];
+	loadFile.loading[key] = [callback];
 	if(loadFile.loadingWait) clearTimeout(loadFile.loadingWait);
 	loadFile.loadingWait = setTimeout(function() {
 		alert("it's taking a long time to load all the files!  Maybe something is wrong?");
@@ -245,9 +261,9 @@ function loadFile(type,path,callback) {
 		},3000);
 	var done = function(arg) {
 		console.log("loaded",type,path);
-		loadFile.loaded[path] = arg;
-		var callbacks = loadFile.loading[path];
-		delete loadFile.loading[path];
+		loadFile.loaded[key] = loadFile.loaded[key] || arg; // could have been set by setFile() in meantime
+		var callbacks = loadFile.loading[key];
+		delete loadFile.loading[key];
 		if(!loadFile.loading.length) clearTimeout(loadFile.loadingWait);
 		for(callback in callbacks)
 			if(callbacks[callback])
@@ -271,6 +287,8 @@ function loadFile(type,path,callback) {
 			done(createTexture(null,null,image));
 		};
 		image.src = path;
+	} else if(type == "g3d" && window.G3D) {
+		setTimeout(function() { done(G3D(path)); },0);
 	} else if(type == "xml") {
 		var doc = new XMLHttpRequest();
 		doc.open("GET",path,true);
@@ -279,6 +297,15 @@ function loadFile(type,path,callback) {
 				done(doc.responseXML);
 		};
 		doc.send();
+	} else if(type == "json") {
+		var doc = new XMLHttpRequest();
+		doc.open("GET",path,true);
+		doc.overrideMimeType("application/json");
+		doc.onreadystatechange = function() {
+			if (doc.readyState==4 && (!doc.status || doc.status==200))
+				done(JSON.parse(doc.response));
+		};
+		doc.send();		
 	} else if(type == "ArrayBuffer") {
 		var doc = new XMLHttpRequest();
 		doc.open("GET",path,true);
@@ -352,12 +379,9 @@ window.requestAnimFrame =
 Sorry, you don't have Javascript enabled :(
 </noscript>
 <div id="upload">
-	<form action="/upload" enctype="multipart/form-data" method="post">
-		&nbsp;file&nbsp;<input type="file" name="file" size="40"/>
-		&nbsp;path&nbsp;<input type="text" name="folder" size="10" value="/"/>
-		&nbsp;message&nbsp;<input type="text" name="message" size="10" value="(edited online)"/>
-		<input type="submit" value="upload!"/>
-	</form>
+	&nbsp;Add and update artwork interface:&nbsp;<input id="uploadFiles" type="file" name="files" size="40" multiple=""/>
+	<input id="uploadButton" type="button" value="upload!"/>
+	<input id="saveButton" type="button" value="save on server"/>
 </div>
 <canvas id="game-canvas">
 Sorry, you don't have webGL enabled :(

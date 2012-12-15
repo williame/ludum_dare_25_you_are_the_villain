@@ -68,31 +68,35 @@ class UploadHandler(BaseHandler):
         user = self.check_auth()
         # get the uploaded file
         message = self.get_argument("message")
-        upload = self.request.files["file"][0]
-        body = upload["body"]
         folder = self.get_argument("folder")
         if folder.startswith("/"):
             folder = folder[1:]
         folder = os.path.normpath(folder)
-        filename = os.path.join(folder,upload["filename"])
+        files = self.request.files["files"]
+        filenames = [os.path.join(folder,upload["filename"]) for upload in files]
+        bodies = [upload["body"] for upload in files]
         self.check_path(filename)
         # check out the repo to a temporary folder
         working_dir = tempfile.mkdtemp() if bare else home
-        print "user",user,"uploading",filename,"(%d bytes)"%len(body),"using",working_dir,"..."
+        print "user",user,"uploading",",".join(filenames),"(%d bytes)"%sum(len(body) for body in bodies),"using",working_dir,"..."
+        return ####
         try:
             if bare:
                 os.chdir(working_dir)
                 subprocess.check_call(["git","clone",home,working_dir])
                 subprocess.check_call(["git","checkout",options.branch])
-            with open(filename,"w") as f:
-                f.write(body)
-            subprocess.check_call(["git","add",filename,"-v"])
-            if subprocess.call(["git","diff","--quiet",options.branch,filename]):
+            dirty = False
+            for filename,body in zip(filenames,bodies):
+                with open(filename,"w") as f:
+                    f.write(body)
+                subprocess.check_call(["git","add",filename,"-v"])
+                dirty = dirty or subprocess.call(["git","diff","--quiet",options.branch,filename])
+            if dirty:
                 subprocess.check_call(["git","commit","-m",message,"--author=%s <none@none>"%user])
                 if bare:
                     subprocess.check_call(["git","push","origin",options.branch])
             else:
-                print "(change to",filename," was no-op)"
+                print "(change to",",".join(filenames)," was no-op)"
         finally:
             if bare:
                 print "cleaning up",working_dir,"..."
@@ -102,7 +106,6 @@ class UploadHandler(BaseHandler):
 if __name__ == "__main__":
     home = os.getcwd()
     bare = not os.path.isdir(".git")
-    print home, bare
     parse_command_line()
     if options.enable_upload and not options.access:
         sys.exit("cannot enable upload without access control")

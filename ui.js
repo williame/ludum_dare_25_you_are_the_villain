@@ -141,6 +141,16 @@ function UIContext() {
 		}
 		ctx.data = ctx.data.length; // better to make it crash
 	};
+	ctx.inject = function(cb) {
+		if(ctx.buffers.length)
+			ctx.buffers[ctx.buffers.length-1].stop = ctx.data.length;
+		ctx.buffers.push({
+			injector: cb,
+			texture: "invalid",
+			start: ctx.data.length,
+			stop: -1,
+		});
+	};
 	ctx.set = function(texture,colour) {
 		if(!ctx.buffers.length || 
 			ctx.buffers[ctx.buffers.length-1].texture != texture ||
@@ -232,7 +242,7 @@ function UIContext() {
 		ctx.drawRect(ctx.blank,colour,x2+margin-width,y1,x2+margin,y2,0,0,1,1);
 		ctx.data = ctx.data.concat(pts);
 	};
-	ctx.draw = function(mvp) {
+	ctx._initShader = function(mvp) {
 		gl.useProgram(UIContext.program);
 		gl.disable(gl.CULL_FACE);
 		gl.disable(gl.DEPTH_TEST);
@@ -243,22 +253,40 @@ function UIContext() {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.enableVertexAttribArray(UIContext.program.vertex);
 		gl.enableVertexAttribArray(UIContext.program.texcoord);
-		for(var buffer in ctx.buffers) {
-			buffer = ctx.buffers[buffer];
-			var len = (buffer.stop >= 0? buffer.stop: ctx.data)-buffer.start;
-			if(!len) continue;
-			gl.bindTexture(gl.TEXTURE_2D,buffer.texture);
-			gl.uniform4fv(UIContext.program.colour,buffer.colour);
-			gl.vertexAttribPointer(UIContext.program.vertex,2,gl.FLOAT,false,16,0);
-			gl.vertexAttribPointer(UIContext.program.texcoord,2,gl.FLOAT,false,16,8);
-			gl.drawArrays(gl.TRIANGLES,buffer.start/4,len/4);
-		}
+	};
+	ctx._deinitShader = function() {
 		gl.disableVertexAttribArray(UIContext.program.vertex);
 		gl.disableVertexAttribArray(UIContext.program.texcoord);
 		gl.bindTexture(gl.TEXTURE_2D,null);
 		gl.bindBuffer(gl.ARRAY_BUFFER,null);
 		gl.enable(gl.DEPTH_TEST);
 		gl.enable(gl.CULL_FACE);
+		gl.useProgram(null);
+	};
+	ctx.draw = function(mvp) {
+		var inited = false;
+		for(var buffer in ctx.buffers) {
+			buffer = ctx.buffers[buffer];
+			if(buffer.injector) {
+				ctx._deinitShader();
+				inited = false;
+				buffer.injector(ctx);
+				continue;
+			}
+			var len = (buffer.stop >= 0? buffer.stop: ctx.data)-buffer.start;
+			if(!len) continue;
+			if(!inited) {
+				ctx._initShader(mvp);
+				inited = true;
+			}
+			gl.bindTexture(gl.TEXTURE_2D,buffer.texture);
+			gl.uniform4fv(UIContext.program.colour,buffer.colour);
+			gl.vertexAttribPointer(UIContext.program.vertex,2,gl.FLOAT,false,16,0);
+			gl.vertexAttribPointer(UIContext.program.texcoord,2,gl.FLOAT,false,16,8);
+			gl.drawArrays(gl.TRIANGLES,buffer.start/4,len/4);
+		}
+		if(inited)
+			ctx._deinitShader();
 	}
 	return ctx;
 };
