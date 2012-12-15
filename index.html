@@ -10,6 +10,7 @@ html, body { border:0px;margin:0px;padding:0px; color:white; background-color:bl
 var gl, canvas, splash, audio, messages, keys = {}, perf;
 
 function init() {
+	
 	canvas = document.getElementById("game-canvas");
 	try {
 		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
@@ -170,6 +171,10 @@ function extend(a,b) {
 	}
 	return a;
 };
+
+function endsWith(str,suffix) {
+    return str.indexOf(suffix,str.length-suffix.length) !== -1;
+}
 
 function now() { return (new Date()).getTime(); }
 

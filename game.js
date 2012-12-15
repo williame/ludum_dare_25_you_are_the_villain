@@ -7,8 +7,8 @@ var	winOrigin = [0,0],
 	modding = false;
 	
 function winMousePos(evt) {
-	var pos = [evt.clientX-canvas.offsetLeft-winOrigin[0],
-		canvas.height+canvas.offsetTop-evt.clientY-winOrigin[1]];
+	var pos = [(evt.clientX-canvas.offsetLeft)+winOrigin[0],
+		((canvas.height+canvas.offsetTop)-evt.clientY)+winOrigin[1]];
 	return pos;
 }
 
@@ -27,6 +27,8 @@ function Section(asset) {
 					mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
 		},
 	};
+	if(endsWith(asset.filename,".png"))
+		section.scale = 1/winScale; // back to 1:1 scale
 	section.setPos(winOrigin[0]+canvas.width*0.2,winOrigin[1]+canvas.height*0.2);
 	sections.push(section);
 	return section;
@@ -36,12 +38,63 @@ var modMenu = UIWindow(false,UIPanel([
 		UIButton("add",function() { assetManager.pick(function(asset) { modMenu.active = Section(asset); }); }),
 	],UILayoutRows));
 
+function pickSection(x,y) {
+	var hit = null;
+	for(var section in sections) {
+		section = sections[section];
+		if(modMenu.active == section || !hit) {
+			var	ray,
+				bounds = section.asset.art.bounds;
+			ray = [x-section.x,y-section.y,0];
+			ray = vec3_scale(ray,1/(winScale*section.scale));
+			ray = [ray[0]+bounds[0][0],ray[1]+bounds[0][1],-100];
+			if(section.asset.art.zAt(ray,[0,0,100],0))
+					hit = section;
+		}
+	}
+	return hit;
+}
+
+function onContextMenu(evt,keys) {
+	if(modding) {
+		var	pin = winMousePos(evt);
+			hit = pickSection(pin[0],pin[1]);
+		modMenu.active = hit;
+		if(hit) {
+			var	menu = UIPanel([
+						UILabel(hit.asset.filename),
+						UIButton("bring forward",function() {
+							var idx = sections.indexOf(hit);
+							if(idx < sections.length-1) {
+								sections.splice(idx,1);
+								sections.splice(idx+1,0,hit);
+							}
+						}),
+						UIButton("send backward",function() {
+							var idx = sections.indexOf(hit);
+							if(idx > 0) {
+								sections.splice(idx,1);
+								sections.splice(idx-1,0,hit);
+							}
+						}),
+					],UILayoutRows),
+				contextMenu = UIWindow(true,menu);
+			contextMenu.layout();
+			menu.setPosVisible([(evt.clientX-canvas.offsetLeft)-menu.width(),(evt.clientY-canvas.offsetTop)-menu.height()]);
+			contextMenu.show();
+		}
+	}
+}
+
 function onMouseDown(evt,keys) {
-	if(modding && modMenu.active) {
-		modMenu.pin = winMousePos(evt);
-		modMenu.pin = [modMenu.pin[0]-modMenu.active.x,modMenu.pin[1]-modMenu.active.y];
-	} else
-		modMenu.pin = null;
+	modMenu.pin = null;
+	if(modding) {
+		var	pin = winMousePos(evt);
+			hit = pickSection(pin[0],pin[1]);
+		modMenu.active= hit;
+		if(hit)
+			modMenu.pin = [pin[0]-hit.x,pin[1]-hit.y];
+	}
 }
 
 function onMouseMove(evt,keys) {
@@ -83,7 +136,7 @@ function render() {
 	}
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,1,200),
+	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,100),
 		mvMatrix, nMatrix, colour;
 	for(var section in sections) {
 		section = sections[section];

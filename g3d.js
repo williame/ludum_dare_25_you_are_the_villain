@@ -255,7 +255,7 @@ function G3D(filename,readyCallback) {
 		var z, n, hit;
 		for(var mesh in g3d.meshes) {
 			mesh = g3d.meshes[mesh];
-			mesh.rayIntersection(rayOrigin,rayDir,false,function(i,I,N) {
+			mesh.rayIntersection(rayOrigin,rayDir,function(i,I,N) {
 				var d = vec3_length(vec3_sub(I,rayOrigin));
 				if(!n || d < z) {
 					z = d;

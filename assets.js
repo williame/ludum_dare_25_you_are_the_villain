@@ -84,9 +84,9 @@ function AssetManager() {
 
 function Asset(filename,art) {
 	if(!art) {
-		if(filename.indexOf(".g3d",filename.length-4) != -1)
+		if(endsWith(filename,".g3d"))
 			loadFile("g3d",filename,function(art) { asset.art = art; });
-		else if(filename.indexOf(".png",filename.length-4) != -1)
+		else if(endsWith(filename,".png"))
 			loadFile("image",filename,function(art) {
 				asset.art = art;
 				// stuff we need to draw it in the asset manager
@@ -95,7 +95,8 @@ function Asset(filename,art) {
 				art.ctx = UIContext();
 				art.ctx.drawRect(art,[1,1,1,1],0,0,art.width,art.height,0,1,1,0);
 				art.ctx.finish();
-				art.draw = function(t,pMatrix,mvMatrix,nMatrix) { art.ctx.draw(pMatrix); }
+				art.draw = function(t,pMatrix,mvMatrix,nMatrix) { art.ctx.draw(mat4_multiply(pMatrix,mvMatrix)); };
+				art.zAt = function(rayOrigin) { return rayOrigin[0]>=0 && rayOrigin[0]<art.width && rayOrigin[1]>=0 && rayOrigin[1]<art.height; };
 			});
 		else
 			fail("unsupported file extension: "+filename);
@@ -166,9 +167,9 @@ function uploadAsset() {
 	for(var i=0; i<files.length; i++) {
 		var file = files[i], type, filename = "data/"+file.name;
 		console.log("uploading",filename);
-		if(filename.indexOf(".g3d",filename.length-4) != -1)
+		if(endsWith(filename,".g3d"))
 			type = "g3d";
-		else if(filename.indexOf(".png",filename.length-4) != -1)
+		else if(endsWith(filename,".png"))
 			type = "image";
 		else {
 			alert("unsupported upload type:\n"+filename);
