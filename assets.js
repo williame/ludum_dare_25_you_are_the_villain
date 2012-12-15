@@ -148,6 +148,7 @@ function reloadAllAssets() {
 	loadFile("json","data/assets.json",function(assets) {
 			for(var a in assets)
 				Asset(assets[a]);
+			reloadLevel();
 	});
 }
 

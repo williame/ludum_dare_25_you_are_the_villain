@@ -151,30 +151,35 @@ function UIContext() {
 			stop: -1,
 		});
 	};
-	ctx.set = function(texture,colour) {
-		if(!ctx.buffers.length || 
-			ctx.buffers[ctx.buffers.length-1].texture != texture ||
-			ctx.buffers[ctx.buffers.length-1].colour != colour) {
-			if(ctx.buffers.length)
-				ctx.buffers[ctx.buffers.length-1].stop = ctx.data.length;
-			ctx.buffers.push({
-				texture: texture,
-				colour: colour,
-				start: ctx.data.length,
-				stop: -1, // marker to say until end of buffer
-			});
+	ctx.set = function(texture,colour,mode) {
+		if(ctx.buffers.length) {
+			var buffer = ctx.buffers[ctx.buffers.length-1];
+			if(buffer.texture == texture && buffer.colour == colour && buffer.mode == mode)
+				return;
+			buffer.stop = ctx.data.length;
 		}
+		ctx.buffers.push({
+			texture: texture,
+			colour: colour,
+			mode: mode,
+			start: ctx.data.length,
+			stop: -1, // marker to say until end of buffer
+		});
 	};
 	ctx.drawText = function(font,colour,x,y,text) { return font? font.drawText(this,colour,x,y,text): 0; };
 	ctx.measureText = function(font,text) { return font? font.measureText(text): [0,0]; };
 	ctx.drawRect = function(texture,colour,x1,y1,x2,y2,tx1,ty1,tx2,ty2) {
-		ctx.set(texture,colour);
+		ctx.set(texture,colour,gl.TRIANGLES);
 		ctx.data = ctx.data.concat([
 			x1,y2,tx1,ty2, x2,y1,tx2,ty1, x1,y1,tx1,ty1, //CCW
 			x2,y2,tx2,ty2, x2,y1,tx2,ty1, x1,y2,tx1,ty2]);
 	};
 	ctx.fillRect = function(colour,x1,y1,x2,y2) {
 		ctx.drawRect(ctx.blank,colour,x1,y1,x2,y2,0,0,1,1);
+	};
+	ctx.drawLine = function(colour,x1,y1,x2,y2) {
+		ctx.set(ctx.blank,colour,gl.LINES);
+		ctx.data = ctx.data.concat([x1,y1,0,0,x2,y2,1,1]);
 	};
 	ctx.makeCorners = function(r) {
 		var pts = [],
@@ -283,7 +288,7 @@ function UIContext() {
 			gl.uniform4fv(UIContext.program.colour,buffer.colour);
 			gl.vertexAttribPointer(UIContext.program.vertex,2,gl.FLOAT,false,16,0);
 			gl.vertexAttribPointer(UIContext.program.texcoord,2,gl.FLOAT,false,16,8);
-			gl.drawArrays(gl.TRIANGLES,buffer.start/4,len/4);
+			gl.drawArrays(buffer.mode,buffer.start/4,len/4);
 		}
 		if(inited)
 			ctx._deinitShader();

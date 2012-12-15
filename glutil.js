@@ -994,6 +994,15 @@ function vec3(array,ofs) {
 	return [array[ofs++],array[ofs++],array[ofs++]];
 }
 
+function vec2_sub(a,b) {
+	return [a[0]-b[0],a[1]-b[1]];
+}
+
+function vec2_distance_sqrd(a,b) {
+	var d = vec2_sub(a,b);
+	return d[0]*d[0] + d[1]*d[1];
+}
+
 var programs = {
 	blankTex: createTexture(1,1,new Uint8Array([255,255,255,255])),
 	standard: function(cb,uniforms) {

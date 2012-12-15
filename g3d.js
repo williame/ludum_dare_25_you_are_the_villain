@@ -3,6 +3,13 @@ function G3D(filename,readyCallback) {
 	if(readyCallback && readyCallback.wait) // using a Waiter?
 		readyCallback = readyCallback.wait(filename);
 	var g3d = {};
+	g3d.readyCallbacks = [];
+	g3d.done = function() {
+		for(var callback in g3d.readyCallbacks)
+			g3d.readyCallbacks[callback](g3d);
+	};
+	if(readyCallback)
+		g3d.readyCallbacks.push(readyCallback);
 	g3d.filename = filename;
 	g3d.meshes = [];
 	g3d.textureFilenames = [];
@@ -108,12 +115,12 @@ function G3D(filename,readyCallback) {
 					g3d.textureFilenames = g3d.textureFilenames.slice(
 						g3d.textureFilenames.indexOf(filename),1);
 					g3d.ready = (0 == g3d.textureFilenames.length);
-					if(g3d.ready && readyCallback)
-						setTimeout(readyCallback,0);
+					if(g3d.ready && g3d.readyCallbacks)
+						setTimeout(g3d.done,0);
 				});
 			})(texture,g3d.textureFilenames[texture]);
-		if(g3d.ready && readyCallback)
-			setTimeout(readyCallback,0);
+		if(g3d.ready && g3d.readyCallbacks)
+			setTimeout(g3d.done,0);
 	};
 	g3d.draw = function(t,pMatrix,mvMatrix,nMatrix,normals,invert,colour) {
 		if(!g3d.ready) return;

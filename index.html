@@ -111,9 +111,10 @@ function init() {
 			perf = new Perf();
 			perf.window().show();
 			// phase2 loading
-			loaded = Waiter(function() { game(); });
-			loadFile("javascript","game.js",loaded());
-			loadFile("javascript","assets.js",loaded());
+			loadFile("javascript","game.js",function() {
+				loadFile("javascript","assets.js",function() { game(); });
+			});
+			
 		});
 	loadFile("javascript","glutil.js",loaded());
 	loadFile("javascript","ui.js",loaded());
