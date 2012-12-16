@@ -31,7 +31,15 @@
 		"parallax0": [],
 		"scene": [],
 		"treasure": [],
-		"enemy": [],
+		"enemy": [
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/goatrun.g3d",
+				"x": 511,
+				"y": 280.8
+			}
+		],
 		"player": [
 			{
 				"scale": 1,
