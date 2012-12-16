@@ -65,5 +65,7 @@
 	"data/hall1.g3d",
 	"data/throne.g3d",
 	"data/throneroom.g3d",
-	"data/bedchamber.g3d"
+	"data/bedchamber.g3d",
+	"data/guard_run.g3d",
+	"data/sgt1_run.g3d"
 ]
