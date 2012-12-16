@@ -158,29 +158,7 @@
 		]
 	},
 	"sections": {
-		"parallax1": [
-			{
-				"scale": 0.05,
-				"animSpeed": 1000,
-				"asset": "data/sky1.png",
-				"x": 323.7999999999999,
-				"y": 436.99999999999994
-			},
-			{
-				"scale": 0.05,
-				"animSpeed": 1000,
-				"asset": "data/sky1.png",
-				"x": 1349.8000000000004,
-				"y": 436.99999999999994
-			},
-			{
-				"scale": 0.05,
-				"animSpeed": 1000,
-				"asset": "data/sky1.png",
-				"x": 2377.8,
-				"y": 436.99999999999994
-			}
-		],
+		"parallax1": [],
 		"parallax0": [
 			{
 				"scale": 0.05,
