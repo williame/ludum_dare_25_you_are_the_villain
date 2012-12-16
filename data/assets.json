@@ -71,5 +71,7 @@
 	"data/background1.png",
 	"data/sky1.png",
 	"data/background2.png",
-	"data/skynight.png"
+	"data/skynight.png",
+	"data/skynightlower.png",
+	"data/skynightupper.png"
 ]
