@@ -158,7 +158,29 @@
 		]
 	},
 	"sections": {
-		"parallax1": [],
+		"parallax1": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 324,
+				"y": 551.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 1352,
+				"y": 551.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 2380,
+				"y": 551.8
+			}
+		],
 		"parallax0": [
 			{
 				"scale": 0.05,
