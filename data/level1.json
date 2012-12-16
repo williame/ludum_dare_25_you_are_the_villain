@@ -316,6 +316,90 @@
 				"asset": "data/wall_simple.g3d",
 				"x": 1759.7089292526246,
 				"y": 253.80892925262447
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 876,
+				"y": 682.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 1132,
+				"y": 682.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 1368,
+				"y": 682.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 1807,
+				"y": 683.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 2065,
+				"y": 682.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 2325,
+				"y": 681.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 2835,
+				"y": 928.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 2572,
+				"y": 928.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/battlements.g3d",
+				"x": 2579,
+				"y": 981.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/turret.g3d",
+				"x": 2350,
+				"y": 718.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/turret_window.g3d",
+				"x": 2919,
+				"y": 975.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 2882,
+				"y": 927.8
 			}
 		],
 		"treasure": [],
