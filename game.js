@@ -221,8 +221,12 @@ function render() {
 						hitCount++;
 						hits[surface] = hits[surface] || [];
 						hits[surface].push([line,box]);
-						if(debugCtx)
-							debugCtx.drawBox([1,1,0,1],box[0],box[1],box[2],box[3]);
+						if(debugCtx) {
+							var colour = [1,1,0,1];
+							if(aabb_line_intersects(playerBox,line))
+								colour = [1,0,0,1];
+							debugCtx.drawBox(colour,box[0],box[1],box[2],box[3]);
+						}
 					}
 				}
 			}
