@@ -3,6 +3,7 @@ var	winOrigin = [0,0],
 	startTime = now(),
 	lastTick = 0,
 	tickFps = 30,
+	gravity = 10,
 	tickMillis = 1000/tickFps,
 	debugCtx = UIContext(),
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
@@ -88,6 +89,22 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			// start from whereever we last were
 			section.setPos(pos[0],pos[1]); // we have now reached previous destination
 			section.path = [[0,pos[0],pos[1]]];
+			if(section.zone == "floor") {
+				var floorLevel = getFloor(pos[0]+vector[0],pos[1]+vector[1],section.w);
+				if(floorLevel != null) {
+					floorLevel = Math.max(floorLevel,pos[1]+vector[1]-gravity);
+					pos[0] += vector[0];
+					pos[1] = floorLevel;	
+				}
+			} else if(section.zone == "ceiling") {
+				var ceilingLevel = getCeiling(pos[0]+vector[0],pos[1]+vector[1]+section.h,section.w);
+				if(ceilingLevel != null) {
+					ceilingLevel = Math.min(ceilingLevel,pos[1]+vector[1]+section.h);
+					pos[0] += vector[0];
+					pos[1] = ceilingLevel-section.h;
+				}
+			}
+			/*
 			// which axis are we going to iterate on?
 			var	steps = Math.max(1,Math.ceil(Math.max(Math.abs(vector[0]),Math.abs(vector[1])))),
 				xstep = vector[0] / steps,
@@ -127,7 +144,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 					pos[1] -= ystep;
 					section.path.push([step/steps,pos[0],pos[1]]);
 				}
-			}
+			}*/
 			// and go to the new place
 			section.path.push([1,pos[0],pos[1]]);
 		},
@@ -147,6 +164,50 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 	section.setPos(x===undefined? winOrigin[0]+canvas.width*0.2: x,
 		y===undefined? winOrigin[1]+canvas.height*0.2: y);
 	return section;
+}
+
+function getFloor(x,y,w) {
+	var	left = x+w*0.25,
+		centre = x+w*0.5,
+		right = x+w*0.75,
+		nearest = null,
+		floor = surfaces.floor;
+	for(var line in floor) {
+		line = floor[line];
+		var a = Math.min(line[0][0],line[1][0]);
+		if(a > right) continue;
+		var b = Math.max(line[0][0],line[1][0]);
+		if(b < left || float_equ(a,b)) continue;
+		var i = Math.min(Math.max(a,centre),b);
+		i = (b-i)/(b-a);
+		var h = line[0][1]+(line[1][1]-line[0][1])*i;
+		if(h > y+gravity-5) continue;
+		if(nearest == null || nearest < h)
+			nearest = h;
+	}
+	return nearest;
+}
+
+function getCeiling(x,y,w) {
+	var	left = x+w*0.25,
+		centre = x+w*0.5,
+		right = x+w*0.75,
+		nearest = null,
+		ceiling = surfaces.ceiling;
+	for(var line in ceiling) {
+		line = ceiling[line];
+		var a = Math.min(line[0][0],line[1][0]);
+		if(a > right) continue;
+		var b = Math.max(line[0][0],line[1][0]);
+		if(b < left || float_equ(a,b)) continue;
+		var i = Math.min(Math.max(a,centre),b);
+		i = (b-i)/(b-a);
+		var h = line[0][1]+(line[1][1]-line[0][1])*i;
+		if(h < y-5) continue;
+		if(nearest == null || nearest > h)
+			nearest = h;
+	}
+	return nearest;
 }
 
 var levelLoaded = false, levelFilename = "data/level1.json";
@@ -227,6 +288,7 @@ function start() {
 	assert(sections.player.length == 1);
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
+	player.zone = "floor";
 	modding = false;
 }
 
