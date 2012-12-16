@@ -241,7 +241,7 @@ function render() {
 	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,100),
+	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
 		screenAabb = aabb(winOrigin[0],winOrigin[1],winOrigin[0]+canvas.width,winOrigin[1]+canvas.height);
 	for(var layer in sections) {
