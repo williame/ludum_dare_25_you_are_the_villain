@@ -21,8 +21,12 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		asset: asset,
 		ready: false,
 		setPos: function(x,y) {
-			section.x = x;
-			section.y = y;
+			section.tx = x;
+			section.ty = y;
+			if(modding) {
+				section.x = x;
+				section.y = y;
+			}
 			section.ready = asset.art && asset.art.ready;
 			if(!section.ready) {
 				var retry = function() {
@@ -45,7 +49,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.h = size[1] * scale;
 			section.aabb = [x,y,x+section.w,y+section.h];
 			section.mvMatrix = mat4_multiply(
-				mat4_translation([section.x,section.y,0]),
+				mat4_translation([x,y,0]),
 				mat4_multiply(mat4_scale(scale),
 					mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
 			if(modding)
@@ -212,55 +216,18 @@ function isLoadingComplete() {
 }
 
 function game() {
-	modding = true;
-	modMenu.show();
+	startModding();
 }
 
-var walking = true;
-
 function start() {
-	if(!sections.player.length) {
+	if(!sections.player.length ) {
 		addMessage(10,null,"cannot play: we don\'t have a player!");
 		return;
 	}
 	assert(sections.player.length == 1);
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
-	updateParallax.last = null;
 	modding = false;
-}
-
-function updateParallax() {
-	updateParallax.last = updateParallax.last || [player.x,player.y];
-	var	x_diff = updateParallax.last[0]-player.x,
-		y_diff = updateParallax.last[1]-player.y,
-        	po0_x_distance = x_diff * 0.5,
-        	po1_x_distance = x_diff * 0.2,
-        	po0_y_distance = y_diff * 0.5,
-        	po1_y_distance = y_diff * 0.2,
-        	obj;
-        if(!float_zero(x_diff)) {
-                for(obj in sections.parallax0) {
-                        obj = sections.parallax0[obj];
-                        obj.setPos(obj.x + po0_x_distance,obj.y);
-                }
-                for(obj in sections.parallax1) {
-                        obj = sections.parallax1[obj];
-                        obj.setPos(obj.x + po1_x_distance,obj.y);
-                }
-                updateParallax.last[0] = player.x;
-        }
-        if(!float_zero(y_diff)) {
-                for(obj in sections.parallax0) {
-                        obj = sections.parallax0[obj];
-                        obj.setPos(obj.x,obj.y + po0_y_distance);
-                }
-                for(obj in sections.parallax1) {
-                        obj = sections.parallax1[obj];
-                        obj.setPos(obj.x,obj.y + po1_y_distance);
-                }
-                updateParallax.last[1] = player.y;
-        }
 }
 
 function render() {
@@ -299,14 +266,29 @@ function render() {
 		}
 		lastTick += tickMillis;
 	}
-	if(!modding)
-		updateParallax();
+	if(!modding) {
+		var playerPos = [player.tx,player.ty];
+		for(var p in sections.parallax0) {
+			p = sections.parallax0[p];
+			var	centre = [p.x+p.w/2,p.y+p.h/2],
+				ofs = vec2_sub(playerPos,centre);
+			p.setPos(p.x+(ofs[0]-centre[0])*0.2,
+				p.y+(ofs[1]-centre[1])*0.2);
+		}
+		for(var p in sections.parallax1) {
+			p = sections.parallax1[p];
+			var	centre = [p.x+p.w/2,p.y+p.h/2],
+				ofs = vec2_sub(playerPos,centre);
+			p.setPos(p.x+(ofs[0]-centre[0])*0.1,
+				p.y+(ofs[1]-centre[1])*0.1);
+		}
+	}
 	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 	if(player && !modding) {
-		winOrigin[0] = player.x+player.w/2-canvas.width/2;
-		winOrigin[1] = player.y+player.h/2-canvas.height/2;
+		winOrigin[0] = player.tx+player.w/2-canvas.width/2;
+		winOrigin[1] = player.ty+player.h/2-canvas.height/2;
 	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,

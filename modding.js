@@ -25,9 +25,12 @@ var	modding = false,
 		modMenuMode,
 		modMenuSections,
 		UIButton("play",function() {
-			modMenu.setMode(modding?"play":"add");
-			if(modding) start();
-			if(modding) modMenu.setMode("add"); },"tool:play"),
+			modMenu.setMode("play");
+			if(modding)
+				start();
+			else
+				startModding();
+			},"tool:play"),
 	],UILayoutRows));
 modMenu.setMode = function(mode) {
 	modMenu.mode = mode;
@@ -42,8 +45,8 @@ modMenu.setMode = function(mode) {
 	modMenu.newLineStart = null;
 	modMenu.editLinePoint = null;
 	modMenu.modeLine = surfaceNames.indexOf(mode) >= 0;
-	if(mode != "play")
-		modding = true;
+	if(mode != "play" && !modding)
+		startModding();
 };
 for(var mode in surfaceNames) {
 	mode = surfaceNames[mode];
@@ -85,12 +88,28 @@ modMenu.drawLines = function() {
 };
 modMenu.ctrl.setPos([10,60]);
 
+function startModding() {
+	console.log("startModding");
+	modding = true;
+	for(var layer in sections)
+		for(var section in sections[layer]) {
+			section = sections[layer][section];
+			section.setPos(section.x,section.y);
+			section.path = null;
+		}
+	if(modMenu.mode == "play")
+		modMenu.setMode("add");
+	modMenu.show();
+	if(debugCtx)
+		debugCtx.clear();
+}
+
 function modOnLevelLoaded() {
 	if(modding) {
 		modMenu.linesCtx.clear();
 		modMenu.drawLines();
 		modMenu.linesCtx.finish();
-	}									
+	}					
 }
 
 function pickSection(x,y,layer) {
