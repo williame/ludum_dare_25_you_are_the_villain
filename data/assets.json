@@ -43,5 +43,13 @@
 	"data/castle1start.g3d",
 	"data/props_barrel.g3d",
 	"data/pit_short.g3d",
-	"data/stairs1.g3d"
+	"data/stairs1.g3d",
+	"data/foreground_stalegtite.g3d",
+	"data/foreground_bigrock_pointed.g3d",
+	"data/foreground_buttressstone.g3d",
+	"data/foreground_littlerock.g3d",
+	"data/foreground_bigrock.g3d",
+	"data/foreground_buttress.g3d",
+	"data/wall_simple2.g3d",
+	"data/stairs2.g3d"
 ]
