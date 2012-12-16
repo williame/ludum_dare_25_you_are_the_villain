@@ -86,5 +86,11 @@
 	"data/particle_star3.png",
 	"data/particle_star2.png",
 	"data/particle_star1.png",
-	"data/logo_flat.png"
+	"data/logo_flat.png",
+	"data/crownjewels3.g3d",
+	"data/crownjewel2.g3d",
+	"data/crownjewels1.g3d",
+	"data/props_banner3.g3d",
+	"data/props_banner2.g3d",
+	"data/props_banner.g3d"
 ]
