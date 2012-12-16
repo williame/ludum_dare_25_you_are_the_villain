@@ -80,5 +80,11 @@
 	"data/turret.g3d",
 	"data/platformbase.g3d",
 	"data/battlements.g3d",
-	"data/earth.png"
+	"data/earth.png",
+	"data/logo_transp.png",
+	"data/particle_star4.png",
+	"data/particle_star3.png",
+	"data/particle_star2.png",
+	"data/particle_star1.png",
+	"data/logo_flat.png"
 ]
