@@ -106,7 +106,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.setPos(pos[0],pos[1]); // we have now reached previous destination
 			section.path = [[0,pos[0],pos[1]]];
 			var	height = pos[1]+vector[1],
-				floorLevel = getFloor(pos[0]+vector[0],pos[1]-gravity,section.w);
+				floorLevel = getFloor(pos[0]+vector[0],pos[1],section.w);
 			if(section.zone == "floor") {
 				if(floorLevel != null) {
 					if(floorLevel < height-gravity) {
