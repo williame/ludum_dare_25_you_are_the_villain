@@ -3,7 +3,7 @@ var	winOrigin = [0,0],
 	startTime = now(),
 	lastTick = 0,
 	tickFps = 30,
-	gravity = 3,
+	gravity = 5,
 	maxSloop = 8,
 	tickMillis = 1000/tickFps,
 	debugCtx = UIContext(),
@@ -119,7 +119,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 					pos[1] = floorLevel;
 				}
 			} else {
-				var ceilingLevel = getCeiling(pos[0]+vector[0],height+section.h,section.w);
+				var ceilingLevel = getCeiling(pos[0]+vector[0],pos[1]+section.h,section.w);
 				if(section.zone == "ceiling") {
 					if(ceilingLevel != null) {
 						height = Math.min(ceilingLevel-section.h,height);
@@ -127,13 +127,12 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 						pos[1] = height;
 					}
 				} else {
-					console.log("air",ceilingLevel-section.h,floorLevel,height,vector[1]);
 					assert(section.zone == "air");
 					if(floorLevel != null) { // something to fall onto
 						if(ceilingLevel != null)
 							height = Math.min(ceilingLevel-section.h,height);
 						if(floorLevel >= height) {
-							console.log("landing!",floorlevel,height);
+							console.log("landing!",floorLevel,height);
 							section.zone = "floor";
 							height = floorLevel;
 						}
@@ -219,7 +218,7 @@ function getFloor(x,y,w) {
 		var i = Math.min(Math.max(a,centre),b);
 		i = (b-i)/(b-a);
 		var h = line[0][1]+(line[1][1]-line[0][1])*i;
-		if(h > y-maxSloop) continue;
+		if(h > y+maxSloop) continue;
 		if(nearest == null || nearest < h)
 			nearest = h;
 	}
