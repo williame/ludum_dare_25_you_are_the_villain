@@ -286,8 +286,8 @@
 				"scale": 1,
 				"animSpeed": 1000,
 				"asset": "data/castle1_levelchange2.g3d",
-				"x": 1321.7089292526246,
-				"y": 249.80892925262447
+				"x": 2189.7089292526243,
+				"y": 252.80892925262447
 			},
 			{
 				"scale": 1,
@@ -295,6 +295,27 @@
 				"asset": "data/castle1_levelchange3.g3d",
 				"x": -1100.2910707473754,
 				"y": -352.19107074737553
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/castle1_battlements1.g3d",
+				"x": 840.7089292526243,
+				"y": 429.80892925262447
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/wall_simple.g3d",
+				"x": 1325.7089292526246,
+				"y": 253.80892925262447
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/wall_simple.g3d",
+				"x": 1759.7089292526246,
+				"y": 253.80892925262447
 			}
 		],
 		"treasure": [],
