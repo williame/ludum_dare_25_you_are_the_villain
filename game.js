@@ -6,6 +6,8 @@ var	winOrigin = [0,0],
 	debugCtx = UIContext(),
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
 	sections,
+	surfaceNames = ["ceiling","floor","wall"],
+	surfaces,
 	player = null;
 
 function Section(layer,asset,x,y,scale) {
@@ -56,13 +58,11 @@ function Section(layer,asset,x,y,scale) {
 	return section;
 }
 
-var	ceiling = [], floor = [],
-	levelLoaded = false, levelFilename = "data/level1.json";
+var levelLoaded = false, levelFilename = "data/level1.json";
 
 function saveLevel() {
 	setFile("json","data/level1.json",{
-		ceiling: ceiling,
-		floor: floor,
+		surfaces: surfaces,
 		sections: sections,
 	});
 }
@@ -74,18 +74,20 @@ function reloadLevel() {
 function loadLevel(filename) {
 	levelFilename = filename;
 	levelLoaded = false;
-	ceiling = [];
-	floor = [];
 	sections = null;
 	loadFile("json",filename,function(data) {
-		ceiling = data.ceiling || [];
-		floor = data.floor || [];
 		modMenu.newLineStart = null;
 		modMenu.editLinePoint = null;
 		modMenu.active = null;
 		modMenu.linesCtx.clear();
 		modMenu.drawLines();
 		modMenu.linesCtx.finish();
+		surfaces = {};
+		for(var surface in surfaceNames) {
+			surface = surfaceNames[surface];
+			surfaces[surface] = [];
+			surfaces[surface] = (data.surfaces? data.surfaces[surface]: null) || [];
+		}
 		var incomplete = false;
 		sections = {};
 		for(var layer in layerNames) {
@@ -165,18 +167,13 @@ function render() {
 					aabb(newPos,vec2_add(playerPos,playerSize)));
 			debugCtx.clear();
 			debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
-			for(var line in ceiling) {
-				line = ceiling[line];
-				var box = aabb(line[0],line[1]);
-				if(aabb_intersects(box,playerBox)) {
-					debugCtx.drawBox([1,1,0,1],box[0],box[1],box[2],box[3]);
-				}
-			}
-			for(var line in floor) {
-				line = floor[line];
-				var box = aabb(line[0],line[1]);
-				if(aabb_intersects(box,playerBox)) {
-					debugCtx.drawBox([1,0,1,1],box[0],box[1],box[2],box[3]);
+			for(var surface in surfaces) {
+				for(var line in surfaces[surface]) {
+					line = surfaces[surface][line];
+					var box = aabb(line[0],line[1]);
+					if(aabb_intersects(box,playerBox)) {
+						debugCtx.drawBox([1,1,0,1],box[0],box[1],box[2],box[3]);
+					}
 				}
 			}
 			debugCtx.finish();
