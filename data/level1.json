@@ -221,6 +221,20 @@
 				"asset": "data/skynightlower.png",
 				"x": 2368,
 				"y": 187.79999999999995
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": -712.2910707473754,
+				"y": 698.8089292526245
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": -713.2910707473754,
+				"y": 190.80892925262447
 			}
 		],
 		"parallax0": [
@@ -244,6 +258,20 @@
 				"asset": "data/background1.png",
 				"x": 2379.5,
 				"y": 348.80000000000007
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": -702.2910707473754,
+				"y": 347.80892925262447
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": -1726.2910707473754,
+				"y": 347.80892925262447
 			}
 		],
 		"scene": [
@@ -253,6 +281,20 @@
 				"asset": "data/castle1_levelchange1.g3d",
 				"x": 391.2,
 				"y": 251
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/castle1_levelchange2.g3d",
+				"x": 1321.7089292526246,
+				"y": 249.80892925262447
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/castle1_levelchange3.g3d",
+				"x": -1100.2910707473754,
+				"y": -352.19107074737553
 			}
 		],
 		"treasure": [],
