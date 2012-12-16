@@ -8,8 +8,8 @@
 			{
 				"scale": 1,
 				"asset": "data/castle1a.g3d",
-				"x": 475.4,
-				"y": 245.8
+				"x": 481.4,
+				"y": 249.8
 			}
 		],
 		"treasure": [],
@@ -17,8 +17,8 @@
 			{
 				"scale": 1,
 				"asset": "data/props_pikesshield_lighter2.g3d",
-				"x": 648.4,
-				"y": 310.8
+				"x": 628.4,
+				"y": 377.8
 			}
 		],
 		"player": []
