@@ -51,5 +51,10 @@
 	"data/foreground_bigrock.g3d",
 	"data/foreground_buttress.g3d",
 	"data/wall_simple2.g3d",
-	"data/stairs2.g3d"
+	"data/stairs2.g3d",
+	"data/cave_timberslope2.g3d",
+	"data/cave_timberslope1.g3d",
+	"data/cave_timbervertical.g3d",
+	"data/cave_wall2.g3d",
+	"data/cave_wall1.g3d"
 ]

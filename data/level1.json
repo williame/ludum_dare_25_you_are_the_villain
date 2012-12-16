@@ -1,1 +1,22 @@
-{}
+{
+	"surfaces": {
+		"ceiling": [],
+		"floor": [],
+		"wall": []
+	},
+	"sections": {
+		"parallax1": [],
+		"parallax0": [],
+		"scene": [
+			{
+				"scale": 1,
+				"asset": "data/castle1start.g3d",
+				"x": 320,
+				"y": 149.8
+			}
+		],
+		"treasure": [],
+		"enemy": [],
+		"player": []
+	}
+}
