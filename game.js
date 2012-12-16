@@ -85,41 +85,43 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.setPos(pos[0],pos[1]); // we have now reached previous destination
 			section.path = [[0,pos[0],pos[1]]];
 			// which axis are we going to iterate on?
-			var	steps = Math.max(0,Math.ceil(Math.max(Math.abs(vector[0]),Math.abs(vector[1])))),
+			var	steps = Math.max(1,Math.ceil(Math.max(Math.abs(vector[0]),Math.abs(vector[1])))),
 				xstep = vector[0] / steps,
-				ystep = vector[1] / steps;
+				ystep = vector[1] / steps,
+				vn;
 			for(var step = 0; step<steps; step++) {
 				pos[0] += xstep;
 				pos[1] += ystep;
 				var	aabb,
 					left = pos[0]+section.w*0.25,
 					right = pos[0]+section.w*0.75,
-					stopped = false;
+					hit = null;
 				for(var type in surfaces) { // cache aabbs, quadtree etc?
 					if(type == "wall") {
 						aabb = [left,pos[1],right,pos[1]+section.h];
 					} else if(type == "ceiling") {
-						if(ystep <= 0) // can fall through ceilings
-							continue;
 						aabb = [left,pos[1]+section.h*0.7,right,pos[1]+section.h]; // top bit
 					} else if(type == "floor") {
-						if(ystep >= 0) // can jump up through floors
-							continue;
 						aabb = [left,pos[1],right,pos[1]+section.h*0.3]; // bottom bit
 					}
 					var array = surfaces[type];
 					for(var line in array) {
 						line = array[line];
-						if(aabb_line_intersects(aabb,line)) {
-							pos[0] -= xstep;
-							pos[1] -= ystep;
-							section.path.push([step/steps,pos[0],pos[1]]);
-							stopped = true;
-							break;
+						if(aabb_line_intersects(aabb,line)) { // hit! for now, stop dead
+							vn = vn || vec2_normalise(vector);
+							var	ln = line_normal(line),
+								lndotv = vec2_dot(ln,vn);
+							if(Math.abs(lndotv) < 0.2) continue;
+							hit = hit || {};
+							hit[type] = hit[type] || [];
+							hit[type].push(line);
 						}
 					}
-					if(stopped)
-						break;
+				}
+				if(hit) { // all the things we hit
+					pos[0] -= xstep;
+					pos[1] -= ystep;
+					section.path.push([step/steps,pos[0],pos[1]]);
 				}
 			}
 			// and go to the new place
@@ -224,7 +226,41 @@ function start() {
 	assert(sections.player.length == 1);
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
+	updateParallax.last = null;
 	modding = false;
+}
+
+function updateParallax() {
+	updateParallax.last = updateParallax.last || [player.x,player.y];
+	var	x_diff = updateParallax.last[0]-player.x,
+		y_diff = updateParallax.last[1]-player.y,
+        	po0_x_distance = x_diff * 0.5,
+        	po1_x_distance = x_diff * 0.2,
+        	po0_y_distance = y_diff * 0.5,
+        	po1_y_distance = y_diff * 0.2,
+        	obj;
+        if(!float_zero(x_diff)) {
+                for(obj in sections.parallax0) {
+                        obj = sections.parallax0[obj];
+                        obj.setPos(obj.x + po0_x_distance,obj.y);
+                }
+                for(obj in sections.parallax1) {
+                        obj = sections.parallax1[obj];
+                        obj.setPos(obj.x + po1_x_distance,obj.y);
+                }
+                updateParallax.last[0] = player.x;
+        }
+        if(!float_zero(y_diff)) {
+                for(obj in sections.parallax0) {
+                        obj = sections.parallax0[obj];
+                        obj.setPos(obj.x,obj.y + po0_y_distance);
+                }
+                for(obj in sections.parallax1) {
+                        obj = sections.parallax1[obj];
+                        obj.setPos(obj.x,obj.y + po1_y_distance);
+                }
+                updateParallax.last[1] = player.y;
+        }
 }
 
 function render() {
@@ -263,6 +299,8 @@ function render() {
 		}
 		lastTick += tickMillis;
 	}
+	if(!modding)
+		updateParallax();
 	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);

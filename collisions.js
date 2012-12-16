@@ -38,3 +38,8 @@ function aabb_line_intersects(aabb,line) {
 	}
 	return Math.max(minY,ay1) <= Math.min(maxY,ay2);
 }
+
+function line_normal(line) {
+	var dir = vec2_sub(line[1],line[0]);
+	return vec2_normalise([dir[1],-dir[0]]);
+}

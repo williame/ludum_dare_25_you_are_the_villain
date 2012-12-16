@@ -148,7 +148,7 @@ function unproject(x,y,mvMatrix,pMatrix,viewport) {
 			(y - viewport[1]) / viewport[3] * 2 - 1,
 			-1, 1],
 		far = [near[0],near[1],1,1];
-	near = vec4_vec3(mat4_vec4_multiply(inv,near));
+	near = vec4_vec3(mat4_vec4_multiply(inv,near));                                                        
 	far = vec4_vec3(mat4_vec4_multiply(inv,far));
 	return [near,vec3_sub(far,near)];
 }
@@ -1000,6 +1000,15 @@ function vec2_sub(a,b) {
 
 function vec2_add(a,b) {
 	return [a[0]+b[0],a[1]+b[1]];
+}
+
+function vec2_normalise(v) {
+	var mag = Math.sqrt(v[0]*v[0]+v[1]*v[1]);
+	return [v[0]/mag, v[1]/mag];
+}
+
+function vec2_dot(a,b) {
+	return [a[0]*b[0]+a[1]*b[1]];
 }
 
 function vec2_distance_sqrd(a,b) {
