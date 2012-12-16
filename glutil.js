@@ -998,6 +998,10 @@ function vec2_sub(a,b) {
 	return [a[0]-b[0],a[1]-b[1]];
 }
 
+function vec2_add(a,b) {
+	return [a[0]+b[0],a[1]+b[1]];
+}
+
 function vec2_distance_sqrd(a,b) {
 	var d = vec2_sub(a,b);
 	return d[0]*d[0] + d[1]*d[1];

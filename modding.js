@@ -5,12 +5,16 @@ function winMousePos(evt) {
 }
 
 var	modding = false,
+	ceilingColour = [0.6,0.8,1,1],
+	floorColour = [0.8,0.6,1,1],
 	modMenuSections = UIPanel([UILabel("section")],UILayoutRows),
 	modMenu = UIWindow(false,UIPanel([
 		UIPanel([UILabel("tool"),
 			UIButton("add",function() {
 				modMenu.setMode("add");
 				assetManager.pick(function(asset) {
+					if(modMenu.section == "player") // only one ever
+						sections["player"] = [];
 					modMenu.active = Section(modMenu.section,asset);
 				});
 			},"tool:add"),
@@ -18,7 +22,10 @@ var	modding = false,
 			UIButton("floor",function() { modMenu.setMode("floor"); },"tool:floor"),
 		],UILayoutRows),
 		modMenuSections,
-		UIButton("play",function() { modding = !modding; modMenu.setMode(modding?"add":"play"); if(!modding) start(); },"tool:play"),
+		UIButton("play",function() {
+			modMenu.setMode(modding?"play":"add");
+			if(modding) start();
+			if(modding) modMenu.setMode("add"); },"tool:play"),
 	],UILayoutRows));
 modMenu.setMode = function(mode) {
 	modMenu.mode = mode;
@@ -33,7 +40,6 @@ modMenu.setMode = function(mode) {
 	modMenu.newLineStart = null;
 	modMenu.editLinePoint = null;
 	modMenu.modeLinesArray = mode == "ceiling"? ceiling: mode == "floor"? floor: null;
-	modding = mode != "play";
 };
 modMenu.setMode("add");
 for(var layer in layerNames) {
@@ -61,11 +67,11 @@ modMenu.linesCtx = UIContext();
 modMenu.drawLines = function() {
 	for(var line in ceiling) {
 		line = ceiling[line];
-		modMenu.linesCtx.drawLine([0,0,1,1],line[0][0],line[0][1],line[1][0],line[1][1]);
+		modMenu.linesCtx.drawLine(ceilingColour,line[0][0],line[0][1],line[1][0],line[1][1]);
 	}
 	for(var line in floor) {
 		line = floor[line];
-		modMenu.linesCtx.drawLine([0,1,0,1],line[0][0],line[0][1],line[1][0],line[1][1]);
+		modMenu.linesCtx.drawLine(floorColour,line[0][0],line[0][1],line[1][0],line[1][1]);
 	}
 };
 modMenu.ctrl.setPos([10,60]);
@@ -217,7 +223,7 @@ function onMouseMove(evt,keys) {
 			pin = pickPoint(modMenu.modeLinesArray,pin[0],pin[1]) || pin;
 			modMenu.linesCtx.clear();
 			modMenu.drawLines();
-			var colour = modMenu.mode == "floor"? [0,1,0,1]: [0,0,1,1];
+			var colour = modMenu.mode == "floor"? floorColour: ceilingColour;
 			modMenu.linesCtx.drawLine(colour,modMenu.newLineStart[0],modMenu.newLineStart[1],pin[0],pin[1]);
 			modMenu.linesCtx.finish();
 		} else if(modMenu.editLinePoint && modMenu.modeLinesArray) {

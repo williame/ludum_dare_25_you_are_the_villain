@@ -68,7 +68,7 @@ function UIFont(xml,texture) {
 	return font;
 }
 
-function load_font(name,path,callback) {
+function loadFont(name,path,callback) {
 	var xml = null, texture = null;
 	var done = function() {
 		if(xml && texture) {
@@ -92,7 +92,7 @@ function load_font(name,path,callback) {
 	});
 }
 
-load_font("default","bitstream_vera_sans");
+loadFont("default","bitstream_vera_sans");
 
 function UIContext() {
 	var ctx = {};
@@ -180,6 +180,12 @@ function UIContext() {
 	ctx.drawLine = function(colour,x1,y1,x2,y2) {
 		ctx.set(ctx.blank,colour,gl.LINES);
 		ctx.data = ctx.data.concat([x1,y1,0,0,x2,y2,1,1]);
+	};
+	ctx.drawBox = function(colour,x1,y1,x2,y2) {
+		ctx.drawLine(colour,x1,y1,x2,y1);
+		ctx.drawLine(colour,x1,y2,x2,y2);
+		ctx.drawLine(colour,x1,y1,x1,y2);
+		ctx.drawLine(colour,x2,y1,x2,y2);
 	};
 	ctx.makeCorners = function(r) {
 		var pts = [],
@@ -565,7 +571,7 @@ function UIButton(text,onClick,tag) {
 	if(tag)
 		ctrl.tag = tag;
 	label.onClick = function(evt) {
-		onClick(evt);
+		onClick.call(ctrl,evt);
 		return true;
 	}
 	return ctrl;

@@ -9,7 +9,7 @@ html, body { border:0px;margin:0px;padding:0px; color:white; background-color:bl
 
 <script type="text/javascript">
 
-var gl, canvas, splash, audio, messages, keys = {}, perf;
+var gl, canvas, splash, audio, messages, keys = {}, perf, loading = true;
 
 function init() {
 	
@@ -35,6 +35,7 @@ function init() {
 		canvas.width = canvas.offsetWidth;
 		canvas.height = canvas.offsetHeight;
 		gl.viewport(0,0,canvas.offsetWidth,canvas.offsetHeight);
+		if(splash) splash.dirty();
 	};
 	window.onresize();
 	var audioFactory = window.webkitAudioContext || window.mozAudioContext;
@@ -107,14 +108,29 @@ function init() {
 			document.addEventListener("keydown",onKeyDown,true);
 			document.addEventListener("keyup",onKeyUp,true);
 			window.focus();
-			window.requestAnimFrame(loop);
-			perf = new Perf();
-			perf.window().show();
+			// splash
+			var splashCtrl = UIComponent();
+			splashCtrl.setSize([canvas.width,canvas.height]);
+			splashCtrl.draw = function(ctx) {
+				var font = splashCtrl.getFont();
+				if(!font) return;
+				var	label = "loading...",
+					sz = ctx.measureText(font,label),
+					x = (canvas.width-sz[0])/2,
+					y = (canvas.height-sz[1])/2;
+				ctx.drawText(font,[1,0.7,0.8,1],x,y,label);
+			};
+			splash = UIWindow(false,splashCtrl);
+			window.requestAnimFrame(loadLoop);
 			// phase2 loading
 			loadFile("javascript","game.js",function() {
-				loadFile("javascript","assets.js",function() { game(); });
+				perf = new Perf();
+				perf.window().show();
+				loaded = Waiter(function() { game(); });
+				loadFile("javascript","assets.js",loaded());
+				loadFile("javascript","collisions.js",loaded());
+				loadFile("javascript","modding.js",loaded());
 			});
-			
 		});
 	loadFile("javascript","glutil.js",loaded());
 	loadFile("javascript","ui.js",loaded());
@@ -175,8 +191,12 @@ function extend(a,b) {
 	return a;
 };
 
+function startsWith(str,prefix) {
+	return str.indexOf(prefix) == 0;
+}
+
 function endsWith(str,suffix) {
-    return str.indexOf(suffix,str.length-suffix.length) !== -1;
+	return str.indexOf(suffix,str.length-suffix.length) !== -1;
 }
 
 function now() { return (new Date()).getTime(); }
@@ -193,6 +213,30 @@ function loop() {
 				render();
 			}
 			drawUI(canvas);
+		}
+	} catch(e) {
+		fail.error = e;
+		console.log("ERROR:",e);
+		console.log(e.stack||"<no stack>");
+		alert("ERROR "+e+"\n"+(e.stack||"<no stack>"));
+	}
+}
+
+function loadLoop() {
+	if(fail.error) return;
+	try {
+		if(window.isLoadingComplete && window.isLoadingComplete()) {
+			loading = false;
+			splash = null;
+			loop();
+			return;
+		}
+		window.requestAnimFrame(loadLoop);
+		schedule.run();
+		if(canvas.width && canvas.height && splash) {
+			gl.clearColor(0,0,0,1);
+			gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+			splash.draw(canvas);
 		}
 	} catch(e) {
 		fail.error = e;
@@ -269,14 +313,17 @@ function loadFile(type,path,callback) {
 		loadFile.loading[key].push(callback);
 		return;
 	}
+	if(splash) splash.dirty();
 	loadFile.loading[key] = [callback];
 	if(loadFile.loadingWait) clearTimeout(loadFile.loadingWait);
 	loadFile.loadingWait = setTimeout(function() {
 		alert("it's taking a long time to load all the files!  Maybe something is wrong?");
 		console.log("awaiting load of:",loadFile.loading);
-		},3000);
+		if(splash) splash.dirty();
+	},3000);
 	var done = function(arg) {
 		console.log("loaded",type,path);
+		if(splash) splash.dirty();
 		loadFile.loaded[key] = loadFile.loaded[key] || arg; // could have been set by setFile() in meantime
 		var callbacks = loadFile.loading[key];
 		delete loadFile.loading[key];
