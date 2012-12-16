@@ -1,1 +1,45 @@
-{}
+{
+	"surfaces": {
+		"ceiling": [
+			[
+				[
+					408,
+					399
+				],
+				[
+					1170,
+					396
+				]
+			]
+		],
+		"floor": [
+			[
+				[
+					397,
+					283
+				],
+				[
+					1168,
+					283
+				]
+			]
+		],
+		"wall": []
+	},
+	"sections": {
+		"parallax1": [],
+		"parallax0": [],
+		"scene": [],
+		"treasure": [],
+		"enemy": [],
+		"player": [
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tealeaf1_walk.g3d",
+				"x": 432,
+				"y": 250.8
+			}
+		]
+	}
+}
