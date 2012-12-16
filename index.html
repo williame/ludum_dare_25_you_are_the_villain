@@ -303,16 +303,18 @@ function loadFile(type,path,callback) {
 	loadFile.loading = loadFile.loading || [];
 	loadFile.loadingWait = loadFile.loadingWait || null;
 	loadFile.loaded = loadFile.loaded || [];
-	console.log("loading",type,path,"...");
 	var key = ""+type+":"+path;
 	if(key in loadFile.loaded) {
+		console.log("serving",type,path,"from cache...");
 		setTimeout(function() { callback(loadFile.loaded[key]); },0);
 		return;
 	}
 	if(key in loadFile.loading) {
+		console.log("already loading",type,path,"...");
 		loadFile.loading[key].push(callback);
 		return;
 	}
+	console.log("loading",type,path,"...");
 	if(splash) splash.dirty();
 	loadFile.loading[key] = [callback];
 	if(loadFile.loadingWait) clearTimeout(loadFile.loadingWait);

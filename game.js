@@ -25,11 +25,17 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.y = y;
 			section.ready = asset.art && asset.art.ready;
 			if(!section.ready) {
-				if(asset.art)
-					asset.art.readyCallbacks.push(function() {
+				var retry = function() {
 						section.setPos(x,y);
-						section.ready = true;
-					});
+						if(section.ready)
+							console.log("asset",asset.filename,"now ready");
+					};
+				if(asset.art)
+					asset.art.readyCallbacks.push(retry);
+				else {
+					console.log("asset",asset.filename,"has no art!");
+					setTimeout(retry,200);
+				}	
 				return;
 			}
 			var	scale = section.scale*winScale,
@@ -44,6 +50,34 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 					mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
 			if(modding)
 				saveLevel();
+		},
+		getMvMatrix: function(pathTime) {
+			if(!section.path || float_zero(pathTime))
+				return section.mvMatrix;
+			assert(pathTime >= 0 && pathTime < 1);
+			var start = section.path[0], prev = start, mvMatrix = null;
+			assert(start[0] == 0);
+			assert(section.path[section.path.length-1][0] == 1);
+			for(var path in section.path) {
+				path = section.path[path];
+				if(path[0] > pathTime) {
+					pathTime = 1- ((pathTime-prev[0]) / (path[0]-prev[0]));
+					var translation = [
+						prev[1]+(path[1]-prev[1])*pathTime,
+						prev[2]+(path[2]-prev[2])*pathTime,
+					0];
+					//if(!float_zero(translation[0])||!float_zero(translation[1]))
+						//console.log("section",section.asset.filename,"pathtime",pathTime,prev,path,translation);
+					var	scale = section.scale*winScale,
+						bounds = asset.art.bounds,
+						size = vec3_sub(bounds[1],bounds[0]);
+					return mat4_multiply(
+						mat4_translation(translation),
+						mat4_multiply(mat4_scale(scale),
+							mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
+				}
+				prev = path;
+			}
 		},
 		toJSON: function() {
 			return {
@@ -139,7 +173,7 @@ function start() {
 	}
 	assert(sections.player.length == 1);
 	player = sections.player[0];
-	player.path = [1,player.x,payer.y];
+	player.path = [[0,player.x,player.y],[1,player.x,player.y]];
 	modding = false;
 }
 
@@ -158,8 +192,8 @@ function render() {
 			else if(keys[40] && !keys[38]) // down
 				winOrigin[1] -= panSpeed;
 		} else {
-			player.x = player.path[player.path.length-1][0];
-			player.y = player.path[player.path.length-1][1];
+			player.setPos(player.path[player.path.length-1][1],player.path[player.path.length-1][2]);
+			player.path = [[0,player.x,player.y]];
 			var	speed = 10, newPos = [player.x,player.y];
 			if(keys[37] && !keys[39]) // left
 				newPos[0] -= speed;
@@ -171,8 +205,7 @@ function render() {
 				newPos[1] -= speed;
 			var 	playerPos = [player.x,player.y],
 				playerSize = [player.w,player.h],
-				playerBox = aabb_join(aabb(playerPos,vec2_add(playerPos,playerSize)),
-					aabb(newPos,vec2_add(playerPos,playerSize)));
+				playerBox = aabb_join(player.aabb,aabb(newPos,vec2_add(newPos,playerSize)));
 			if(debugCtx) {
 				debugCtx.clear();
 				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
@@ -192,8 +225,8 @@ function render() {
 				}
 			}
 			if(hitCount) {
-			} else
-				player.path = [1,newPos[0],newPos[1]];
+			} //else
+				player.path.push([1,newPos[0],newPos[1]]);
 			if(debugCtx)
 				debugCtx.finish();
 		}
@@ -211,7 +244,7 @@ function render() {
 			section = layer[section];
 			if(!section.ready || !aabb_intersects(screenAabb,section.aabb))
 				continue;
-			mvMatrix = section.mvMatrix;
+			mvMatrix = section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
 			animTime = (t % section.animSpeed) / section.animSpeed;
