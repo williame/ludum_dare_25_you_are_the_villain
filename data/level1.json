@@ -1089,6 +1089,16 @@
 				3820,
 				32
 			]
+		],
+		[
+			[
+				3812,
+				33
+			],
+			[
+				4310,
+				34
+			]
 		]
 	],
 	"floor": [
@@ -1440,6 +1450,16 @@
 			[
 				3675,
 				-148
+			]
+		],
+		[
+			[
+				3821,
+				-94
+			],
+			[
+				4316,
+				-96
 			]
 		]
 	],
@@ -1809,6 +1829,48 @@
 			"asset": "data/spikes.g3d",
 			"x": 3628,
 			"y": -151.2
+		},
+		{
+			"scale": 1,
+			"asset": "data/castle1door1.g3d",
+			"x": 3816,
+			"y": -97.19999999999999
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3430,
+			"y": 137.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3504,
+			"y": 134.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3577,
+			"y": 133.8
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3581,
+			"y": 19.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3580,
+			"y": 78.80000000000001
+		},
+		{
+			"scale": 1,
+			"asset": "data/coin_simple.g3d",
+			"x": 3506,
+			"y": 76.80000000000001
 		}
 	]
 }
