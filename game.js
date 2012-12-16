@@ -79,12 +79,41 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		},
 		move: function(vector) {
 			assert(section.path);
-			var last = section.path[section.path.length-1];
+			var pos = section.path[section.path.length-1];
+			pos = [pos[1],pos[2]]; // easier to have a proper naked vec2 rather than the prefix with the time
 			// start from whereever we last were
-			section.setPos(last[1],last[2]); // we have now reached previous destination
-			section.path = [[0,last[1], last[2]]];
+			section.setPos(pos[0],pos[1]); // we have now reached previous destination
+			section.path = [[0,pos[0],pos[1]]];
+			// which axis are we going to iterate on?
+			var	steps = Math.max(0,Math.ceil(Math.max(Math.abs(vector[0]),Math.abs(vector[1])))),
+				xstep = vector[0] / steps,
+				ystep = vector[1] / steps;
+			for(var step = 0; step<steps; step++) {
+				pos[0] += xstep;
+				pos[1] += ystep;
+				var	aabb = [pos[0],pos[1],pos[0]+section.w,pos[1]+section.h],
+					stopped = false;
+				for(var type in surfaces) { // cache aabbs, quadtree etc?
+					if((type == "ceiling" && ystep < 0) || // can fall through ceilings
+						(type == "floor" && ystep > 0)) // can jump up through floors
+						continue;
+					var array = surfaces[type];
+					for(var line in array) {
+						line = array[line];
+						if(aabb_line_intersects(aabb,line)) {
+							pos[0] -= xstep;
+							pos[1] -= ystep;
+							section.path.push([step/steps,pos[0],pos[1]]);
+							stopped = true;
+							break;
+						}
+					}
+					if(stopped)
+						break;
+				}
+			}
 			// and go to the new place
-			section.path.push([1,last[1]+vector[0],last[2]+vector[1]]);
+			section.path.push([1,pos[0],pos[1]]);
 		},
 		toJSON: function() {
 			return {
@@ -227,6 +256,10 @@ function render() {
 	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+	if(player && !modding) {
+		winOrigin[0] = player.x+player.w/2-canvas.width/2;
+		winOrigin[1] = player.y+player.h/2-canvas.height/2;
+	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
 		screenAabb = aabb(winOrigin[0],winOrigin[1],winOrigin[0]+canvas.width,winOrigin[1]+canvas.height);
