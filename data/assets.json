@@ -73,5 +73,11 @@
 	"data/background2.png",
 	"data/skynight.png",
 	"data/skynightlower.png",
-	"data/skynightupper.png"
+	"data/skynightupper.png",
+	"data/turret_window.g3d",
+	"data/tower_part.g3d",
+	"data/turret_short.g3d",
+	"data/turret.g3d",
+	"data/platformbase.g3d",
+	"data/battlements.g3d"
 ]
