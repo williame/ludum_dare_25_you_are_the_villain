@@ -162,18 +162,46 @@
 			{
 				"scale": 0.05,
 				"animSpeed": 1000,
-				"asset": "data/char.png",
-				"x": 403.4,
-				"y": 111.80000000000001
+				"asset": "data/sky1.png",
+				"x": 323.7999999999999,
+				"y": 436.99999999999994
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/sky1.png",
+				"x": 1349.8000000000004,
+				"y": 436.99999999999994
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/sky1.png",
+				"x": 2377.8,
+				"y": 436.99999999999994
 			}
 		],
 		"parallax0": [
 			{
 				"scale": 0.05,
 				"animSpeed": 1000,
-				"asset": "data/walls1.png",
-				"x": 501.4,
-				"y": 21.80000000000001
+				"asset": "data/background1.png",
+				"x": 323.5,
+				"y": 347.80000000000007
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 1351.5,
+				"y": 347.80000000000007
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 2379.5,
+				"y": 348.80000000000007
 			}
 		],
 		"scene": [
@@ -200,8 +228,8 @@
 				"scale": 1,
 				"animSpeed": 1000,
 				"asset": "data/tealeaf1_walk.g3d",
-				"x": 433,
-				"y": 271.8
+				"x": 744,
+				"y": 385.79999999999995
 			}
 		]
 	}
