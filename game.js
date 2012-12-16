@@ -66,8 +66,6 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 						prev[1]+(path[1]-prev[1])*pathTime,
 						prev[2]+(path[2]-prev[2])*pathTime,
 					0];
-					//if(!float_zero(translation[0])||!float_zero(translation[1]))
-						//console.log("section",section.asset.filename,"pathtime",pathTime,prev,path,translation);
 					var	scale = section.scale*winScale,
 						bounds = asset.art.bounds,
 						size = vec3_sub(bounds[1],bounds[0]);
@@ -78,6 +76,15 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				}
 				prev = path;
 			}
+		},
+		move: function(vector) {
+			assert(section.path);
+			var last = section.path[section.path.length-1];
+			// start from whereever we last were
+			section.setPos(last[1],last[2]); // we have now reached previous destination
+			section.path = [[0,last[1], last[2]]];
+			// and go to the new place
+			section.path.push([1,last[1]+vector[0],last[2]+vector[1]]);
 		},
 		toJSON: function() {
 			return {
@@ -138,7 +145,7 @@ function loadLevel(filename) {
 				section = data.sections[layer][section];
 				var asset = getAsset(section.asset);
 				if(asset)
-					Section(layer,asset,section.x,section.y,section.scale);
+					Section(layer,asset,section.x,section.y,section.scale,section.animSpeed);
 				else {
 					console.log("cannot get "+section.asset);
 					incomplete = true;
@@ -168,6 +175,8 @@ function game() {
 	modMenu.show();
 }
 
+var walking = true;
+
 function start() {
 	if(!sections.player.length) {
 		addMessage(10,null,"cannot play: we don\'t have a player!");
@@ -175,7 +184,7 @@ function start() {
 	}
 	assert(sections.player.length == 1);
 	player = sections.player[0];
-	player.path = [[0,player.x,player.y],[1,player.x,player.y]];
+	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
 	modding = false;
 }
 
@@ -194,47 +203,24 @@ function render() {
 			else if(keys[40] && !keys[38]) // down
 				winOrigin[1] -= panSpeed;
 		} else {
-			player.setPos(player.path[player.path.length-1][1],player.path[player.path.length-1][2]);
-			player.path = [[0,player.x,player.y]];
-			var	speed = 10, newPos = [player.x,player.y];
+			var	speed = 10, vector = [0,0];
 			if(keys[37] && !keys[39]) // left
-				newPos[0] -= speed;
+				vector[0] -= speed;
 			else if(keys[39] && !keys[37]) // right
-				newPos[0] += speed;
+				vector[0] += speed;
 			if(keys[38] && !keys[40]) // up
-				newPos[1] += speed;
+				vector[1] += speed;
 			else if(keys[40] && !keys[38]) // down
-				newPos[1] -= speed;
-			var 	playerPos = [player.x,player.y],
-				playerSize = [player.w,player.h],
-				playerBox = aabb_join(player.aabb,aabb(newPos,vec2_add(newPos,playerSize)));
+				vector[1] -= speed;
+
+			player.move(vector);
+			
 			if(debugCtx) {
+				var playerBox = player.aabb.slice(0);
 				debugCtx.clear();
 				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
-			}
-			var hits = {}, hitCount = 0;
-			for(var surface in surfaces) {
-				for(var line in surfaces[surface]) {
-					line = surfaces[surface][line];
-					var box = aabb(line[0],line[1]);
-					if(aabb_intersects(box,playerBox)) {
-						hitCount++;
-						hits[surface] = hits[surface] || [];
-						hits[surface].push([line,box]);
-						if(debugCtx) {
-							var colour = [1,1,0,1];
-							if(aabb_line_intersects(playerBox,line))
-								colour = [1,0,0,1];
-							debugCtx.drawBox(colour,box[0],box[1],box[2],box[3]);
-						}
-					}
-				}
-			}
-			if(hitCount) {
-			} //else
-				player.path.push([1,newPos[0],newPos[1]]);
-			if(debugCtx)
 				debugCtx.finish();
+			}
 		}
 		lastTick += tickMillis;
 	}
