@@ -61,11 +61,11 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			for(var path in section.path) {
 				path = section.path[path];
 				if(path[0] > pathTime) {
-					pathTime = 1- ((pathTime-prev[0]) / (path[0]-prev[0]));
+					pathTime = 1-((pathTime-prev[0]) / (path[0]-prev[0]));
 					var translation = [
-						prev[1]+(path[1]-prev[1])*pathTime,
-						prev[2]+(path[2]-prev[2])*pathTime,
-					0];
+						path[1]-(path[1]-prev[1])*pathTime,
+						path[2]-(path[2]-prev[2])*pathTime,
+						0];
 					var	scale = section.scale*winScale,
 						bounds = asset.art.bounds,
 						size = vec3_sub(bounds[1],bounds[0]);
@@ -91,12 +91,22 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			for(var step = 0; step<steps; step++) {
 				pos[0] += xstep;
 				pos[1] += ystep;
-				var	aabb = [pos[0],pos[1],pos[0]+section.w,pos[1]+section.h],
+				var	aabb,
+					left = pos[0]+section.w*0.25,
+					right = pos[0]+section.w*0.75,
 					stopped = false;
 				for(var type in surfaces) { // cache aabbs, quadtree etc?
-					if((type == "ceiling" && ystep < 0) || // can fall through ceilings
-						(type == "floor" && ystep > 0)) // can jump up through floors
-						continue;
+					if(type == "wall") {
+						aabb = [left,pos[1],right,pos[1]+section.h];
+					} else if(type == "ceiling") {
+						if(ystep <= 0) // can fall through ceilings
+							continue;
+						aabb = [left,pos[1]+section.h*0.7,right,pos[1]+section.h]; // top bit
+					} else if(type == "floor") {
+						if(ystep >= 0) // can jump up through floors
+							continue;
+						aabb = [left,pos[1],right,pos[1]+section.h*0.3]; // bottom bit
+					}
 					var array = surfaces[type];
 					for(var line in array) {
 						line = array[line];
