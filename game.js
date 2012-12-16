@@ -3,7 +3,8 @@ var	winOrigin = [0,0],
 	startTime = now(),
 	lastTick = 0,
 	tickFps = 30,
-	gravity = 10,
+	gravity = 3,
+	maxSloop = 8,
 	tickMillis = 1000/tickFps,
 	debugCtx = UIContext(),
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
@@ -31,17 +32,31 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.ready = asset.art && asset.art.ready;
 			if(!section.ready) {
 				var retry = function() {
+						if(section.ready)
+							return;
 						section.setPos(x,y);
 						if(section.ready)
 							console.log("asset",asset.filename,"now ready");
 					};
-				if(asset.art)
-					asset.art.readyCallbacks.push(retry);
+				if(asset.art) {
+					if(asset.art.readyCallbacks.indexOf(retry) == -1)
+						asset.art.readyCallbacks.push(retry);
+					else
+						console.log("asset",asset.filename,"still not ready");
+				} else if(section.readyCallback)
+					console.log("asset",asset.filename,"still has no art!");
 				else {
 					console.log("asset",asset.filename,"has no art!");
-					setTimeout(retry,200);
-				}	
+					section.readyCallback = setTimeout(function() {
+						section.readyCallback = null;
+						retry();
+					},200);
+				}
 				return;
+			}
+			if(section.readyCallback) {
+				clearTimeout(section.readyCallback);
+				section.readyCallback = null;
 			}
 			var	scale = section.scale*winScale,
 				bounds = asset.art.bounds,
@@ -81,6 +96,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				}
 				prev = path;
 			}
+			return null; // dumb checker
 		},
 		move: function(vector) {
 			assert(section.path);
@@ -89,19 +105,41 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			// start from whereever we last were
 			section.setPos(pos[0],pos[1]); // we have now reached previous destination
 			section.path = [[0,pos[0],pos[1]]];
+			var	height = pos[1]+vector[1],
+				floorLevel = getFloor(pos[0]+vector[0],pos[1]-gravity,section.w);
 			if(section.zone == "floor") {
-				var floorLevel = getFloor(pos[0]+vector[0],pos[1]+vector[1],section.w);
 				if(floorLevel != null) {
-					floorLevel = Math.max(floorLevel,pos[1]+vector[1]-gravity);
+					if(floorLevel < height-gravity) {
+						console.log("falling!",floorLevel,height-gravity);
+						section.zone = "air";
+						section.upVector = 0;
+						floorLevel = height-gravity;
+					}
 					pos[0] += vector[0];
-					pos[1] = floorLevel;	
+					pos[1] = floorLevel;
 				}
-			} else if(section.zone == "ceiling") {
-				var ceilingLevel = getCeiling(pos[0]+vector[0],pos[1]+vector[1]+section.h,section.w);
-				if(ceilingLevel != null) {
-					ceilingLevel = Math.min(ceilingLevel,pos[1]+vector[1]+section.h);
-					pos[0] += vector[0];
-					pos[1] = ceilingLevel-section.h;
+			} else {
+				var ceilingLevel = getCeiling(pos[0]+vector[0],height+section.h,section.w);
+				if(section.zone == "ceiling") {
+					if(ceilingLevel != null) {
+						height = Math.min(ceilingLevel-section.h,height);
+						pos[0] += vector[0];
+						pos[1] = height;
+					}
+				} else {
+					console.log("air",ceilingLevel-section.h,floorLevel,height,vector[1]);
+					assert(section.zone == "air");
+					if(floorLevel != null) { // something to fall onto
+						if(ceilingLevel != null)
+							height = Math.min(ceilingLevel-section.h,height);
+						if(floorLevel >= height) {
+							console.log("landing!",floorlevel,height);
+							section.zone = "floor";
+							height = floorLevel;
+						}
+						pos[0] += vector[0];
+						pos[1] = height;
+					}
 				}
 			}
 			/*
@@ -181,7 +219,7 @@ function getFloor(x,y,w) {
 		var i = Math.min(Math.max(a,centre),b);
 		i = (b-i)/(b-a);
 		var h = line[0][1]+(line[1][1]-line[0][1])*i;
-		if(h > y+gravity-5) continue;
+		if(h > y-maxSloop) continue;
 		if(nearest == null || nearest < h)
 			nearest = h;
 	}
@@ -203,7 +241,7 @@ function getCeiling(x,y,w) {
 		var i = Math.min(Math.max(a,centre),b);
 		i = (b-i)/(b-a);
 		var h = line[0][1]+(line[1][1]-line[0][1])*i;
-		if(h < y-5) continue;
+		if(h < y-maxSloop) continue;
 		if(nearest == null || nearest > h)
 			nearest = h;
 	}
@@ -326,14 +364,25 @@ function render() {
 				winOrigin[1] -= panSpeed;
 		} else {
 			var	speed = 10, vector = [0,0];
-			if(keys[37] && !keys[39]) // left
-				vector[0] -= speed;
-			else if(keys[39] && !keys[37]) // right
-				vector[0] += speed;
-			if(keys[38] && !keys[40]) // up
-				vector[1] += speed;
-			else if(keys[40] && !keys[38]) // down
-				vector[1] -= speed;
+			if(player.zone == "floor") {
+				if(keys[37] && !keys[39]) // left
+					vector[0] -= speed;
+				else if(keys[39] && !keys[37]) // right
+					vector[0] += speed;
+				if(keys[38] && !keys[40]) { // up; jump
+					player.zone = "air";
+					player.upVector = 10;
+				}
+			}
+			if(player.zone == "air") {
+				if(keys[38] && !keys[40]) // up
+					player.upVector *= 0.9;
+				else if(keys[40] && !keys[38]) // down
+					player.upVector *= 0.5;
+				else
+					player.upVector *= 0.8;
+				vector[1] = player.upVector * gravity - gravity;
+			}
 
 			player.move(vector);
 			
@@ -357,7 +406,7 @@ function render() {
 	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
-		screenAabb = aabb(winOrigin[0],winOrigin[1],winOrigin[0]+canvas.width,winOrigin[1]+canvas.height);
+		screenAabb = aabb([winOrigin[0],winOrigin[1]],[winOrigin[0]+canvas.width,winOrigin[1]+canvas.height]);
 	for(var layer in sections) {
 		layer = sections[layer];
 		for(var section in layer) {
