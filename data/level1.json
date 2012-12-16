@@ -163,22 +163,64 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/skynight.png",
-				"x": 324,
-				"y": 551.8
+				"x": 312,
+				"y": 699.8
 			},
 			{
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/skynight.png",
-				"x": 1352,
-				"y": 551.8
+				"x": 1340,
+				"y": 699.8
 			},
 			{
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/skynight.png",
-				"x": 2380,
-				"y": 551.8
+				"x": 2368,
+				"y": 699.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 312,
+				"y": 1210.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 1340,
+				"y": 1210.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 2368,
+				"y": 1211.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 312,
+				"y": 187.79999999999995
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 1340,
+				"y": 188.79999999999995
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 2368,
+				"y": 187.79999999999995
 			}
 		],
 		"parallax0": [
