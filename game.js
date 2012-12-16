@@ -25,10 +25,11 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.y = y;
 			section.ready = asset.art && asset.art.ready;
 			if(!section.ready) {
-				asset.art.readyCallbacks.push(function() {
-					section.setPos(x,y);
-					section.ready = true;
-				});
+				if(asset.art)
+					asset.art.readyCallbacks.push(function() {
+						section.setPos(x,y);
+						section.ready = true;
+					});
 				return;
 			}
 			var	scale = section.scale*winScale,
