@@ -42,6 +42,8 @@ modMenu.setMode = function(mode) {
 	modMenu.newLineStart = null;
 	modMenu.editLinePoint = null;
 	modMenu.modeLine = surfaceNames.indexOf(mode) >= 0;
+	if(mode != "play")
+		modding = true;
 };
 for(var mode in surfaceNames) {
 	mode = surfaceNames[mode];
@@ -202,7 +204,6 @@ function onMouseDown(evt,keys) {
 	modMenu.newLineStart = null;
 	modMenu.editLinePoint = null;
 	if(modding) {
-		console.log("mode",modMenu.mode);
 		var pin = winMousePos(evt);
 		if(modMenu.mode == "add") {
 			var hit = pickSection(pin[0],pin[1]);

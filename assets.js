@@ -77,7 +77,7 @@ function AssetManager() {
 				0,size[2]),
 			mvMatrix = mat4_translation([0,0,-bounds[1][2]]),
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
-		active.asset.art.draw((now()-active.startTime)%1,pMatrix,mvMatrix,nMatrix,showNormals.show);
+		active.asset.art.draw(((now()-active.startTime)%1000)/1000,pMatrix,mvMatrix,nMatrix,showNormals.show);
 		gl.disable(gl.SCISSOR_TEST);
 		gl.viewport(oldViewport[0],oldViewport[1],oldViewport[2],oldViewport[3]);
 	};

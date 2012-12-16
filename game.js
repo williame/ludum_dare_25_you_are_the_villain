@@ -2,7 +2,8 @@ var	winOrigin = [0,0],
 	winScale = 20,
 	startTime = now(),
 	lastTick = 0,
-	tickMillis = 1000/30,
+	tickFps = 30,
+	tickMillis = 1000/tickFps,
 	debugCtx = UIContext(),
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
 	sections,
@@ -10,12 +11,13 @@ var	winOrigin = [0,0],
 	surfaces,
 	player = null;
 
-function Section(layer,asset,x,y,scale) {
+function Section(layer,asset,x,y,scale,animSpeed) {
 	assert(asset);
 	var	undefined,
 		section = {
 		layer: layer,
 		scale: scale||1,
+		animSpeed: animSpeed||1000,
 		asset: asset,
 		ready: false,
 		setPos: function(x,y) {
@@ -34,6 +36,7 @@ function Section(layer,asset,x,y,scale) {
 				size = vec3_sub(bounds[1],bounds[0]);
 			section.w = size[0] * scale;
 			section.h = size[1] * scale;
+			section.aabb = [x,y,x+section.w,y+section.h];
 			section.mvMatrix = mat4_multiply(
 				mat4_translation([section.x,section.y,0]),
 				mat4_multiply(mat4_scale(scale),
@@ -44,6 +47,7 @@ function Section(layer,asset,x,y,scale) {
 		toJSON: function() {
 			return {
 				scale: section.scale,
+				animSpeed: section.animSpeed,
 				asset: section.asset.filename,
 				x: section.x,
 				y: section.y,
@@ -134,6 +138,7 @@ function start() {
 	}
 	assert(sections.player.length == 1);
 	player = sections.player[0];
+	player.path = [1,player.x,payer.y];
 	modding = false;
 }
 
@@ -152,7 +157,9 @@ function render() {
 			else if(keys[40] && !keys[38]) // down
 				winOrigin[1] -= panSpeed;
 		} else {
-			var	speed = 20, newPos = [player.x,player.y];
+			player.x = player.path[player.path.length-1][0];
+			player.y = player.path[player.path.length-1][1];
+			var	speed = 10, newPos = [player.x,player.y];
 			if(keys[37] && !keys[39]) // left
 				newPos[0] -= speed;
 			else if(keys[39] && !keys[37]) // right
@@ -165,37 +172,49 @@ function render() {
 				playerSize = [player.w,player.h],
 				playerBox = aabb_join(aabb(playerPos,vec2_add(playerPos,playerSize)),
 					aabb(newPos,vec2_add(playerPos,playerSize)));
-			debugCtx.clear();
-			debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
+			if(debugCtx) {
+				debugCtx.clear();
+				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
+			}
+			var hits = {}, hitCount = 0;
 			for(var surface in surfaces) {
 				for(var line in surfaces[surface]) {
 					line = surfaces[surface][line];
 					var box = aabb(line[0],line[1]);
 					if(aabb_intersects(box,playerBox)) {
-						debugCtx.drawBox([1,1,0,1],box[0],box[1],box[2],box[3]);
+						hitCount++;
+						hits[surface] = hits[surface] || [];
+						hits[surface].push([line,box]);
+						if(debugCtx)
+							debugCtx.drawBox([1,1,0,1],box[0],box[1],box[2],box[3]);
 					}
 				}
 			}
-			debugCtx.finish();
-			player.x = newPos[0];
-			player.y = newPos[1];
+			if(hitCount) {
+			} else
+				player.path = [1,newPos[0],newPos[1]];
+			if(debugCtx)
+				debugCtx.finish();
 		}
 		lastTick += tickMillis;
 	}
+	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,100),
-		mvMatrix, nMatrix, colour;
+		mvMatrix, nMatrix, colour, animTime,
+		screenAabb = aabb(winOrigin[0],winOrigin[1],winOrigin[0]+canvas.width,winOrigin[1]+canvas.height);
 	for(var layer in sections) {
 		layer = sections[layer];
 		for(var section in layer) {
 			section = layer[section];
-			if(!section.ready)
+			if(!section.ready || !aabb_intersects(screenAabb,section.aabb))
 				continue;
 			mvMatrix = section.mvMatrix;
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
-			section.asset.art.draw((now()-startTime)%1,pMatrix,mvMatrix,nMatrix,false,false,colour);
+			animTime = (t % section.animSpeed) / section.animSpeed;
+			section.asset.art.draw(animTime,pMatrix,mvMatrix,nMatrix,false,false,colour);
 		}
 	}
 	//###if(modding)
