@@ -2,23 +2,25 @@
 	"ceiling": [],
 	"floor": [],
 	"sections": {
+		"parallax1": [],
+		"parallax0": [],
 		"scene": [
 			{
 				"scale": 1,
 				"asset": "data/castle1a.g3d",
-				"x": 480.4,
-				"y": 240.8
-			}
-		],
-		"enemy": [
-			{
-				"scale": 1,
-				"asset": "data/guard_stand.g3d",
-				"x": 574.4,
-				"y": 248.8
+				"x": 475.4,
+				"y": 245.8
 			}
 		],
 		"treasure": [],
+		"enemy": [
+			{
+				"scale": 1,
+				"asset": "data/props_pikesshield_lighter2.g3d",
+				"x": 648.4,
+				"y": 310.8
+			}
+		],
 		"player": []
 	}
 }
