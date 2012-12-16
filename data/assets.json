@@ -67,5 +67,7 @@
 	"data/throneroom.g3d",
 	"data/bedchamber.g3d",
 	"data/guard_run.g3d",
-	"data/sgt1_run.g3d"
+	"data/sgt1_run.g3d",
+	"data/background1.png",
+	"data/sky1.png"
 ]
