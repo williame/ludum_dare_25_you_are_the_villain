@@ -158,8 +158,24 @@
 		]
 	},
 	"sections": {
-		"parallax1": [],
-		"parallax0": [],
+		"parallax1": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/char.png",
+				"x": 403.4,
+				"y": 111.80000000000001
+			}
+		],
+		"parallax0": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/walls1.png",
+				"x": 501.4,
+				"y": 21.80000000000001
+			}
+		],
 		"scene": [
 			{
 				"scale": 1,
