@@ -79,5 +79,6 @@
 	"data/turret_short.g3d",
 	"data/turret.g3d",
 	"data/platformbase.g3d",
-	"data/battlements.g3d"
+	"data/battlements.g3d",
+	"data/earth.png"
 ]
