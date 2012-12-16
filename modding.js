@@ -85,6 +85,14 @@ modMenu.drawLines = function() {
 };
 modMenu.ctrl.setPos([10,60]);
 
+function modOnLevelLoaded() {
+	if(modding) {
+		modMenu.linesCtx.clear();
+		modMenu.drawLines();
+		modMenu.linesCtx.finish();
+	}									
+}
+
 function pickSection(x,y,layer) {
 	layer = layer || modMenu.section;
 	var hit = null;

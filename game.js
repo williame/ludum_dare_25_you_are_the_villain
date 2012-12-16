@@ -147,8 +147,10 @@ function loadLevel(filename) {
 		}
 		if(incomplete)
 			setTimeout(reloadLevel,1000);
-		else
+		else {
 			levelLoaded = true;
+			modOnLevelLoaded();
+		}
 	});
 }
 

@@ -86,7 +86,7 @@ function G3D(filename,readyCallback) {
 		var meshCount = reader.uint16();
 		if(!meshCount) throw "has no meshes";
 		if(reader.uint8()) throw "is not a mtMorphMesh";
-		g3d.bounds = [[1000,1000,1000],[-1000,-1000,-1000]];
+		g3d.bounds = [[100000,100000,100000],[-100000,-100000,-100000]];
 		for(var i=0; i<meshCount; i++) {
 			var mesh = G3DMesh(g3d,reader);
 			for(var c=0; c<3; c++) { // bounds
@@ -307,7 +307,7 @@ function G3DMesh(g3d,reader) {
 	mesh.vnVbo = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER,mesh.vnVbo);
 	mesh.vnData = reader.float32(mesh.frameCount*mesh.vertexCount*3*2);
-	mesh.bounds = [[1000,1000,1000],[-1000,-1000,-1000]];
+	mesh.bounds = [[100000,100000,100000],[-100000,-100000,-100000]];
 	for(var f=0; f<mesh.frameCount; f++)
 		for(var v=0; v<mesh.vertexCount; v++)
 			for(var i=0; i<3; i++) { // bounds
