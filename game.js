@@ -227,41 +227,25 @@ function start() {
 	assert(sections.player.length == 1);
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
-	updateParallax.last = null;
 	modding = false;
 }
 
 function updateParallax() {
-	updateParallax.last = updateParallax.last || [player.tx,player.ty];
-	var	x_diff = updateParallax.last[0]-player.tx,
-		y_diff = updateParallax.last[1]-player.ty,
+	var	x_diff = player.x-player.tx,
+		y_diff = player.y-player.ty,
         	po0_x_distance = x_diff * 0.2,
         	po1_x_distance = x_diff * 0.1,
         	po0_y_distance = y_diff * 0.2,
         	po1_y_distance = y_diff * 0.1,
         	obj;
-        if(!float_zero(x_diff)) {
-                for(obj in sections.parallax0) {
-                        obj = sections.parallax0[obj];
-                        obj.setPos(obj.tx + po0_x_distance,obj.ty);
-                }
-                for(obj in sections.parallax1) {
-                        obj = sections.parallax1[obj];
-                        obj.setPos(obj.tx + po1_x_distance,obj.ty);
-                }
-                updateParallax.last[0] = player.tx;
-        }
-        if(!float_zero(y_diff)) {
-                for(obj in sections.parallax0) {
-                        obj = sections.parallax0[obj];
-                        obj.setPos(obj.tx,obj.ty + po0_y_distance);
-                }
-                for(obj in sections.parallax1) {
-                        obj = sections.parallax1[obj];
-                        obj.setPos(obj.tx,obj.ty + po1_y_distance);
-                }
-                updateParallax.last[1] = player.ty;
-        }
+	for(obj in sections.parallax0) {
+		obj = sections.parallax0[obj];
+		obj.setPos(obj.x+po0_x_distance,obj.y+po0_y_distance);
+	}
+	for(obj in sections.parallax1) {
+		obj = sections.parallax1[obj];
+		obj.setPos(obj.x+po1_x_distance,obj.y+po1_y_distance);
+	}
 }
 
 function render() {
