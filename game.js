@@ -75,7 +75,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				section.w = size[0] * scale;
 				section.h = size[1] * scale;
 				section.ofs = vec3_neg(vec3_add(bounds[0],vec3_scale(size,0.5)));
-				section.mMatrix = mat4_multiply(mat4_scale(scale),mat4_translation([section.ofs[0],section.ofs[1],0]));
+				section.mMatrix = mat4_multiply(mat4_scale(scale),mat4_translation(section.ofs));
 			}
 			section.aabb = [x,y,x+section.w,y+section.h];
 			section.cx = x+section.w/2;
@@ -509,7 +509,7 @@ function render() {
 	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
-		screenBox = aabb([winOrigin[0],winOrigin[1]],[winOrigin[0]+canvas.width,winOrigin[1]+canvas.height]),
+		screenBox = [winOrigin[0],winOrigin[1],winOrigin[0]+canvas.width,winOrigin[1]+canvas.height],
 		array;
 	for(var layer in layerNames) {
 		layer = layerNames[layer];
