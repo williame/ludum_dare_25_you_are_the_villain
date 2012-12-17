@@ -5781,22 +5781,22 @@
 				"scale": 1,
 				"animSpeed": 1000,
 				"asset": "data/goatrun.g3d",
-				"x": 1566.4,
+				"x": 1521.4,
+				"y": 17.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/goatrun.g3d",
+				"x": 1723.4,
+				"y": 14.800000000000011
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/goatrun.g3d",
+				"x": 1927.4,
 				"y": 15.800000000000011
-			},
-			{
-				"scale": 1,
-				"animSpeed": 1000,
-				"asset": "data/goatrun.g3d",
-				"x": 1766.4,
-				"y": 18.80000000000001
-			},
-			{
-				"scale": 1,
-				"animSpeed": 1000,
-				"asset": "data/goatrun.g3d",
-				"x": 1967.4,
-				"y": 20.80000000000001
 			}
 		],
 		"player": [
