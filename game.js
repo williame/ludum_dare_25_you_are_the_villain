@@ -16,6 +16,7 @@ var	winOrigin = [0,0],
 	surfaces,
 	tree,
 	lives = 9,
+	activeEnemy,
 	player = null;
 
 function Section(layer,asset,x,y,scale,animSpeed) {
@@ -395,7 +396,8 @@ function start() {
 	playing = true;
 	newGame = true;
 	lives = 9;
-	updateScoreUI();
+	activeEnemy = [];
+	updateScore();
 	var soundtrack = document.getElementById("soundtrack_control");
 	soundtrack.style.display = "block";
 	soundtrack.play();
@@ -411,6 +413,7 @@ function resetLevel() {
 			section.path = null;
 			section.vector = [0,0];
 			section.dead = false;
+			section.activated = false;
 		}
 }
 
@@ -461,6 +464,11 @@ function render() {
 			else if(keys[40] && !keys[38]) // down
 				winOrigin[1] -= panSpeed;
 		} else if(playing) {
+			// update enemies
+			for(var enemy=activeEnemy.length-1; enemy>=0; enemy--)
+				if(activeEnemy[enemy](lastTick)) // return true to delete yourself
+					activeEnemy.splice(enemy,1);
+			// update player
 			var	speed = 10, vector = [0,0];
 			if(player.zone == "floor") {
 				if(keys[37] && !keys[39]) // left
@@ -505,15 +513,20 @@ function render() {
 						if(aabb_circle_intersects(player.aabb,[hit.x+r,hit.y+r],r)) {
 							doEffect("collect",player.defaultEffectPos());
 							hit.dead = true;
-							updateScoreUI();
+							updateScore();
 						}
 					}
 				}
 			}
 			
 			if(debugCtx) {
-				var playerBox = player.moveBox;
-				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
+				for(var enemy in sections.enemy) {
+					enemy = sections.enemy[enemy];
+					if(enemy.moveBox)
+						debugCtx.drawBox([1,1,0,1],enemy.moveBox[0],enemy.moveBox[1],enemy.moveBox[2],enemy.moveBox[3]);
+				}
+				// player
+				debugCtx.drawBox([0,1,0,1],player.moveBox[0],player.moveBox[1],player.moveBox[2],player.moveBox[3]);
 			}
 		}
 		lastTick += tickMillis;
@@ -551,7 +564,7 @@ function render() {
 				gl.clear(gl.DEPTH_BUFFER_BIT);
 				first = false;
 			}
-			if(section.layer == "enemy" && !section.activated) {
+			if(playing && section.layer == "enemy" && !section.activated) {
 				section.activated = true;
 				activateAI(section);
 			}
@@ -574,26 +587,25 @@ function render() {
 	}
 }
 
-function updateScoreUI() {
-	console.log("updateScoreUI");
-	updateScoreUI.collected = 0;
-	updateScoreUI.remaining = 0;
-	if(!updateScoreUI.win) {
-		updateScoreUI.ctrl = UIComponent();
-		updateScoreUI.ctrl.draw = function(ctx) {
+function updateScore() {
+	updateScore.collected = 0;
+	updateScore.remaining = 0;
+	if(!updateScore.win) {
+		updateScore.ctrl = UIComponent();
+		updateScore.ctrl.draw = function(ctx) {
 			var	swagbag = getFile("image","data/swagbag.png"),
 				cat = getFile("image","data/cats_life.png");
 				left = 10,
 				bottom = 10,
 				height = 48,
-				font = updateScoreUI.ctrl.getFont();
+				font = updateScore.ctrl.getFont();
 			if(swagbag) {
 				ctx.drawRect(swagbag,[1,1,1,1],
 					left,canvas.height-bottom-height,left+height,canvas.height-bottom,
 					0,0,1,1);
 			}
 			if(font) {
-				var	text = "swag: "+updateScoreUI.collected,
+				var	text = "swag: "+updateScore.collected,
 					x = 2*left+height,
 					y = canvas.height-bottom-(height-font.lineHeight)/2-font.lineHeight;
 				ctx.drawText(font,[0,0,0,1],x-1,y,  text);
@@ -611,31 +623,45 @@ function updateScoreUI() {
 					0,0,lives,1);
 			}	
 		};
-		updateScoreUI.win = UIWindow(false,updateScoreUI.ctrl);
+		updateScore.win = UIWindow(false,updateScore.ctrl);
 	}
 	if(playing)
-		updateScoreUI.win.show();
-	else
-		updateScoreUI.win.hide();
+		updateScore.win.show();
+	else {
+		updateScore.win.hide();
+		return;
+	}
+	// dead? LOSE
+	if(lives <= 0) {
+		playing = false;
+		addMessage(0,"###","you died!");
+		//### end screen
+	}
 	// count treasure
 	if(sections) {
 		for(var t in sections.treasure)
 			if(sections.treasure[t].dead)
-				updateScoreUI.collected++;
+				updateScore.collected++;
 			else
-				updateScoreUI.remaining++;
-		//done
-		updateScoreUI.ctrl.dirty();
+				updateScore.remaining++;
 	}
+	// and we've collected it all? WIN
+	if(updateScore.collected && !updateScore.remaining) {
+		playing = false;
+		addMessage(0,"###","you won!");
+		//### end screen
+	}
+	//done
+	updateScore.ctrl.dirty();
 }
 
-loadFile("image","data/swagbag.png",updateScoreUI);
+loadFile("image","data/swagbag.png",updateScore);
 loadFile("image","data/cats_life.png",function(tex) {
 	gl.bindTexture(gl.TEXTURE_2D,tex);
 	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);
 	gl.bindTexture(gl.TEXTURE_2D,null);
-	updateScoreUI();
+	updateScore();
 });
 
 function doEffect(cause,pt) {
@@ -649,6 +675,8 @@ function doEffect(cause,pt) {
 		playSound(getFile("audio","data/Jump4.wav.ogg"));
 	else if(cause == "collect")
 		playSound(getFile("audio","data/Pickup_Coin12.wav.ogg"));
+	else if(cause == "hurt")
+		playSound(getFile("audio","data/Hit_Hurt71.wav.ogg"));		
 }
 
 loadFile("audio","data/Explosion5.wav.ogg");
@@ -657,7 +685,30 @@ loadFile("audio","data/Jump4.wav.ogg");
 loadFile("audio","data/Pickup_Coin12.wav.ogg");
 
 function activateAI(unit) {
+	console.log("activating AI",unit.asset.filename);
 	if(unit.asset.filename == "data/goatrun.g3d") {
-		console.log("WILL: activating goat");
+		// things we have to do to make it moveable
+		unit.zone = "floor";
+		unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.y]];
+		// and we want to track our last attack time
+		unit.lastAttack = 0;
+		// make it move each tick
+		activeEnemy.push(function(t) {
+			// do we want to go left or right?
+			var dir = player.tx - unit.tx;
+			dir = dir<0? -1: dir>0? 1: 0;
+			// have we collided with the player?
+			if(aabb_intersects(player.aabb,unit.aabb)) {
+				if(unit.lastAttack<t) {
+					unit.lastAttack = t + 3000; // one life taken every 3 seconds
+					lives--;
+					doEffect("hurt",player.defaultEffectPos(dir < 0));
+					updateScore();
+				}
+			} else {
+				// go that way
+				unit.move([dir*3,-gravity]);
+			}
+		});
 	} // else if...
 }
