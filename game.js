@@ -539,8 +539,6 @@ function render() {
 						if(aabb_line_intersects(player.aabb,spike)) {
 							doEffect("hurt",player.defaultEffectPos());
 							tree.spike.lastAttack = lastTick + 3000; // don't hurt more than every 3 seconds
-							lives--;
-							updateScore();
 							break;
 						}
 					}
@@ -603,6 +601,10 @@ function render() {
 				section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
+			if(playing && section === player && player.lastHurt) {
+				if(player.lastHurt > t && t%100>50)
+					colour = [1,0.8,0.8,0.6];
+			}
 			if(section.animOnce)
 				animTime = Math.min(1,Math.max(0,t-section.startTime)/section.animSpeed); //### broken
 			else
@@ -697,7 +699,7 @@ loadFile("image","data/cats_life.png",function(tex) {
 function doEffect(cause,pt) {
 	console.log(cause,pt);
 	doEffect.last = doEffect.last || {};
-	var t = now();
+	var t = now() - startTime;
 	if(doEffect.last[cause] > t)
 		return;
 	doEffect.last[cause] = t + 500; // max twice a second
@@ -705,8 +707,12 @@ function doEffect(cause,pt) {
 		playSound(getFile("audio","data/Jump4.wav.ogg"));
 	else if(cause == "collect")
 		playSound(getFile("audio","data/Pickup_Coin12.wav.ogg"));
-	else if(cause == "hurt")
-		playSound(getFile("audio","data/Hit_Hurt71.wav.ogg"));		
+	else if(cause == "hurt") {
+		playSound(getFile("audio","data/Hit_Hurt71.wav.ogg"));
+		player.lastHurt = doEffect.last[cause];
+		lives--;
+	}
+	updateScore();
 }
 
 loadFile("audio","data/Explosion5.wav.ogg");
@@ -731,9 +737,7 @@ function activateAI(unit) {
 			if(aabb_intersects(player.aabb,unit.aabb)) {
 				if(unit.lastAttack<t) {
 					unit.lastAttack = t + 3000; // one life taken every 3 seconds
-					lives--;
 					doEffect("hurt",player.defaultEffectPos(dir < 0));
-					updateScore();
 				}
 			} else {
 				// go that way
