@@ -105,39 +105,44 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			// start from whereever we last were
 			section.setPos(pos[0],pos[1]); // we have now reached previous destination
 			section.path = [[0,pos[0],pos[1]]];
-			var	height = pos[1]+vector[1],
-				floorLevel = getFloor(pos[0]+vector[0],pos[1],section.w);
+			var	left = pos[0]+vector[0],
+				bottom = pos[1]+vector[1];
+			if(float_zero(vector[0]) || hitsWall(left,bottom,section.w,section.h)) {
+				left = pos[0];
+				vector[0] = 0;
+			}
+			var floorLevel = getFloor(left,pos[1],section.w);
 			if(section.zone == "floor") {
 				if(floorLevel != null) {
-					if(floorLevel < height-gravity) {
-						console.log("falling!",floorLevel,height-gravity);
+					if(floorLevel < bottom-gravity) {
+						console.log("falling!",floorLevel,bottom-gravity);
 						section.zone = "air";
-						section.upVector = 0;
-						floorLevel = height-gravity;
+						section.vector = [vector[0],0];
+						floorLevel = bottom-gravity;
 					}
 					pos[0] += vector[0];
 					pos[1] = floorLevel;
 				}
 			} else {
-				var ceilingLevel = getCeiling(pos[0]+vector[0],pos[1]+section.h,section.w);
+				var ceilingLevel = getCeiling(left,pos[1]+section.h,section.w);
 				if(section.zone == "ceiling") {
 					if(ceilingLevel != null) {
-						height = Math.min(ceilingLevel-section.h,height);
+						bottom = Math.min(ceilingLevel-section.h,bottom);
 						pos[0] += vector[0];
-						pos[1] = height;
+						pos[1] = bottom;
 					}
 				} else {
 					assert(section.zone == "air");
 					if(floorLevel != null) { // something to fall onto
 						if(ceilingLevel != null)
-							height = Math.min(ceilingLevel-section.h,height);
-						if(floorLevel >= height) {
-							console.log("landing!",floorLevel,height);
+							bottom = Math.min(ceilingLevel-section.h,bottom);
+						if(floorLevel >= bottom) {
+							console.log("landing!",floorLevel,bottom);
 							section.zone = "floor";
-							height = floorLevel;
+							bottom = floorLevel;
 						}
 						pos[0] += vector[0];
-						pos[1] = height;
+						pos[1] = bottom;
 					}
 				}
 			}
@@ -245,6 +250,23 @@ function getCeiling(x,y,w) {
 			nearest = h;
 	}
 	return nearest;
+}
+
+function hitsWall(x,y,w,h) {
+	var 	left = x+w*0.25,
+		right = x+w*0.75,
+		walls = surfaces.wall,
+		box = [left,y,right,y+h],
+		line;
+	for(line in walls) {
+		line = walls[line];
+		if(aabb_intersects(box,aabb(line[0],line[1])) &&
+			aabb_line_intersects(box,line)) {
+			console.log("straight down!",box,line);
+			return true;
+		}
+	}
+	return false;
 }
 
 var levelLoaded = false, levelFilename = "data/level1.json";
@@ -370,17 +392,18 @@ function render() {
 					vector[0] += speed;
 				if(keys[38] && !keys[40]) { // up; jump
 					player.zone = "air";
-					player.upVector = 10;
+					player.vector = [vector[0],10];
 				}
 			}
 			if(player.zone == "air") {
 				if(keys[38] && !keys[40]) // up
-					player.upVector *= 0.9;
+					player.vector[1] *= 0.9;
 				else if(keys[40] && !keys[38]) // down
-					player.upVector *= 0.5;
+					player.vector[1] *= 0.5;
 				else
-					player.upVector *= 0.8;
-				vector[1] = player.upVector * gravity - gravity;
+					player.vector[1] *= 0.8;
+				vector[0] = player.vector[0];
+				vector[1] = player.vector[1] * gravity - gravity;
 			}
 
 			player.move(vector);
