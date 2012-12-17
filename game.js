@@ -3,7 +3,7 @@ var	winOrigin = [0,0],
 	startTime = now(),
 	lastTick = 0,
 	tickFps = 30,
-	gravity = 5,
+	gravity = 1,
 	maxSloop = 8,
 	tickMillis = 1000/tickFps,
 	newGame = false,
@@ -463,23 +463,26 @@ function render() {
 					vector[0] += speed;
 				if(keys[38] && !keys[40]) { // up; jump
 					player.zone = "air";
-					player.vector = [vector[0],5];
+					player.vector[1] = 15;
 					doEffect("jump",player.defaultEffectPos(true));
-				}
+				} else
+					player.vector[0] *= 0.2;
 			}
 			if(player.zone == "air") {
+				player.vector[1] -= gravity;
 				if(keys[38] && !keys[40]) // up
-					player.vector[1] *= 0.9;
+					; //player.vector[1] *= 0.9;
 				else if(keys[40] && !keys[38]) // down
 					player.vector[1] *= 0.5;
-				else
-					player.vector[1] *= 0.8;
+				if(!keys[38] && player.vector[1] > 0)
+					player.vector[1] *= 0.2;
 				if(keys[37] && !keys[39]) // left
 					player.vector[0] = -speed;
 				else if(keys[39] && !keys[37]) // right
 					player.vector[0] = speed;
+                               player.vector[1] = Math.max(-20,player.vector[1]);
 				vector[0] = player.vector[0];
-				vector[1] = player.vector[1] * gravity - gravity;
+				vector[1] = player.vector[1];
 			}
 
 			player.move(vector);
