@@ -3881,7 +3881,7 @@
 				"animSpeed": 1000,
 				"asset": "data/castle1start.g3d",
 				"x": 840,
-				"y": -140.2
+				"y": -141.2
 			},
 			{
 				"scale": 1,
@@ -5836,6 +5836,62 @@
 				"asset": "data/step_stone.g3d",
 				"x": 3428,
 				"y": 584.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 2909,
+				"y": 1071.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 2900,
+				"y": 1060.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 4668,
+				"y": 907.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 6736,
+				"y": 584.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 2236,
+				"y": 58.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 2233,
+				"y": -362.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 2390,
+				"y": -142.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/door.g3d",
+				"x": 4905,
+				"y": -86.19999999999999
 			}
 		]
 	}
