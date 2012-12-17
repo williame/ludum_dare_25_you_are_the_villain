@@ -6,10 +6,11 @@ function winMousePos(evt) {
 
 var	modding = false,
 	surfaceColours = {
-		ceiling: [0.6,0.8,1,1],
-		floor: [0.8,0.6,1,1],
+		ceiling: [0.6,0.8,0,1],
+		floor: [0.8,1,0,1],
 		wall: [1,0.6,0.6,1],
 	},
+	modLineWidth = 2,
 	modMenuMode = UIPanel([UILabel("tool"),
 			UIButton("add",function() {
 				modMenu.setMode("add");
@@ -24,6 +25,7 @@ var	modding = false,
 	modMenu = UIWindow(false,UIPanel([
 		modMenuMode,
 		modMenuSections,
+		UIButton("tidy",function() { modMenuTidy(); }),
 		UIButton("play",function() {
 			modMenu.setMode("play");
 			if(modding)
@@ -45,6 +47,10 @@ modMenu.setMode = function(mode) {
 	modMenu.newLineStart = null;
 	modMenu.editLinePoint = null;
 	modMenu.modeLine = surfaceNames.indexOf(mode) >= 0;
+	if(debugCtx) {
+		debugCtx.clear();
+		debugCtx.finish();
+	}
 	if(mode != "play" && !modding)
 		startModding();
 };
@@ -83,7 +89,7 @@ modMenu.drawLines = function() {
 	for(var surface in surfaces)
 		for(var line in surfaces[surface]) {
 			line = surfaces[surface][line];
-			modMenu.linesCtx.drawLine(surfaceColours[surface],line[0][0],line[0][1],line[1][0],line[1][1]);
+			modMenu.linesCtx.drawLine(surfaceColours[surface],line[0][0],line[0][1],line[1][0],line[1][1],modLineWidth);
 		}
 };
 modMenu.ctrl.setPos([10,60]);
@@ -91,17 +97,14 @@ modMenu.ctrl.setPos([10,60]);
 function startModding() {
 	console.log("startModding");
 	modding = true;
-	for(var layer in sections)
-		for(var section in sections[layer]) {
-			section = sections[layer][section];
-			section.setPos(section.x,section.y);
-			section.path = null;
-		}
+	resetLevel();
 	if(modMenu.mode == "play")
 		modMenu.setMode("add");
 	modMenu.show();
-	if(debugCtx)
+	if(debugCtx) {
 		debugCtx.clear();
+		debugCtx.finish();
+	}
 }
 
 function modOnLevelLoaded() {
@@ -264,7 +267,7 @@ function onMouseMove(evt,keys) {
 			modMenu.linesCtx.clear();
 			modMenu.drawLines();
 			var colour = surfaceColours[modMenu.mode];
-			modMenu.linesCtx.drawLine(colour,modMenu.newLineStart[0],modMenu.newLineStart[1],pin[0],pin[1]);
+			modMenu.linesCtx.drawLine(colour,modMenu.newLineStart[0],modMenu.newLineStart[1],pin[0],pin[1],modLineWidth);
 			modMenu.linesCtx.finish();
 		} else if(modMenu.editLinePoint && modMenu.modeLine) {
 			var pin = winMousePos(evt);
@@ -291,4 +294,102 @@ function onMouseUp(evt,keys) {
 		modMenu.newLineStart = null;
 		modMenu.editLinePoint = null;
 	}
+}
+
+function modMenuTidy() {
+	if(!modding) {
+		alert("you can only tidy in modding mode");
+		keys = {}; // clear them after losing focus in an assert
+		return;
+	}
+	if(!debugCtx)
+		debugCtx = UIContext();
+	debugCtx.clear();
+	var	issues = [],
+		red = [1,0,0,1], green = [0,1,0,1],
+		badLine = function(line,colour) {
+			debugCtx.drawLine(colour||red,line[0][0],line[0][1],line[1][0],line[1][1],modLineWidth*1.5);
+			winOrigin = [line[0][0]-canvas.width/2,line[0][1]-canvas.height/2]; // centre screen so we can find the damn thing!
+		},
+		badPoint = function(point,colour) {
+			debugCtx.fillCircle(colour||red,point[0],point[1],10);
+		},
+		player = sections.player[0],
+		playerWidth = player? player.w/2: 0;
+	if(!player)
+		issues.push("no player!");
+	else if(float_zero(playerWidth))
+		issues.push("bad player bounding box!");
+	for(var surface in surfaces) {
+		var badSlope = 0, unclosed = 0, fixSlope = 0;
+		for(var line in surfaces[surface]) {
+			line = surfaces[surface][line];
+			// work out adjacency
+			var	a = linesForPoint(line[0]),
+				b = linesForPoint(line[1]),
+				ab = a.concat(b),
+				adjSurfaces = [];
+			for(var l in ab) {
+				l = ab[l];
+				for(var s in surfaces)
+					if(surfaces[s].indexOf(l) != -1) {
+						adjSurfaces.push(s); 
+						break;
+					}
+			}
+			// slope check
+			if(surface == "wall") {
+				if(adjSurfaces.indexOf("floor")!=-1 || adjSurfaces.indexOf("ceiling")!=-1) {
+					var slope = line[0][0]-line[1][0];
+					if(float_zero(slope)) {
+					} else if(slope < 3) {
+						fixSlope++;
+						line[1][0] = line[0][0];
+						badLine(line,green);
+					} else {
+						badSlope++;
+						badLine(line);
+					}
+				}
+			} else if(player) {
+				var slope = vec2_normalise(vec2_sub(line[0],line[1]));
+				slope = vec2_scale(slope,playerWidth);
+				if(slope[1] >= maxSloop) {
+					badSlope++;
+					console.log("bad slope!",line);
+					badLine(line);
+				}
+			}
+			// unclosed checking
+			if(a.length == 1 && b.length == 1 && surface == "floor") // platforms allowed
+				continue;
+			if(a.length < 2) {
+				unclosed++;
+				badPoint(line[0]);
+			}
+			if(b.length < 2) {
+				unclosed++;
+				badPoint(line[1]);
+			}
+		}
+		if(fixSlope)
+			issues.push("FIXED "+fixSlope+" badly sloped "+surface+"s");
+		if(badSlope)
+			issues.push(""+badSlope+" badly sloped "+surface+"s");
+		if(unclosed)
+			issues.push(""+unclosed+" unclosed "+surface+" points");
+	}
+	debugCtx.finish();
+	modMenu.linesCtx.clear();
+	modMenu.drawLines();
+	modMenu.linesCtx.finish();
+	if(issues.length) {
+		var msg = ""+issues.length+" issues found:";
+		for(var issue in issues)
+			msg += "\n * "+issues[issue];
+		alert(msg);
+	} else
+		alert("no issues spotted!\n"+
+			"(this tool isn\'t very sophisticated,\n"+
+			" it could miss all kinds of things...)");
 }

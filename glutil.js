@@ -1016,6 +1016,10 @@ function vec2_distance_sqrd(a,b) {
 	return d[0]*d[0] + d[1]*d[1];
 }
 
+function vec2_scale(v,f) {
+	return [v[0]*f,v[1]*f];
+}
+
 var programs = {
 	blankTex: createTexture(1,1,new Uint8Array([255,255,255,255])),
 	standard: function(cb,uniforms) {

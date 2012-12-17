@@ -6,6 +6,7 @@ var	winOrigin = [0,0],
 	gravity = 5,
 	maxSloop = 8,
 	tickMillis = 1000/tickFps,
+	newGame = false,
 	debugCtx = UIContext(),
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
 	sections,
@@ -108,22 +109,28 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			section.path = [[0,pos[0],pos[1]]];
 			var	left = pos[0]+vector[0],
 				bottom = pos[1]+vector[1];
-			if(float_zero(vector[0]) || hitsWall(left,bottom,section.w,section.h)) {
+			if(!float_zero(vector[0]) && hitsWall(left,bottom,section.w,section.h)) {
 				left = pos[0];
+				section.vector = [0,-gravity];
 				vector[0] = 0;
 			}
 			var floorLevel = getFloor(left,pos[1],section.w);
+			if(floorLevel == null) {
+				restartGame();
+				return;
+			}
 			if(section.zone == "floor") {
 				if(floorLevel != null) {
 					if(floorLevel < bottom-gravity) {
 						console.log("falling!",floorLevel,bottom-gravity);
 						section.zone = "air";
-						section.vector = [vector[0],0];
+						section.vector = [vector[0]*0.2,vector[1]*0.5];
 						floorLevel = bottom-gravity;
 					}
 					pos[0] += vector[0];
 					pos[1] = floorLevel;
-				}
+				} else
+					restartGame();
 			} else {
 				var ceilingLevel = getCeiling(left,pos[1]+section.h,section.w);
 				if(section.zone == "ceiling") {
@@ -135,16 +142,22 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				} else {
 					assert(section.zone == "air");
 					if(floorLevel != null) { // something to fall onto
-						if(ceilingLevel != null)
-							bottom = Math.min(ceilingLevel-section.h,bottom);
 						if(floorLevel >= bottom) {
 							console.log("landing!",floorLevel,bottom);
 							section.zone = "floor";
 							bottom = floorLevel;
+						} else if(ceilingLevel != null) {
+							ceilingLevel -= section.h;
+							if(ceilingLevel < bottom) {
+								console.log("bump!",ceilingLevel);
+								bottom = ceilingLevel;
+								section.vector[1] = 0;
+							}
 						}
 						pos[0] += vector[0];
 						pos[1] = bottom;
-					}
+					} else
+						restartGame();
 				}
 			}
 			/*
@@ -289,10 +302,22 @@ function loadLevel(filename) {
 		modMenu.drawLines();
 		modMenu.linesCtx.finish();
 		surfaces = {};
+		var ptIndex = {}; // we want them shared where possible, for modding
 		for(var surface in surfaceNames) {
 			surface = surfaceNames[surface];
 			surfaces[surface] = [];
 			surfaces[surface] = (data.surfaces? data.surfaces[surface]: null) || [];
+			for(var line in surfaces[surface]) {
+				line = surfaces[surface][line];
+				if(!(line[0] in ptIndex))
+					ptIndex[line[0]] = line[0];
+				else
+					line[0] = ptIndex[line[0]];
+				if(!(line[1] in ptIndex))
+					ptIndex[line[1]] = line[1];
+				else
+					line[1] = ptIndex[line[1]];
+			}
 		}
 		var incomplete = false;
 		sections = {};
@@ -340,6 +365,7 @@ function start() {
 		return;
 	}
 	assert(sections.player.length == 1);
+	resetLevel();
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
 	player.zone = "floor";
@@ -347,6 +373,27 @@ function start() {
 	treeCeiling = make_tree(surfaces.ceiling || []);
 	treeWall = make_tree(surfaces.wall || []);
 	modding = false;
+	newGame = true;
+}
+
+function resetLevel() {
+	for(var layer in sections)
+		for(var section in sections[layer]) {
+			section = sections[layer][section];
+			section.setPos(section.x,section.y);
+			section.path = null;
+			section.vector = [0,0];
+		}
+}
+
+function restartGame() {
+	alert("an embarrassing error occurred!\n"+
+		"you ran out of floor, somehow...\n"+
+		"(blame the level designer, not the coder ;)\n"+
+		"We\'ll just restart the level and pretend\n"+
+		"it never happened, shall we?");
+	keys = {}; // zap all ups and downs etc
+	start();
 }
 
 function updateParallax() {
@@ -369,6 +416,7 @@ function updateParallax() {
 
 function render() {
 	var t = now()-startTime;
+	newGame = false;
 	// tick
 	while(lastTick+tickMillis < t) {
 		if(modding) {
@@ -390,7 +438,7 @@ function render() {
 					vector[0] += speed;
 				if(keys[38] && !keys[40]) { // up; jump
 					player.zone = "air";
-					player.vector = [vector[0],10];
+					player.vector = [vector[0],5];
 				}
 			}
 			if(player.zone == "air") {
@@ -405,6 +453,7 @@ function render() {
 			}
 
 			player.move(vector);
+			if(newGame) return;
 			
 			if(debugCtx) {
 				var playerBox = player.aabb.slice(0);

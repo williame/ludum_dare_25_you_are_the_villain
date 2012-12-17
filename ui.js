@@ -177,15 +177,27 @@ function UIContext() {
 	ctx.fillRect = function(colour,x1,y1,x2,y2) {
 		ctx.drawRect(ctx.blank,colour,x1,y1,x2,y2,0,0,1,1);
 	};
-	ctx.drawLine = function(colour,x1,y1,x2,y2) {
-		ctx.set(ctx.blank,colour,gl.LINES);
-		ctx.data = ctx.data.concat([x1,y1,0,0,x2,y2,1,1]);
+	ctx.drawLine = function(colour,x1,y1,x2,y2,width) {
+		if(!width) {
+			ctx.set(ctx.blank,colour,gl.LINES);
+			ctx.data = ctx.data.concat([x1,y1,0,0,x2,y2,1,1]);
+		} else {
+			var	n = line_normal([[x1,y1],[x2,y2]]);
+			width /= 2;
+			for(var i=-width; i<=width; i+=0.5) {
+				var v = vec2_scale(n,i);
+				ctx.drawLine(colour,x1-v[0],y1-v[1],x2-v[0],y2-v[1]);
+			}
+		}
 	};
 	ctx.drawBox = function(colour,x1,y1,x2,y2) {
 		ctx.drawLine(colour,x1,y1,x2,y1);
 		ctx.drawLine(colour,x1,y2,x2,y2);
 		ctx.drawLine(colour,x1,y1,x1,y2);
 		ctx.drawLine(colour,x2,y1,x2,y2);
+	};
+	ctx.fillCircle = function(colour,x1,y1,radius) {
+		ctx.fillRoundedRect(colour,radius,x1,y1,x1,y1);
 	};
 	ctx.makeCorners = function(r) {
 		var pts = [],
