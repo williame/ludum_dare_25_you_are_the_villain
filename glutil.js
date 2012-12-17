@@ -33,8 +33,11 @@ function createShader(str,type) {
 		shader = gl.createShader(type);
 		gl.shaderSource(shader,str);
 		gl.compileShader(shader);
-		if (!gl.getShaderParameter(shader,gl.COMPILE_STATUS))
-			throw gl.getShaderInfoLog(shader);
+		if (!gl.getShaderParameter(shader,gl.COMPILE_STATUS)) {
+			console.log("bad shader!",type,str);
+			console.log("gl says:",gl.getShaderInfoLog(shader));
+			fail("error compiling shader");
+		}
 		window.x_shaders[[str,type]] = shader;
 	}
 	return shader;

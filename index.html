@@ -318,7 +318,7 @@ function clearCachedFiles() {
 
 function getFile(type,path) {
 	var key = ""+type+":"+path;
-	return loadFile.loaded[key];
+	return loadFile.loaded? loadFile.loaded[key] || null: null;
 }
 
 function loadFile(type,path,callback) {

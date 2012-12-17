@@ -104,17 +104,15 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				path = section.path[path];
 				if(path[0] > pathTime) {
 					pathTime = (pathTime-prev[0]) / (path[0]-prev[0]);
-					var translation = [
-						section.w/2+path[1]-(path[1]-prev[1])*pathTime,
-						section.h/2+path[2]-(path[2]-prev[2])*pathTime,
-						0];
+					section.exactX = section.w/2+path[1]-(path[1]-prev[1])*pathTime;
+					section.exactY = section.h/2+path[2]-(path[2]-prev[2])*pathTime;
 					var	scale = section.scale*winScale,
 						bounds = asset.art.bounds,
 						size = vec3_sub(bounds[1],bounds[0]),
 						ofs = vec3_neg(vec3_add(bounds[0],vec3_scale(size,0.5)));
 					return mat4_multiply(
 						mat4_multiply(
-							mat4_translation(translation),
+							mat4_translation([section.exactX,section.exactY,0]),
 							rotation),
 						section.mMatrix);
 				}
@@ -503,9 +501,11 @@ function render() {
 	assert(pathTime >= 0 && pathTime < 1,[lastTick,t,tickMillis,pathTime]);
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+	var playerMatrix;
 	if(playing) {
-		winOrigin[0] = player.tx+player.w/2-canvas.width/2;
-		winOrigin[1] = player.ty+player.h/2-canvas.height/2;
+		playerMatrix = player.getMvMatrix(pathTime); // computes exact position of everything
+		winOrigin[0] = player.exactX+player.w/2-canvas.width/2;
+		winOrigin[1] = player.exactY+player.h/2-canvas.height/2;
 	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
@@ -527,7 +527,9 @@ function render() {
 				gl.clear(gl.DEPTH_BUFFER_BIT);
 				first = false;
 			}
-			mvMatrix = section.getMvMatrix(pathTime);
+			mvMatrix = section === player && playerMatrix? 
+				playerMatrix:
+				section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
 			animTime = (t % section.animSpeed) / section.animSpeed;
