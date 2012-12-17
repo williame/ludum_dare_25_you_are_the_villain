@@ -325,6 +325,7 @@ function loadFile(type,path,callback) {
 	loadFile.loading = loadFile.loading || [];
 	loadFile.loadingWait = loadFile.loadingWait || null;
 	loadFile.loaded = loadFile.loaded || [];
+	callback = callback || function(){};
 	var key = ""+type+":"+path;
 	if(key in loadFile.loaded) {
 		console.log("serving",type,path,"from cache...");
@@ -404,15 +405,19 @@ function loadFile(type,path,callback) {
 		};
 		doc.send();
 	} else if(type == "audio") {
-		var doc = new XMLHttpRequest();
-		doc.open("GET",path,true);
-		doc.responseType = "arraybuffer";
-		doc.overrideMimeType('text/plain; charset=x-user-defined');
-		doc.onreadystatechange = function() {
-			if (doc.readyState==4 && (!doc.status || doc.status==200))
-				audio.decodeAudioData(doc.response,done);
-		};
-		doc.send();
+		if(!audio)
+			done();
+		else {
+			var doc = new XMLHttpRequest();
+			doc.open("GET",path,true);
+			doc.responseType = "arraybuffer";
+			doc.overrideMimeType('text/plain; charset=x-user-defined');
+			doc.onreadystatechange = function() {
+				if (doc.readyState==4 && (!doc.status || doc.status==200))
+					audio.decodeAudioData(doc.response,done);
+			};
+			doc.send();
+		}
 	} else
 		console.log("unsupported type",type,path);
 }
@@ -423,6 +428,7 @@ function randomSound(list) {
 }
 
 function playSound(clip,volume) {
+	if(!clip) return;
 	var source = audio.createBufferSource();
 	source.buffer = clip;
 	if(volume) {

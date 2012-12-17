@@ -102,8 +102,8 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				rotation = mat4_identity();
 			for(var path in section.path) {
 				path = section.path[path];
-				if(path[0] > pathTime) {
-					pathTime = (pathTime-prev[0]) / (path[0]-prev[0]);
+				if(path[0] >= pathTime) {
+					pathTime = 1 - ((pathTime-prev[0]) / (path[0]-prev[0]));
 					section.exactX = section.w/2+path[1]-(path[1]-prev[1])*pathTime;
 					section.exactY = section.h/2+path[2]-(path[2]-prev[2])*pathTime;
 					var	scale = section.scale*winScale,
@@ -120,8 +120,10 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			}
 			return section.mvMatrix; // dumb checker
 		},
-		defaultEffectPos: function() {
-			return [section.facing<0? section.tx: section.facing>0? section.tx+section.w: section.cx,section.cy];
+		defaultEffectPos: function(behind) {
+			var facing = section.facing || 0;
+			if(behind) facing = -facing;
+			return [facing<0? section.tx: facing>0? section.tx+section.w: section.cx,section.cy];
 		},
 		move: function(vector) {
 			assert(section.path);
@@ -364,6 +366,8 @@ function game() {
 }
 
 function start() {
+	if(!audio)
+		addMessage(20,"sorry","the new HTML5 audio API is not supported by your browser");
 	if(!sections.player.length ) {
 		addMessage(10,null,"cannot play: we don\'t have a player!");
 		return;
@@ -378,7 +382,7 @@ function start() {
 		if(surfaces[surface].length)
 			tree[surface] = make_tree(surfaces[surface],function(line) { return aabb(line[0],line[1]); });
 	for(var layer in sections)
-		if(sections[layer].length && layer != "enemy" && layer != "player")
+		if(sections[layer].length && layer != "enemy" && layer != "player" && !startsWith(layer,"parallax"))
 			tree[layer] = make_tree(sections[layer],function(section) { return [section.x,section.y,section.x+section.w,section.y+section.h]; });
 	modding = false;
 	playing = true;
@@ -408,8 +412,8 @@ function restartGame() {
 }
 
 function updateParallax() {
-	var	x_diff = player.x-player.tx,
-		y_diff = player.y-player.ty,
+	var	x_diff = player.tx-player.x,
+		y_diff = player.ty-player.y,
         	po0_x_distance = x_diff * 0.2,
         	po1_x_distance = x_diff * 0.1,
         	po0_y_distance = y_diff * 0.2,
@@ -452,6 +456,7 @@ function render() {
 				if(keys[38] && !keys[40]) { // up; jump
 					player.zone = "air";
 					player.vector = [vector[0],5];
+					doEffect("jump",player.defaultEffectPos(true));
 				}
 			}
 			if(player.zone == "air") {
@@ -481,7 +486,7 @@ function render() {
 						if(hit.dead) continue;
 						var r = Math.min(hit.w/2,hit.h/2);
 						if(aabb_circle_intersects(player.aabb,[hit.x+r,hit.y+r],r)) {
-							console.log("took",hit);
+							doEffect("collect",player.defaultEffectPos());
 							hit.dead = true;
 						}
 					}
@@ -498,7 +503,8 @@ function render() {
 	if(playing)
 		updateParallax();
 	var pathTime = 1 - ((lastTick-t) / tickMillis); // now as fraction of next step
-	assert(pathTime >= 0 && pathTime < 1,[lastTick,t,tickMillis,pathTime]);
+	pathTime = Math.min(1,Math.max(0,pathTime));
+	//assert(pathTime >= 0 && pathTime < 1,[lastTick,t,tickMillis,pathTime]);
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 	var playerMatrix;
@@ -545,4 +551,19 @@ function render() {
 
 function doEffect(cause,pt) {
 	console.log(cause,pt);
+	doEffect.last = doEffect.last || {};
+	var t = now();
+	if(doEffect.last[cause] > t)
+		return;
+	doEffect.last[cause] = t + 500; // max twice a second
+	if(cause == "jump")
+		playSound(getFile("audio","data/Jump4.wav.ogg"));
+	else if(cause == "collect")
+		playSound(getFile("audio","data/Pickup_Coin12.wav.ogg"));
 }
+
+loadFile("audio","data/Explosion5.wav.ogg");
+loadFile("audio","data/Hit_Hurt71.wav.ogg");
+loadFile("audio","data/Jump4.wav.ogg");
+loadFile("audio","data/Pickup_Coin12.wav.ogg");
+
