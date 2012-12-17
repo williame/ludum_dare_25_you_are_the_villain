@@ -551,6 +551,10 @@ function render() {
 				gl.clear(gl.DEPTH_BUFFER_BIT);
 				first = false;
 			}
+			if(section.layer == "enemy" && !section.activated) {
+				section.activated = true;
+				activateAI(section);
+			}
 			mvMatrix = section === player && playerMatrix? 
 				playerMatrix:
 				section.getMvMatrix(pathTime);
@@ -602,7 +606,6 @@ function updateScoreUI() {
 				left = 150;
 				height = 64;
 				var width = cat.width/cat.height * height;
-				console.log("cat",cat,width);
 				ctx.drawRect(cat,[1,1,1,1],
 					left,canvas.height-bottom-height,left+width*lives,canvas.height-bottom,
 					0,0,lives,1);
@@ -653,3 +656,8 @@ loadFile("audio","data/Hit_Hurt71.wav.ogg");
 loadFile("audio","data/Jump4.wav.ogg");
 loadFile("audio","data/Pickup_Coin12.wav.ogg");
 
+function activateAI(unit) {
+	if(unit.asset.filename == "data/goatrun.g3d") {
+		console.log("WILL: activating goat");
+	} // else if...
+}
