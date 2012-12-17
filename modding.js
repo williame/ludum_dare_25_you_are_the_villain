@@ -97,7 +97,7 @@ function startModding() {
 	modding = true;
 	playing = false;
 	resetLevel();
-	if(modMenu.mode == "play")
+	if(!modMenu.mode || modMenu.mode == "play")
 		modMenu.setMode("add");
 	modMenu.show();
 	if(!debugCtx)

@@ -22,10 +22,16 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 	var	undefined,
 		section = {
 		layer: layer,
+		z: layerNames.indexOf(layer),
 		scale: scale||1,
 		animSpeed: animSpeed||1000,
 		asset: asset,
 		ready: false,
+		x: NaN, y:NaN,
+		w: NaN, h: NaN,
+		cx: NaN, cy: NaN,
+		ofs: null,
+		mMatrix: null, mvMatrix: null,
 		setPos: function(x,y) {
 			section.tx = x;
 			section.ty = y;
@@ -62,41 +68,56 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				clearTimeout(section.readyCallback);
 				section.readyCallback = null;
 			}
-			var	scale = section.scale*winScale,
-				bounds = asset.art.bounds,
-				size = vec3_sub(bounds[1],bounds[0]);
-			section.w = size[0] * scale;
-			section.h = size[1] * scale;
+			if(!section.mMatrix) {
+				var	scale = section.scale*winScale,
+					bounds = asset.art.bounds,
+					size = vec3_sub(bounds[1],bounds[0]);
+				section.w = size[0] * scale;
+				section.h = size[1] * scale;
+				section.ofs = vec3_neg(vec3_add(bounds[0],vec3_scale(size,0.5)));
+				section.mMatrix = mat4_multiply(mat4_scale(scale),mat4_translation([section.ofs[0],section.ofs[1],0]));
+			}
 			section.aabb = [x,y,x+section.w,y+section.h];
-			section.mvMatrix = mat4_multiply(
-				mat4_translation([x,y,0]),
-				mat4_multiply(mat4_scale(scale),
-					mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
+			section.cx = x+section.w/2;
+			section.cy = y+section.h/2;
+			section.mvMatrix = null;
 			if(modding)
 				saveLevel();
 		},
 		getMvMatrix: function(pathTime) {
-			if(!section.path || float_zero(pathTime))
+			if(!section.path || float_zero(pathTime)) {
+				if(!section.mvMatrix)
+					section.mvMatrix = mat4_multiply(
+						mat4_translation([section.cx,section.cy,0]),
+						section.mMatrix);
 				return section.mvMatrix;
+			}
 			assert(pathTime >= 0 && pathTime < 1,pathTime);
 			var start = section.path[0], prev = start, mvMatrix = null;
 			assert(start[0] == 0);
-			assert(section.path[section.path.length-1][0] == 1);
+			assert(section.path[section.path.length-1][0] == 1,section.path);
+			var facing;
+			if(self.facing)
+				rotation = mat4_rotation(self.facing*Math.PI/2,[0,1,0]);
+			else
+				rotation = mat4_identity();
 			for(var path in section.path) {
 				path = section.path[path];
 				if(path[0] > pathTime) {
 					pathTime = (pathTime-prev[0]) / (path[0]-prev[0]);
 					var translation = [
-						path[1]-(path[1]-prev[1])*pathTime,
-						path[2]-(path[2]-prev[2])*pathTime,
+						section.w/2+path[1]-(path[1]-prev[1])*pathTime,
+						section.h/2+path[2]-(path[2]-prev[2])*pathTime,
 						0];
 					var	scale = section.scale*winScale,
 						bounds = asset.art.bounds,
-						size = vec3_sub(bounds[1],bounds[0]);
+						size = vec3_sub(bounds[1],bounds[0]),
+						ofs = vec3_neg(vec3_add(bounds[0],vec3_scale(size,0.5)));
 					return mat4_multiply(
-						mat4_translation(translation),
-						mat4_multiply(mat4_scale(scale),
-							mat4_translation([-bounds[0][0],-bounds[0][1],-size[2]/2])));
+						mat4_multiply(
+							mat4_translation(translation),
+							rotation),
+						section.mMatrix);
 				}
 				prev = path;
 			}
@@ -104,107 +125,60 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		},
 		move: function(vector) {
 			assert(section.path);
-			var pos = section.path[section.path.length-1];
-			pos = [pos[1],pos[2]]; // easier to have a proper naked vec2 rather than the prefix with the time
+			var prev = section.path[section.path.length-1];
+			var	shrink = section.w*0.25,
+				from_x = prev[1],
+				from_y = prev[2],
+				to_x = prev[1]+vector[0],
+				to_y = prev[2]+vector[1],
+				toBox = [to_x+shrink,to_y,to_x+section.w-shrink,to_y+section.h];
 			// start from whereever we last were
-			section.setPos(pos[0],pos[1]); // we have now reached previous destination
-			section.path = [[0,pos[0],pos[1]]];
-			var	left = pos[0]+vector[0],
-				bottom = pos[1]+vector[1];
-			if(!float_zero(vector[0]) && hitsWall(left,bottom,section.w,section.h)) {
-				left = pos[0];
+			section.setPos(from_x,from_y); // we have now reached previous destination
+			section.path = [[0,from_x,from_y]];
+			self.facing = float_zero(vector[0])? 0: vector[0] < 1? 1: -1;
+			section.moveBox = aabb_join([from_x+shrink,from_y,from_x+section.w-shrink,from_y+section.h],toBox);				
+			if(hitsWall(toBox)) {
+				console.log("splat");
 				section.vector = [0,-gravity];
-				vector[0] = 0;
+				to_x = from_x;
+				to_y = from_y;
 			}
-			var floorLevel = getFloor(left,pos[1],section.w);
+			var floorLevel = getFloor(section.moveBox,Math.max(from_y,to_y));
 			if(floorLevel == null) {
+				console.log("bad floor",section,from_x,from_y,to_x,to_y);
 				restartGame();
 				return;
 			}
 			if(section.zone == "floor") {
-				if(floorLevel != null) {
-					if(floorLevel < bottom-gravity) {
-						console.log("falling!",floorLevel,bottom-gravity);
-						section.zone = "air";
-						section.vector = [vector[0]*0.2,vector[1]*0.5];
-						floorLevel = bottom-gravity;
-					}
-					pos[0] += vector[0];
-					pos[1] = floorLevel;
-				} else
-					restartGame();
+				if(floorLevel < to_y-gravity) {
+					console.log("falling!",floorLevel,to_y);
+					section.zone = "air";
+					section.vector = [vector[0]*0.2,vector[1]*0.5];
+					floorLevel = to_y-gravity;
+				}
+				section.path.push([1,to_x,floorLevel]);
 			} else {
-				var ceilingLevel = getCeiling(left,pos[1]+section.h,section.w);
+				var ceilingLevel = getCeiling(section.moveBox,Math.min(from_y,to_y)+section.h);
 				if(section.zone == "ceiling") {
-					if(ceilingLevel != null) {
-						bottom = Math.min(ceilingLevel-section.h,bottom);
-						pos[0] += vector[0];
-						pos[1] = bottom;
-					}
+					if(ceilingLevel != null)
+						section.path.push([1,to_x,Math.min(ceilingLevel-section.h,to_y)]);
 				} else {
 					assert(section.zone == "air");
-					if(floorLevel != null) { // something to fall onto
-						if(floorLevel >= bottom) {
-							console.log("landing!",floorLevel,bottom);
-							section.zone = "floor";
-							bottom = floorLevel;
-						} else if(ceilingLevel != null) {
-							ceilingLevel -= section.h;
-							if(ceilingLevel < bottom) {
-								console.log("bump!",ceilingLevel);
-								bottom = ceilingLevel;
-								section.vector[1] = 0;
-							}
+					if(floorLevel >= to_y) {
+						console.log("landing!",floorLevel,to_y);
+						section.zone = "floor";
+						to_y = floorLevel;
+					} else if(ceilingLevel != null) {
+						ceilingLevel -= section.h;
+						if(ceilingLevel < to_y) {
+							console.log("bump!",ceilingLevel);
+							to_y = ceilingLevel;
+							section.vector[1] = 0;
 						}
-						pos[0] += vector[0];
-						pos[1] = bottom;
-					} else
-						restartGame();
+					}
+					section.path.push([1,to_x,to_y]);
 				}
 			}
-			/*
-			// which axis are we going to iterate on?
-			var	steps = Math.max(1,Math.ceil(Math.max(Math.abs(vector[0]),Math.abs(vector[1])))),
-				xstep = vector[0] / steps,
-				ystep = vector[1] / steps,
-				vn;
-			for(var step = 0; step<steps; step++) {
-				pos[0] += xstep;
-				pos[1] += ystep;
-				var	aabb,
-					left = pos[0]+section.w*0.25,
-					right = pos[0]+section.w*0.75,
-					hit = null;
-				for(var type in surfaces) { // cache aabbs, quadtree etc?
-					if(type == "wall") {
-						aabb = [left,pos[1],right,pos[1]+section.h];
-					} else if(type == "ceiling") {
-						aabb = [left,pos[1]+section.h*0.7,right,pos[1]+section.h]; // top bit
-					} else if(type == "floor") {
-						aabb = [left,pos[1],right,pos[1]+section.h*0.3]; // bottom bit
-					}
-					var array = surfaces[type];
-					for(var line in array) {
-						line = array[line];
-						if(aabb_line_intersects(aabb,line)) { // hit! for now, stop dead
-							vn = vn || vec2_normalise(vector);
-							var	ln = line_normal(line),
-								lndotv = vec2_dot(ln,vn);
-							if(Math.abs(lndotv) < 0.2) continue;
-							hit = hit || {};
-							hit[type] = hit[type] || [];
-							hit[type].push(line);
-						}
-					}
-				}
-				if(hit) { // all the things we hit
-					pos[0] -= xstep;
-					pos[1] -= ystep;
-					section.path.push([step/steps,pos[0],pos[1]]);
-				}
-			}*/
-			// and go to the new place
-			section.path.push([1,pos[0],pos[1]]);
 		},
 		toJSON: function() {
 			return {
@@ -224,23 +198,27 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 	return section;
 }
 
-function getFloor(x,y,w) {
+function getFloor(box,y) {
 	if(!tree.floor) return null;
-	var	left = x+w*0.25,
-		centre = x+w*0.5,
-		right = x+w*0.75,
+	var	left = box[0],
+		right = box[2],
+		centre = (left+right)/2,
 		nearest = null,
 		floor = [];
-	tree.floor.find([left,tree.floor.box[1],right,tree.floor.box[3]],floor);
+	tree.floor.find([left,tree.floor.box[1],right,box[3]],floor);
 	for(var line in floor) {
 		line = floor[line];
-		var a = Math.min(line[0][0],line[1][0]);
+		var	x1 = line[0][0],
+			x2 = line[1][0],
+			a = Math.min(x1,x2);
 		if(a > right) continue;
-		var b = Math.max(line[0][0],line[1][0]);
+		var b = Math.max(x1,x2);
 		if(b < left || float_equ(a,b)) continue;
 		var i = Math.min(Math.max(a,centre),b);
 		i = (b-i)/(b-a);
-		var h = line[0][1]+(line[1][1]-line[0][1])*i;
+		var	y1 = line[0][1],
+			y2 = line[1][1],
+			h = y1+(y2-y1)*i;
 		if(h > y+maxSloop) continue;
 		if(nearest == null || nearest < h)
 			nearest = h;
@@ -248,23 +226,27 @@ function getFloor(x,y,w) {
 	return nearest;
 }
 
-function getCeiling(x,y,w) {
+function getCeiling(box,y) {
 	if(!tree.ceiling) return null;
-	var	left = x+w*0.25,
-		centre = x+w*0.5,
-		right = x+w*0.75,
+	var	left = box[0],
+		right = box[2],
+		centre = (left+right)/2,
 		nearest = null,
 		ceiling = [];
 	tree.ceiling.find([left,tree.ceiling.box[1],right,tree.ceiling.box[3]],ceiling);
 	for(var line in ceiling) {
 		line = ceiling[line];
-		var a = Math.min(line[0][0],line[1][0]);
+		var	x1 = line[0][0],
+			x2 = line[1][0],
+			a = Math.min(x1,x2);
 		if(a > right) continue;
-		var b = Math.max(line[0][0],line[1][0]);
+		var b = Math.max(x1,x2);
 		if(b < left || float_equ(a,b)) continue;
 		var i = Math.min(Math.max(a,centre),b);
 		i = (b-i)/(b-a);
-		var h = line[0][1]+(line[1][1]-line[0][1])*i;
+		var	y1 = line[0][1],
+			y2 = line[1][1],
+			h = y1+(y2-y1)*i;
 		if(h < y-maxSloop) continue;
 		if(nearest == null || nearest > h)
 			nearest = h;
@@ -272,13 +254,9 @@ function getCeiling(x,y,w) {
 	return nearest;
 }
 
-function hitsWall(x,y,w,h) {
+function hitsWall(box) {
 	if(!tree.wall) return null;
-	var 	left = x+w*0.25,
-		right = x+w*0.75,
-		walls = surfaces.wall,
-		box = [left,y,right,y+h],
-		check = function(line) { return aabb_line_intersects(box,line); };
+	var check = function(line) { return aabb_line_intersects(box,line); };
 	return tree.wall.findOne(box,check);
 }
 
@@ -415,6 +393,7 @@ function resetLevel() {
 }
 
 function restartGame() {
+	console.log(player);
 	alert("an embarrassing error occurred!\n"+
 		"you ran out of floor, somehow...\n"+
 		"(blame the level designer, not the coder ;)\n"+
@@ -504,7 +483,7 @@ function render() {
 			}
 			
 			if(debugCtx) {
-				var playerBox = player.aabb.slice(0);
+				var playerBox = player.moveBox;
 				debugCtx.clear();
 				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
 				debugCtx.finish();
