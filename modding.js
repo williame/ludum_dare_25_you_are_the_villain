@@ -4,8 +4,7 @@ function winMousePos(evt) {
 	return pos;
 }
 
-var	modding = false,
-	surfaceColours = {
+var	surfaceColours = {
 		ceiling: [0.6,0.8,0,1],
 		floor: [0.8,1,0,1],
 		wall: [1,0.6,0.6,1],
@@ -62,7 +61,6 @@ for(var mode in surfaceNames) {
 		modMenu.setMode(this.tag.substring(5));
 	},"mode:"+mode));
 }
-modMenu.setMode("add");
 for(var layer in layerNames) {
 	layer = layerNames[layer];
 	modMenuSections.addChild(UIButton(layer,function() {
@@ -97,14 +95,18 @@ modMenu.ctrl.setPos([10,60]);
 function startModding() {
 	console.log("startModding");
 	modding = true;
+	playing = false;
 	resetLevel();
 	if(modMenu.mode == "play")
 		modMenu.setMode("add");
 	modMenu.show();
-	if(debugCtx) {
-		debugCtx.clear();
-		debugCtx.finish();
-	}
+	if(!debugCtx)
+		debugCtx = UIContext();
+	debugCtx.clear();
+	debugCtx.finish();
+	modMenu.linesCtx.clear();
+	modMenu.drawLines();
+	modMenu.linesCtx.finish();
 }
 
 function modOnLevelLoaded() {

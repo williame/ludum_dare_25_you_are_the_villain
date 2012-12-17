@@ -7,7 +7,9 @@ var	winOrigin = [0,0],
 	maxSloop = 8,
 	tickMillis = 1000/tickFps,
 	newGame = false,
-	debugCtx = UIContext(),
+	modding = false,
+	playing = false,
+	debugCtx,
 	layerNames = ["parallax1","parallax0","scene","treasure","enemy","player"],
 	sections,
 	surfaceNames = ["ceiling","floor","wall"],
@@ -27,7 +29,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		setPos: function(x,y) {
 			section.tx = x;
 			section.ty = y;
-			if(modding) {
+			if(!playing) {
 				section.x = x;
 				section.y = y;
 			}
@@ -356,7 +358,24 @@ function isLoadingComplete() {
 }
 
 function game() {
-	startModding();
+	var	startMenu = UIPanel([
+			UIButton("New Game!",function() {
+					startMenuWin.hide();
+					start();
+			}),
+			UIButton("Level Editor!",function() {
+					startMenuWin.hide();
+					startModding();
+			}),
+			UIButton("Vote for us on Ludum Dare!",function() {
+				window.location.href = "http://www.ludumdare.com/compo";
+			}),
+		],UILayoutRows),
+		startMenuWin = UIWindow(true,startMenu);
+	startMenu.draw = drawLogo;
+	startMenu.layout();
+	startMenu.setPosVisible([(canvas.width-startMenu.width())*0.4, (canvas.height-startMenu.height())*0.75]);
+	startMenuWin.show();
 }
 
 function start() {
@@ -373,6 +392,7 @@ function start() {
 	treeCeiling = make_tree(surfaces.ceiling || []);
 	treeWall = make_tree(surfaces.wall || []);
 	modding = false;
+	playing = true;
 	newGame = true;
 }
 
@@ -429,7 +449,7 @@ function render() {
 				winOrigin[1] += panSpeed;
 			else if(keys[40] && !keys[38]) // down
 				winOrigin[1] -= panSpeed;
-		} else {
+		} else if(playing) {
 			var	speed = 10, vector = [0,0];
 			if(player.zone == "floor") {
 				if(keys[37] && !keys[39]) // left
@@ -448,6 +468,10 @@ function render() {
 					player.vector[1] *= 0.5;
 				else
 					player.vector[1] *= 0.8;
+				if(keys[37] && !keys[39]) // left
+					player.vector[0] = -speed;
+				else if(keys[39] && !keys[37]) // right
+					player.vector[0] = speed;
 				vector[0] = player.vector[0];
 				vector[1] = player.vector[1] * gravity - gravity;
 			}
@@ -464,12 +488,12 @@ function render() {
 		}
 		lastTick += tickMillis;
 	}
-	if(!modding)
+	if(playing)
 		updateParallax();
 	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-	if(player && !modding) {
+	if(playing) {
 		winOrigin[0] = player.tx+player.w/2-canvas.width/2;
 		winOrigin[1] = player.ty+player.h/2-canvas.height/2;
 	}
@@ -489,8 +513,8 @@ function render() {
 			section.asset.art.draw(animTime,pMatrix,mvMatrix,nMatrix,false,false,colour);
 		}
 	}
-	//###if(modding)
+	if(debugCtx) {
 		modMenu.linesCtx.draw(pMatrix);
-	if(debugCtx)
 		debugCtx.draw(pMatrix);
+	}
 }

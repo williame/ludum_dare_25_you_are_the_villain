@@ -113,23 +113,13 @@ function init() {
 			loadFile("image","data/logo_flat.png",function() { splashCtrl.dirty(); });
 			splashCtrl.setSize([canvas.width,canvas.height]);
 			splashCtrl.draw = function(ctx) {
-				var 	logo = getFile("image","data/logo_flat.png"),
-					x, y;
-				if(logo) {
-					x = (canvas.width-logo.width)/2;
-					y = (canvas.height-logo.height)/2;
-					ctx.drawRect(logo,[1,1,1,1],
-						Math.max(x,0),Math.max(y,0),
-						Math.min(x+logo.width,canvas.width),
-						Math.min(y+logo.height,canvas.height),
-						0,0,1,1);
-				}
+				drawLogo(ctx);
 				var font = splashCtrl.getFont();
 				if(!font) return;
 				var	label = "loading...",
-					sz = ctx.measureText(font,label);
-				x = (canvas.width-sz[0])*0.5;
-				y = (canvas.height-sz[1])*0.75;
+					sz = ctx.measureText(font,label),
+					x = (canvas.width-sz[0])*0.5,
+					y = (canvas.height-sz[1])*0.75;
 				ctx.drawText(font,[1,0.7,0.8,1],x,y,label);
 			};
 			splash = UIWindow(false,splashCtrl);
@@ -147,6 +137,21 @@ function init() {
 	loadFile("javascript","glutil.js",loaded());
 	loadFile("javascript","ui.js",loaded());
 	loadFile("javascript","g3d.js",loaded());
+}
+
+function drawLogo(ctx) {
+	ctx.clear();
+	ctx.fillRect([0,0,0,1],0,0,canvas.width,canvas.height);
+	var 	logo = getFile("image","data/logo_flat.png");
+	if(logo) {
+		var	x = (canvas.width-logo.width)/2,
+			y = (canvas.height-logo.height)/2;
+		ctx.drawRect(logo,[1,1,1,1],
+			Math.max(x,0),Math.max(y,0),
+			Math.min(x+logo.width,canvas.width),
+			Math.min(y+logo.height,canvas.height),
+			0,0,1,1);
+	}
 }
 
 function addMessage(secs,from,text,tag) {
