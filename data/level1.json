@@ -5093,8 +5093,8 @@
 				"scale": 1,
 				"animSpeed": 1000,
 				"asset": "data/gem1.g3d",
-				"x": 1606,
-				"y": -226.2
+				"x": 1605,
+				"y": -158.2
 			},
 			{
 				"scale": 1,
@@ -5797,6 +5797,20 @@
 				"asset": "data/goatrun.g3d",
 				"x": 1927.4,
 				"y": 15.800000000000011
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/goatrun.g3d",
+				"x": 1143.2,
+				"y": -355
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/goatrun.g3d",
+				"x": 3825.2,
+				"y": -441
 			}
 		],
 		"player": [
