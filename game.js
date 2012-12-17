@@ -14,7 +14,7 @@ var	winOrigin = [0,0],
 	sections,
 	surfaceNames = ["ceiling","floor","wall"],
 	surfaces,
-	treeCeiling,treeFloor,treeWall,
+	tree,
 	player = null;
 
 function Section(layer,asset,x,y,scale,animSpeed) {
@@ -78,14 +78,14 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		getMvMatrix: function(pathTime) {
 			if(!section.path || float_zero(pathTime))
 				return section.mvMatrix;
-			assert(pathTime >= 0 && pathTime < 1);
+			assert(pathTime >= 0 && pathTime < 1,pathTime);
 			var start = section.path[0], prev = start, mvMatrix = null;
 			assert(start[0] == 0);
 			assert(section.path[section.path.length-1][0] == 1);
 			for(var path in section.path) {
 				path = section.path[path];
 				if(path[0] > pathTime) {
-					pathTime = 1-((pathTime-prev[0]) / (path[0]-prev[0]));
+					pathTime = (pathTime-prev[0]) / (path[0]-prev[0]);
 					var translation = [
 						path[1]-(path[1]-prev[1])*pathTime,
 						path[2]-(path[2]-prev[2])*pathTime,
@@ -100,7 +100,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				}
 				prev = path;
 			}
-			return null; // dumb checker
+			return section.mvMatrix; // dumb checker
 		},
 		move: function(vector) {
 			assert(section.path);
@@ -225,12 +225,13 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 }
 
 function getFloor(x,y,w) {
+	if(!tree.floor) return null;
 	var	left = x+w*0.25,
 		centre = x+w*0.5,
 		right = x+w*0.75,
 		nearest = null,
 		floor = [];
-	treeFloor.find([left,treeFloor.box[1],right,treeFloor.box[3]],floor);
+	tree.floor.find([left,tree.floor.box[1],right,tree.floor.box[3]],floor);
 	for(var line in floor) {
 		line = floor[line];
 		var a = Math.min(line[0][0],line[1][0]);
@@ -248,12 +249,13 @@ function getFloor(x,y,w) {
 }
 
 function getCeiling(x,y,w) {
+	if(!tree.ceiling) return null;
 	var	left = x+w*0.25,
 		centre = x+w*0.5,
 		right = x+w*0.75,
 		nearest = null,
 		ceiling = [];
-	treeCeiling.find([left,treeCeiling.box[1],right,treeCeiling.box[3]],ceiling);
+	tree.ceiling.find([left,tree.ceiling.box[1],right,tree.ceiling.box[3]],ceiling);
 	for(var line in ceiling) {
 		line = ceiling[line];
 		var a = Math.min(line[0][0],line[1][0]);
@@ -271,12 +273,13 @@ function getCeiling(x,y,w) {
 }
 
 function hitsWall(x,y,w,h) {
+	if(!tree.wall) return null;
 	var 	left = x+w*0.25,
 		right = x+w*0.75,
 		walls = surfaces.wall,
 		box = [left,y,right,y+h],
 		check = function(line) { return aabb_line_intersects(box,line); };
-	return treeWall.findOne(box,check);
+	return tree.wall.findOne(box,check);
 }
 
 var levelLoaded = false, levelFilename = "data/level1.json";
@@ -388,9 +391,13 @@ function start() {
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
 	player.zone = "floor";
-	treeFloor = make_tree(surfaces.floor || []);
-	treeCeiling = make_tree(surfaces.ceiling || []);
-	treeWall = make_tree(surfaces.wall || []);
+	tree = {};
+	for(var surface in surfaces)
+		if(surfaces[surface].length)
+			tree[surface] = make_tree(surfaces[surface],function(line) { return aabb(line[0],line[1]); });
+	for(var layer in sections)
+		if(sections[layer].length && layer != "enemy" && layer != "player")
+			tree[layer] = make_tree(sections[layer],function(section) { return [section.x,section.y,section.x+section.w,section.y+section.h]; });
 	modding = false;
 	playing = true;
 	newGame = true;
@@ -403,6 +410,7 @@ function resetLevel() {
 			section.setPos(section.x,section.y);
 			section.path = null;
 			section.vector = [0,0];
+			section.dead = false;
 		}
 }
 
@@ -438,7 +446,7 @@ function render() {
 	var t = now()-startTime;
 	newGame = false;
 	// tick
-	while(lastTick+tickMillis < t) {
+	while(lastTick < t) {
 		if(modding) {
 			var	panSpeed = 20;
 			if(keys[37] && !keys[39]) // left
@@ -478,6 +486,22 @@ function render() {
 
 			player.move(vector);
 			if(newGame) return;
+
+			if(tree.treasure) {
+				var treasure = [];
+				tree.treasure.find(player.aabb,treasure);
+				if(treasure.length) {
+					for(var hit in treasure) {
+						hit = treasure[hit];
+						if(hit.dead) continue;
+						var r = Math.min(hit.w/2,hit.h/2);
+						if(aabb_circle_intersects(player.aabb,[hit.x+r,hit.y+r],r)) {
+							console.log("took",hit);
+							hit.dead = true;
+						}
+					}
+				}
+			}
 			
 			if(debugCtx) {
 				var playerBox = player.aabb.slice(0);
@@ -490,7 +514,8 @@ function render() {
 	}
 	if(playing)
 		updateParallax();
-	var pathTime = 1 - ((t-lastTick) / tickMillis); // now as fraction of next step
+	var pathTime = 1 - ((lastTick-t) / tickMillis); // now as fraction of next step
+	assert(pathTime >= 0 && pathTime < 1,[lastTick,t,tickMillis,pathTime]);
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
 	if(playing) {
@@ -504,7 +529,7 @@ function render() {
 		layer = sections[layer];
 		for(var section in layer) {
 			section = layer[section];
-			if(!section.ready || !aabb_intersects(screenAabb,section.aabb))
+			if(!section.ready || section.dead || !aabb_intersects(screenAabb,section.aabb))
 				continue;
 			mvMatrix = section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));

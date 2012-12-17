@@ -9,7 +9,7 @@ html, body { border:0px;margin:0px;padding:0px; color:white; background-color:bl
 
 <script type="text/javascript">
 
-var gl, canvas, splash, audio, messages, keys = {}, perf, loading = true;
+var gl, canvas, splash, audio, messages, keys = {}, loading = true;
 
 function init() {
 	
@@ -126,8 +126,8 @@ function init() {
 			window.requestAnimFrame(loadLoop);
 			// phase2 loading
 			loadFile("javascript","game.js",function() {
-				perf = new Perf();
-				perf.window().show();
+				//perf = new Perf();
+				//perf.window().show();
 				loaded = Waiter(function() { game(); });
 				loadFile("javascript","assets.js",loaded());
 				loadFile("javascript","collisions.js",loaded());
@@ -225,7 +225,7 @@ function loop() {
 		schedule.run();
 		if(canvas.width && canvas.height) {
 			if(window.render) {
-				(window.perf)
+				if(window.perf)
 					perf.tick();
 				render();
 			}
@@ -456,7 +456,7 @@ window.requestAnimFrame =
 	window.oRequestAnimationFrame ||
 	window.msRequestAnimationFrame ||
 	function(callback) {
-		window.setTimeout(callback, 1/60);
+		window.setTimeout(callback,1000/60);
 	};
 
 </script>

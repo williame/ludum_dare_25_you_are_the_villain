@@ -39,6 +39,12 @@ function aabb_line_intersects(aabb,line) {
 	return Math.max(minY,ay1) <= Math.min(maxY,ay2);
 }
 
+function aabb_circle_intersects(box,pt,radius) {
+	var	dx = pt[0]-Math.max(box[0],Math.min(pt[0],box[2])),
+		dy = pt[1]-Math.max(box[1],Math.min(pt[1],box[3]));
+	return dx*dx+dy*dy < radius*radius;
+}
+
 function line_normal(line) {
 	var dir = vec2_sub(line[1],line[0]);
 	return vec2_normalise([dir[1],-dir[0]]);
@@ -129,20 +135,20 @@ function tree_node(box) {
 	};
 }
 
-function make_tree(lines) {
-	var	box = aabb(lines[0][0],lines[0][1]),
-		boxes = [], line_box;
-	for(var line in lines) {
-		line = lines[line];
-		line_box = aabb(line[0],line[1]);
-		boxes.push(line_box);
-		box = aabb_join(box,line_box);
+function make_tree(items,boxer) {
+	var	box = boxer(items[0]),
+		boxes = [], item_box;
+	for(var item in items) {
+		item = items[item];
+		item_box = boxer(item);
+		boxes.push(item_box);
+		box = aabb_join(box,item_box);
 	}
 	var tree = new tree_node(box);
-	for(var line in lines) {
-		line_box = boxes[line];
-		line = lines[line];
-		tree.add(line,line_box);
+	for(var item in items) {
+		item_box = boxes[item];
+		item = items[item];
+		tree.add(item,item_box);
 	}
 	tree.freeze();
 	return tree;
