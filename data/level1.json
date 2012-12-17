@@ -200,6 +200,146 @@
 					5744.5089292526245,
 					1041.3655566814004
 				]
+			],
+			[
+				[
+					3114,
+					727
+				],
+				[
+					3751.5089292526245,
+					726.3655566814003
+				]
+			],
+			[
+				[
+					2859,
+					-22
+				],
+				[
+					2961,
+					-19
+				]
+			],
+			[
+				[
+					3073,
+					-21
+				],
+				[
+					3305,
+					-19
+				]
+			],
+			[
+				[
+					3422,
+					-20
+				],
+				[
+					3755,
+					-22
+				]
+			],
+			[
+				[
+					3335,
+					59
+				],
+				[
+					3397,
+					60
+				]
+			],
+			[
+				[
+					6733,
+					859
+				],
+				[
+					6074,
+					866
+				]
+			],
+			[
+				[
+					5967,
+					734
+				],
+				[
+					5802,
+					732
+				]
+			],
+			[
+				[
+					6738,
+					680
+				],
+				[
+					6785,
+					679
+				]
+			],
+			[
+				[
+					6783,
+					861
+				],
+				[
+					6895,
+					861
+				]
+			],
+			[
+				[
+					5916,
+					238
+				],
+				[
+					6853,
+					297
+				]
+			],
+			[
+				[
+					3866,
+					283
+				],
+				[
+					4498,
+					286
+				]
+			],
+			[
+				[
+					4790,
+					35
+				],
+				[
+					4928,
+					35
+				]
+			],
+			[
+				[
+					4975,
+					256
+				],
+				[
+					5807,
+					253
+				]
+			],
+			[
+				[
+					3428,
+					-318
+				],
+				[
+					3863,
+					-319
+				]
 			]
 		],
 		"floor": [
@@ -1232,6 +1372,596 @@
 					4818,
 					1009
 				]
+			],
+			[
+				[
+					4753,
+					826
+				],
+				[
+					4781,
+					826
+				]
+			],
+			[
+				[
+					3016,
+					525
+				],
+				[
+					3080,
+					524
+				]
+			],
+			[
+				[
+					3270,
+					536
+				],
+				[
+					3341,
+					537
+				]
+			],
+			[
+				[
+					3159,
+					478
+				],
+				[
+					3222,
+					478
+				]
+			],
+			[
+				[
+					3265,
+					398
+				],
+				[
+					3332,
+					398
+				]
+			],
+			[
+				[
+					3072,
+					306
+				],
+				[
+					3498,
+					305
+				]
+			],
+			[
+				[
+					3025,
+					251
+				],
+				[
+					3073,
+					251
+				]
+			],
+			[
+				[
+					3004,
+					176
+				],
+				[
+					2962,
+					175
+				]
+			],
+			[
+				[
+					3030,
+					104
+				],
+				[
+					3072,
+					103
+				]
+			],
+			[
+				[
+					3006,
+					57
+				],
+				[
+					2962,
+					57
+				]
+			],
+			[
+				[
+					2985,
+					-64
+				],
+				[
+					3052,
+					-65
+				]
+			],
+			[
+				[
+					2859,
+					-147
+				],
+				[
+					3308,
+					-150
+				]
+			],
+			[
+				[
+					3426,
+					-143
+				],
+				[
+					3873,
+					-143
+				]
+			],
+			[
+				[
+					3792,
+					-75
+				],
+				[
+					3825,
+					-75
+				]
+			],
+			[
+				[
+					3826,
+					-26
+				],
+				[
+					3856,
+					-26
+				]
+			],
+			[
+				[
+					3830,
+					31
+				],
+				[
+					3783,
+					30
+				]
+			],
+			[
+				[
+					3827,
+					100
+				],
+				[
+					3855,
+					100
+				]
+			],
+			[
+				[
+					5917,
+					352
+				],
+				[
+					6737,
+					350
+				]
+			],
+			[
+				[
+					6783,
+					587
+				],
+				[
+					6738,
+					586
+				]
+			],
+			[
+				[
+					6787,
+					357
+				],
+				[
+					6898,
+					358
+				]
+			],
+			[
+				[
+					6643,
+					494
+				],
+				[
+					6679,
+					494
+				]
+			],
+			[
+				[
+					6579,
+					418
+				],
+				[
+					6631,
+					419
+				]
+			],
+			[
+				[
+					6528,
+					364
+				],
+				[
+					6720,
+					365
+				]
+			],
+			[
+				[
+					6712,
+					379
+				],
+				[
+					6541,
+					378
+				]
+			],
+			[
+				[
+					6849,
+					731
+				],
+				[
+					6896,
+					732
+				]
+			],
+			[
+				[
+					6854,
+					646
+				],
+				[
+					6895,
+					646
+				]
+			],
+			[
+				[
+					6830,
+					537
+				],
+				[
+					6782,
+					535
+				]
+			],
+			[
+				[
+					6849,
+					456
+				],
+				[
+					6896,
+					456
+				]
+			],
+			[
+				[
+					5978,
+					-192
+				],
+				[
+					6093,
+					-195
+				]
+			],
+			[
+				[
+					6235,
+					-194
+				],
+				[
+					6311,
+					-195
+				]
+			],
+			[
+				[
+					6309,
+					-240
+				],
+				[
+					6453,
+					-239
+				]
+			],
+			[
+				[
+					6454,
+					-193
+				],
+				[
+					6707,
+					-194
+				]
+			],
+			[
+				[
+					6707,
+					-244
+				],
+				[
+					6850,
+					-245
+				]
+			],
+			[
+				[
+					5844,
+					-95
+				],
+				[
+					5977,
+					-93
+				]
+			],
+			[
+				[
+					5844,
+					-95
+				],
+				[
+					5806,
+					-94
+				]
+			],
+			[
+				[
+					4592,
+					-92
+				],
+				[
+					5806,
+					-94
+				]
+			],
+			[
+				[
+					5375,
+					-64
+				],
+				[
+					5739,
+					-64
+				]
+			],
+			[
+				[
+					5600,
+					-30
+				],
+				[
+					5693,
+					-29
+				]
+			],
+			[
+				[
+					5562,
+					36
+				],
+				[
+					5721,
+					36
+				]
+			],
+			[
+				[
+					6094,
+					-244
+				],
+				[
+					6179,
+					-243
+				]
+			],
+			[
+				[
+					6179,
+					-243
+				],
+				[
+					6236,
+					-243
+				]
+			],
+			[
+				[
+					3873,
+					161
+				],
+				[
+					4354,
+					157
+				]
+			],
+			[
+				[
+					4355,
+					124
+				],
+				[
+					4402,
+					124
+				]
+			],
+			[
+				[
+					4404,
+					80
+				],
+				[
+					4449,
+					81
+				]
+			],
+			[
+				[
+					4451,
+					37
+				],
+				[
+					4492,
+					37
+				]
+			],
+			[
+				[
+					4497,
+					-5
+				],
+				[
+					4543,
+					-5
+				]
+			],
+			[
+				[
+					4545,
+					-47
+				],
+				[
+					4589,
+					-48
+				]
+			],
+			[
+				[
+					5864,
+					437
+				],
+				[
+					5805,
+					437
+				]
+			],
+			[
+				[
+					5857,
+					359
+				],
+				[
+					5807,
+					359
+				]
+			],
+			[
+				[
+					5865,
+					239
+				],
+				[
+					5917,
+					239
+				]
+			],
+			[
+				[
+					5862,
+					143
+				],
+				[
+					5923,
+					144
+				]
+			],
+			[
+				[
+					5844,
+					8
+				],
+				[
+					5920,
+					9
+				]
+			],
+			[
+				[
+					6233,
+					6
+				],
+				[
+					6303,
+					7
+				]
+			],
+			[
+				[
+					6296,
+					110
+				],
+				[
+					6567,
+					109
+				]
+			],
+			[
+				[
+					6138,
+					-98
+				],
+				[
+					6211,
+					-97
+				]
+			],
+			[
+				[
+					3311,
+					-451
+				],
+				[
+					3864,
+					-449
+				]
+			],
+			[
+				[
+					3373,
+					-195
+				],
+				[
+					3403,
+					-197
+				]
+			],
+			[
+				[
+					3368,
+					-280
+				],
+				[
+					3401,
+					-280
+				]
+			],
+			[
+				[
+					3335,
+					-356
+				],
+				[
+					3371,
+					-356
+				]
 			]
 		],
 		"wall": [
@@ -1864,6 +2594,516 @@
 					4983.5089292526245,
 					552.3655566814004
 				]
+			],
+			[
+				[
+					3497,
+					599
+				],
+				[
+					3498,
+					305
+				]
+			],
+			[
+				[
+					2957,
+					630
+				],
+				[
+					2961,
+					-19
+				]
+			],
+			[
+				[
+					3072,
+					306
+				],
+				[
+					3073,
+					-21
+				]
+			],
+			[
+				[
+					2957,
+					630
+				],
+				[
+					2989,
+					687
+				]
+			],
+			[
+				[
+					2989,
+					687
+				],
+				[
+					3114,
+					727
+				]
+			],
+			[
+				[
+					3747,
+					321
+				],
+				[
+					3755,
+					-22
+				]
+			],
+			[
+				[
+					3873,
+					161
+				],
+				[
+					3873,
+					-143
+				]
+			],
+			[
+				[
+					3422,
+					-20
+				],
+				[
+					3421,
+					25
+				]
+			],
+			[
+				[
+					3421,
+					25
+				],
+				[
+					3397,
+					60
+				]
+			],
+			[
+				[
+					3305,
+					-19
+				],
+				[
+					3306,
+					22
+				]
+			],
+			[
+				[
+					3306,
+					22
+				],
+				[
+					3335,
+					59
+				]
+			],
+			[
+				[
+					5917,
+					352
+				],
+				[
+					5916,
+					238
+				]
+			],
+			[
+				[
+					6737,
+					489
+				],
+				[
+					6737,
+					350
+				]
+			],
+			[
+				[
+					6737,
+					489
+				],
+				[
+					6736,
+					552
+				]
+			],
+			[
+				[
+					6736,
+					552
+				],
+				[
+					6738,
+					586
+				]
+			],
+			[
+				[
+					6738,
+					680
+				],
+				[
+					6733,
+					859
+				]
+			],
+			[
+				[
+					6074,
+					866
+				],
+				[
+					5966,
+					785
+				]
+			],
+			[
+				[
+					5966,
+					785
+				],
+				[
+					5967,
+					734
+				]
+			],
+			[
+				[
+					5802,
+					732
+				],
+				[
+					5807,
+					253
+				]
+			],
+			[
+				[
+					6783,
+					861
+				],
+				[
+					6785,
+					679
+				]
+			],
+			[
+				[
+					6895,
+					861
+				],
+				[
+					6898,
+					358
+				]
+			],
+			[
+				[
+					6783,
+					587
+				],
+				[
+					6787,
+					357
+				]
+			],
+			[
+				[
+					6853,
+					297
+				],
+				[
+					6850,
+					-245
+				]
+			],
+			[
+				[
+					5977,
+					-93
+				],
+				[
+					5978,
+					-192
+				]
+			],
+			[
+				[
+					6093,
+					-195
+				],
+				[
+					6094,
+					-244
+				]
+			],
+			[
+				[
+					6235,
+					-194
+				],
+				[
+					6236,
+					-243
+				]
+			],
+			[
+				[
+					6311,
+					-195
+				],
+				[
+					6309,
+					-240
+				]
+			],
+			[
+				[
+					6454,
+					-193
+				],
+				[
+					6453,
+					-239
+				]
+			],
+			[
+				[
+					6707,
+					-194
+				],
+				[
+					6707,
+					-244
+				]
+			],
+			[
+				[
+					4354,
+					157
+				],
+				[
+					4355,
+					124
+				]
+			],
+			[
+				[
+					4402,
+					124
+				],
+				[
+					4404,
+					80
+				]
+			],
+			[
+				[
+					4449,
+					81
+				],
+				[
+					4451,
+					37
+				]
+			],
+			[
+				[
+					4492,
+					37
+				],
+				[
+					4497,
+					-5
+				]
+			],
+			[
+				[
+					4543,
+					-5
+				],
+				[
+					4545,
+					-47
+				]
+			],
+			[
+				[
+					4589,
+					-48
+				],
+				[
+					4592,
+					-92
+				]
+			],
+			[
+				[
+					4498,
+					286
+				],
+				[
+					4507,
+					222
+				]
+			],
+			[
+				[
+					4507,
+					222
+				],
+				[
+					4543,
+					160
+				]
+			],
+			[
+				[
+					4543,
+					160
+				],
+				[
+					4642,
+					77
+				]
+			],
+			[
+				[
+					4642,
+					77
+				],
+				[
+					4790,
+					35
+				]
+			],
+			[
+				[
+					4782,
+					426
+				],
+				[
+					4799,
+					33
+				]
+			],
+			[
+				[
+					3866,
+					283
+				],
+				[
+					3867,
+					323
+				]
+			],
+			[
+				[
+					3867,
+					323
+				],
+				[
+					3847,
+					356
+				]
+			],
+			[
+				[
+					3847,
+					356
+				],
+				[
+					3801,
+					377
+				]
+			],
+			[
+				[
+					3801,
+					377
+				],
+				[
+					3766,
+					352
+				]
+			],
+			[
+				[
+					3766,
+					352
+				],
+				[
+					3747,
+					321
+				]
+			],
+			[
+				[
+					4975,
+					256
+				],
+				[
+					4935,
+					228
+				]
+			],
+			[
+				[
+					4935,
+					228
+				],
+				[
+					4923,
+					197
+				]
+			],
+			[
+				[
+					4923,
+					197
+				],
+				[
+					4928,
+					35
+				]
+			],
+			[
+				[
+					3308,
+					-150
+				],
+				[
+					3311,
+					-451
+				]
+			],
+			[
+				[
+					3426,
+					-143
+				],
+				[
+					3428,
+					-318
+				]
+			],
+			[
+				[
+					3863,
+					-319
+				],
+				[
+					3864,
+					-449
+				]
 			]
 		]
 	},
@@ -2409,8 +3649,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth_big.png",
-				"x": 5173.5089292526245,
-				"y": -278.8344433185996
+				"x": 5249.5089292526245,
+				"y": -245.8344433185996
 			},
 			{
 				"scale": 0.05,
@@ -2446,6 +3686,69 @@
 				"asset": "data/stainglass.png",
 				"x": 3783.5089292526245,
 				"y": 4.16555668140046
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/stainglass.png",
+				"x": 5780,
+				"y": 349.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/stainglass.png",
+				"x": 6641,
+				"y": 746.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/battlements.g3d",
+				"x": 5949,
+				"y": 838.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/battlements.g3d",
+				"x": 6310,
+				"y": 838.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 5949,
+				"y": 791.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth_big.png",
+				"x": 3455,
+				"y": -1299.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth_big.png",
+				"x": 4481,
+				"y": -1302.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth_big.png",
+				"x": 5496,
+				"y": -1256.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth_big.png",
+				"x": 6517,
+				"y": -1261.2
 			}
 		],
 		"scene": [
@@ -3183,6 +4486,461 @@
 				"asset": "data/hall2.g3d",
 				"x": 4654,
 				"y": 782.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4735,
+				"y": 785.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 2913,
+				"y": 87.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 2913,
+				"y": -157.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 2912,
+				"y": 8.800000000000011
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 2980,
+				"y": -91.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 2932,
+				"y": 43.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3030,
+				"y": 86.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 2937,
+				"y": 161.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3028,
+				"y": 237.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3269,
+				"y": 522.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3147,
+				"y": 462.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3265,
+				"y": 382.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3010,
+				"y": 509.79999999999995
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/stairs2.g3d",
+				"x": 4354,
+				"y": -91.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/throneroom.g3d",
+				"x": 5781,
+				"y": 346.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 5749,
+				"y": 491.79999999999995
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 5754,
+				"y": 286.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/turret.g3d",
+				"x": 6705,
+				"y": 418.79999999999995
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 6736,
+				"y": 353.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_fireplace.g3d",
+				"x": 5982,
+				"y": 478.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 5778,
+				"y": 738.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/throne.g3d",
+				"x": 6527,
+				"y": 349.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 5789,
+				"y": 420.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6756,
+				"y": 519.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6849,
+				"y": 438.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6854,
+				"y": 631.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6849,
+				"y": 719.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter2.g3d",
+				"x": 6145,
+				"y": 634.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter1.g3d",
+				"x": 6276,
+				"y": 634.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 6422,
+				"y": 632.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_banner.g3d",
+				"x": 6148,
+				"y": 495.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_banner2.g3d",
+				"x": 6278,
+				"y": 495.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_banner3.g3d",
+				"x": 6426,
+				"y": 496.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown_hall.g3d",
+				"x": 5856,
+				"y": -200.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 5757,
+				"y": 77.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/tower_part.g3d",
+				"x": 5760,
+				"y": -101.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/bedchamber.g3d",
+				"x": 4843,
+				"y": -101.20000000000005
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/foreground_buttress.g3d",
+				"x": 5865,
+				"y": -199.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 5705,
+				"y": -149.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/pit.g3d",
+				"x": 6093,
+				"y": -254.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/pit.g3d",
+				"x": 6309,
+				"y": -252.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/pit.g3d",
+				"x": 6707,
+				"y": -254.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6131,
+				"y": 0.8000000000000114
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6227,
+				"y": -1.1999999999999886
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6307,
+				"y": -3.1999999999999886
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6439,
+				"y": -3.1999999999999886
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6527,
+				"y": -4.199999999999989
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6611,
+				"y": -4.199999999999989
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6718,
+				"y": -5.199999999999989
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 6788,
+				"y": -1.1999999999999886
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter6.g3d",
+				"x": 5986,
+				"y": 2.8000000000000114
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5032,
+				"y": 75.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5111,
+				"y": 73.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5203,
+				"y": 75.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5309,
+				"y": 73.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5415,
+				"y": 72.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5518,
+				"y": 73.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_pikesshield_lighter5.g3d",
+				"x": 5622,
+				"y": 75.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/platformbase.g3d",
+				"x": 6289,
+				"y": 63.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6137,
+				"y": -111.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 6230,
+				"y": -9.199999999999989
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 5845,
+				"y": -6.199999999999989
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 5863,
+				"y": 128.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 5864,
+				"y": 225.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 5784,
+				"y": 341.8
 			}
 		],
 		"treasure": [
@@ -3295,8 +5053,8 @@
 				"scale": 1,
 				"animSpeed": 1000,
 				"asset": "data/treasure_chest.g3d",
-				"x": 4723,
-				"y": 788.8
+				"x": 4832,
+				"y": 785.8
 			},
 			{
 				"scale": 1,
@@ -3374,6 +5132,447 @@
 				"asset": "data/crownjewel2.g3d",
 				"x": 5648,
 				"y": 929.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3801,
+				"y": 1051.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4051,
+				"y": 1102.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4197,
+				"y": 1103.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4344,
+				"y": 1104.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4485,
+				"y": 1107.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4197,
+				"y": 1069.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4050,
+				"y": 1066.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4345,
+				"y": 1069.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 4484,
+				"y": 1065.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3155,
+				"y": 1413.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3155,
+				"y": 1387.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3154,
+				"y": 1361.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3184,
+				"y": 1360.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3215,
+				"y": 1358.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3155,
+				"y": 1440.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3273,
+				"y": 1357.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3272,
+				"y": 1384.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3272,
+				"y": 1415.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3273,
+				"y": 1442.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3308,
+				"y": 1354.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3332,
+				"y": 1380.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3330,
+				"y": 1417.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3309,
+				"y": 1442.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3395,
+				"y": 1417.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3414,
+				"y": 1438.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3443,
+				"y": 1434.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3430,
+				"y": 1348.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3438,
+				"y": 1401.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3421,
+				"y": 1370.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3404,
+				"y": 1347.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3456,
+				"y": 1347.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3496,
+				"y": 1434.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3497,
+				"y": 1405.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3524,
+				"y": 1436.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3552,
+				"y": 1436.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3501,
+				"y": 1347.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3531,
+				"y": 1395.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3532,
+				"y": 1365.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 6802,
+				"y": 375.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 6854,
+				"y": 375.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 6858,
+				"y": 472.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 6801,
+				"y": 420.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crownjewels3.g3d",
+				"x": 6811,
+				"y": 754.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 5402,
+				"y": -62.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 5988,
+				"y": -192.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5568,
+				"y": 111.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5696,
+				"y": 116.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5631,
+				"y": 117.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crownjewels1.g3d",
+				"x": 6750,
+				"y": -131.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 3799,
+				"y": 239.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 3799,
+				"y": 266.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 3354,
+				"y": -20.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 4432,
+				"y": 199.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 4515,
+				"y": 105.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/gem1.g3d",
+				"x": 4608,
+				"y": 32.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3817,
+				"y": -420.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3769,
+				"y": -361.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3725,
+				"y": -420.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3657,
+				"y": -360.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3607,
+				"y": -417.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3540,
+				"y": -361.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/first_aid.g3d",
+				"x": 3494,
+				"y": -417.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crownjewel2.g3d",
+				"x": 980,
+				"y": -364.2
 			}
 		],
 		"enemy": [],
@@ -3393,6 +5592,27 @@
 				"asset": "data/platformbase.g3d",
 				"x": 4750.5089292526245,
 				"y": 1285.1655566814004
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4753,
+				"y": 786.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 2982,
+				"y": -78.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/step_stone.g3d",
+				"x": 3428,
+				"y": 584.8
 			}
 		]
 	}
