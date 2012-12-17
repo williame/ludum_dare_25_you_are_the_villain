@@ -1162,6 +1162,76 @@
 					5042.5089292526245,
 					1104.3655566814004
 				]
+			],
+			[
+				[
+					3827,
+					848
+				],
+				[
+					3855,
+					848
+				]
+			],
+			[
+				[
+					3783,
+					777
+				],
+				[
+					3828,
+					778
+				]
+			],
+			[
+				[
+					3853,
+					721
+				],
+				[
+					3828,
+					721
+				]
+			],
+			[
+				[
+					3819,
+					673
+				],
+				[
+					3792,
+					673
+				]
+			],
+			[
+				[
+					5311,
+					674
+				],
+				[
+					5384,
+					674
+				]
+			],
+			[
+				[
+					4750,
+					945
+				],
+				[
+					4776,
+					946
+				]
+			],
+			[
+				[
+					4791,
+					1009
+				],
+				[
+					4818,
+					1009
+				]
 			]
 		],
 		"wall": [
@@ -2788,13 +2858,6 @@
 			{
 				"scale": 1,
 				"animSpeed": 1000,
-				"asset": "data/hall2.g3d",
-				"x": 4657.5089292526245,
-				"y": 780.1655566814004
-			},
-			{
-				"scale": 1,
-				"animSpeed": 1000,
 				"asset": "data/battlements.g3d",
 				"x": 4649.5089292526245,
 				"y": 1336.1655566814004
@@ -3078,6 +3141,48 @@
 				"asset": "data/props_fireplace.g3d",
 				"x": 3090.5089292526245,
 				"y": 303.16555668140046
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4786,
+				"y": 906.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4786,
+				"y": 939.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4787,
+				"y": 973.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 4748,
+				"y": 908.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/props_barrel.g3d",
+				"x": 5001,
+				"y": 910.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/hall2.g3d",
+				"x": 4654,
+				"y": 782.8
 			}
 		],
 		"treasure": [
@@ -3185,6 +3290,90 @@
 				"asset": "data/crown2.g3d",
 				"x": 1904,
 				"y": 1140.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 4723,
+				"y": 788.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 5114,
+				"y": 782.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 5000,
+				"y": 786.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 5089,
+				"y": 1168.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown2.g3d",
+				"x": 5091,
+				"y": 1124.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5091,
+				"y": 1079.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5092,
+				"y": 1018.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4970,
+				"y": 1572.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4826,
+				"y": 1573.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4824,
+				"y": 1530.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4972,
+				"y": 1528.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crownjewel2.g3d",
+				"x": 5648,
+				"y": 929.8
 			}
 		],
 		"enemy": [],
