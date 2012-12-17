@@ -93,12 +93,11 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				return section.mvMatrix;
 			}
 			assert(pathTime >= 0 && pathTime < 1,pathTime);
-			var start = section.path[0], prev = start, mvMatrix = null;
+			var start = section.path[0], prev = start, mvMatrix = null, rotation;
 			assert(start[0] == 0);
 			assert(section.path[section.path.length-1][0] == 1,section.path);
-			var facing;
-			if(self.facing)
-				rotation = mat4_rotation(self.facing*Math.PI/2,[0,1,0]);
+			if(section.facing)
+				rotation = mat4_rotation(section.facing*Math.PI/2,[0,1,0]);
 			else
 				rotation = mat4_identity();
 			for(var path in section.path) {
@@ -123,6 +122,9 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			}
 			return section.mvMatrix; // dumb checker
 		},
+		defaultEffectPos: function() {
+			return [section.facing<0? section.tx: section.facing>0? section.tx+section.w: section.cx,section.cy];
+		},
 		move: function(vector) {
 			assert(section.path);
 			var prev = section.path[section.path.length-1];
@@ -135,14 +137,18 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			// start from whereever we last were
 			section.setPos(from_x,from_y); // we have now reached previous destination
 			section.path = [[0,from_x,from_y]];
-			self.facing = float_zero(vector[0])? 0: vector[0] < 1? 1: -1;
-			section.moveBox = aabb_join([from_x+shrink,from_y,from_x+section.w-shrink,from_y+section.h],toBox);				
-			if(hitsWall(toBox)) {
-				console.log("splat");
+			section.facing = float_zero(vector[0])? 0: vector[0] < 1? 1: -1;
+			var splat = hitsWall([toBox[0]+1,toBox[1]+1,toBox[2]-1,toBox[3]-1]);
+			if(splat) {
+				doEffect("splat",section.defaultEffectPos());
+				if(debugCtx)
+					debugCtx.drawLine([1,0,0,1],splat[0][0],splat[0][1],splat[1][0],splat[1][1],2);
 				section.vector = [0,-gravity];
 				to_x = from_x;
-				to_y = from_y;
+				//to_y = from_y;
+				toBox = [to_x+shrink,to_y,to_x+section.w-shrink,to_y+section.h];
 			}
+			section.moveBox = aabb_join([from_x+shrink,from_y,from_x+section.w-shrink,from_y+section.h],toBox);				
 			var floorLevel = getFloor(section.moveBox,Math.max(from_y,to_y));
 			if(floorLevel == null) {
 				console.log("bad floor",section,from_x,from_y,to_x,to_y);
@@ -151,7 +157,7 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			}
 			if(section.zone == "floor") {
 				if(floorLevel < to_y-gravity) {
-					console.log("falling!",floorLevel,to_y);
+					doEffect("falling",section.defaultEffectPos());
 					section.zone = "air";
 					section.vector = [vector[0]*0.2,vector[1]*0.5];
 					floorLevel = to_y-gravity;
@@ -165,13 +171,13 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 				} else {
 					assert(section.zone == "air");
 					if(floorLevel >= to_y) {
-						console.log("landing!",floorLevel,to_y);
+						doEffect("landing",section.defaultEffectPos());
 						section.zone = "floor";
 						to_y = floorLevel;
 					} else if(ceilingLevel != null) {
 						ceilingLevel -= section.h;
 						if(ceilingLevel < to_y) {
-							console.log("bump!",ceilingLevel);
+							doEffect("bump",section.defaultEffectPos());
 							to_y = ceilingLevel;
 							section.vector[1] = 0;
 						}
@@ -256,7 +262,7 @@ function getCeiling(box,y) {
 
 function hitsWall(box) {
 	if(!tree.wall) return null;
-	var check = function(line) { return aabb_line_intersects(box,line); };
+	var check = function(line) { return aabb_line_intersects(box,line)? line: false; };
 	return tree.wall.findOne(box,check);
 }
 
@@ -424,8 +430,10 @@ function updateParallax() {
 function render() {
 	var t = now()-startTime;
 	newGame = false;
+	if(debugCtx)
+		debugCtx.clear();
 	// tick
-	while(lastTick < t) {
+	while(lastTick <= t) {
 		if(modding) {
 			var	panSpeed = 20;
 			if(keys[37] && !keys[39]) // left
@@ -484,9 +492,7 @@ function render() {
 			
 			if(debugCtx) {
 				var playerBox = player.moveBox;
-				debugCtx.clear();
 				debugCtx.drawBox([0,1,0,1],playerBox[0],playerBox[1],playerBox[2],playerBox[3]);
-				debugCtx.finish();
 			}
 		}
 		lastTick += tickMillis;
@@ -503,13 +509,24 @@ function render() {
 	}
 	var	pMatrix = createOrtho2D(winOrigin[0],winOrigin[0]+canvas.width,winOrigin[1],winOrigin[1]+canvas.height,-100,800),
 		mvMatrix, nMatrix, colour, animTime,
-		screenAabb = aabb([winOrigin[0],winOrigin[1]],[winOrigin[0]+canvas.width,winOrigin[1]+canvas.height]);
-	for(var layer in sections) {
-		layer = sections[layer];
-		for(var section in layer) {
-			section = layer[section];
-			if(!section.ready || section.dead || !aabb_intersects(screenAabb,section.aabb))
+		screenBox = aabb([winOrigin[0],winOrigin[1]],[winOrigin[0]+canvas.width,winOrigin[1]+canvas.height]),
+		array;
+	for(var layer in layerNames) {
+		layer = layerNames[layer];
+		if(tree && tree[layer]) {
+			array = [];
+			tree[layer].find(screenBox,array);
+		} else
+			array = sections[layer]; 
+		var first = true; 
+		for(var section in array) {
+			section = array[section];
+			if(!section.ready || section.dead)
 				continue;
+			if(first && section.asset.art.meshes) { // infer is g3d
+				gl.clear(gl.DEPTH_BUFFER_BIT);
+				first = false;
+			}
 			mvMatrix = section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
@@ -518,7 +535,12 @@ function render() {
 		}
 	}
 	if(debugCtx) {
+		debugCtx.finish();
 		modMenu.linesCtx.draw(pMatrix);
 		debugCtx.draw(pMatrix);
 	}
+}
+
+function doEffect(cause,pt) {
+	console.log(cause,pt);
 }

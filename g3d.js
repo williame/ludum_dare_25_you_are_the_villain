@@ -122,7 +122,7 @@ function G3D(filename,readyCallback) {
 		if(g3d.ready && g3d.readyCallbacks)
 			setTimeout(g3d.done,0);
 	};
-	g3d.draw = function(t,pMatrix,mvMatrix,nMatrix,normals,invert,colour) {
+	g3d.draw = function(t,pMatrix,mvMatrix,nMatrix,normals,invert,colour,program) {
 		if(!g3d.ready) return;
 		if(!G3D.program) {
 			G3D.program = createProgram(
@@ -175,20 +175,21 @@ function G3D(filename,readyCallback) {
 			G3D.program.colour = gl.getUniformLocation(G3D.program,"colour");
 			G3D.program.texture = gl.getUniformLocation(G3D.program,"texture");
 		}
-		gl.useProgram(G3D.program);
-		gl.uniformMatrix4fv(G3D.program.pMatrix,false,pMatrix);
-		gl.uniformMatrix4fv(G3D.program.mvMatrix,false,mvMatrix);
-		gl.uniformMatrix4fv(G3D.program.nMatrix,false,nMatrix);
+		program = program || G3D.program;
+		gl.useProgram(program);
+		gl.uniformMatrix4fv(program.pMatrix,false,pMatrix);
+		gl.uniformMatrix4fv(program.mvMatrix,false,mvMatrix);
+		gl.uniformMatrix4fv(program.nMatrix,false,nMatrix);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.uniform1i(G3D.program.texture,0);
+		gl.uniform1i(program.texture,0);
 		gl.frontFace(invert?gl.CW:gl.CCW);
-		gl.uniform4fv(G3D.program.colour,colour||[1,1,1,1]);
+		gl.uniform4fv(program.colour,colour||[1,1,1,1]);
 		t = Math.max(0,Math.min(t,1));
 		var showNormals = normals || g3d.showNormals || false;
 		for(var i=0; i<g3d.meshes.length; i++) {
 			var mesh = g3d.meshes[i];
 			if(!invert || !mesh.twoSided) {
-				mesh.draw(G3D.program,t);
+				mesh.draw(program,t);
 				showNormals |= mesh.showNormals || false;
 			}
 		}

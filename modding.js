@@ -96,6 +96,7 @@ function startModding() {
 	console.log("startModding");
 	modding = true;
 	playing = false;
+	tree = null;
 	resetLevel();
 	if(!modMenu.mode || modMenu.mode == "play")
 		modMenu.setMode("add");
