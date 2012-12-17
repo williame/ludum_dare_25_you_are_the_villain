@@ -720,29 +720,35 @@ loadFile("audio","data/Hit_Hurt71.wav.ogg");
 loadFile("audio","data/Jump4.wav.ogg");
 loadFile("audio","data/Pickup_Coin12.wav.ogg");
 
+function AIBasic(unit,zone) {
+	// things we have to do to make it moveable
+	unit.zone = zone;
+	unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.y]];
+	// and we want to track our last attack time
+	unit.lastAttack = 0;
+	// make it move each tick
+	activeEnemy.push(function(t) {
+		// do we want to go left or right?
+		var dir = player.tx - unit.tx;
+		dir = dir<0? -1: dir>0? 1: 0;
+		// have we collided with the player?
+		if(aabb_intersects(player.aabb,unit.aabb)) {
+			if(unit.lastAttack<t) {
+				unit.lastAttack = t + 3000; // one life taken every 3 seconds
+				doEffect("hurt",player.defaultEffectPos(dir < 0));
+			}
+		} else {
+			// go that way
+			unit.move([dir*3, zone=="ceiling"? gravity: -gravity]);
+		}
+	});
+}
+
 function activateAI(unit) {
 	console.log("activating AI",unit.asset.filename);
 	if(unit.asset.filename == "data/goatrun.g3d") {
-		// things we have to do to make it moveable
-		unit.zone = "floor";
-		unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.y]];
-		// and we want to track our last attack time
-		unit.lastAttack = 0;
-		// make it move each tick
-		activeEnemy.push(function(t) {
-			// do we want to go left or right?
-			var dir = player.tx - unit.tx;
-			dir = dir<0? -1: dir>0? 1: 0;
-			// have we collided with the player?
-			if(aabb_intersects(player.aabb,unit.aabb)) {
-				if(unit.lastAttack<t) {
-					unit.lastAttack = t + 3000; // one life taken every 3 seconds
-					doEffect("hurt",player.defaultEffectPos(dir < 0));
-				}
-			} else {
-				// go that way
-				unit.move([dir*3,-gravity]);
-			}
-		});
+		AIBasic(unit,"floor");
+	} else if(unit.asset.filename == "data/spider.g3d") {
+		AIBasic(unit,"ceiling");
 	} // else if...
 }
