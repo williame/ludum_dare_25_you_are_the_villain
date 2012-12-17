@@ -553,8 +553,10 @@ function render() {
 		if(tree && tree[layer]) {
 			array = [];
 			tree[layer].find(screenBox,array);
-		} else
-			array = sections[layer]; 
+		} else if(sections && sections[layer])
+			array = sections[layer];
+		else
+			continue;
 		var first = true; 
 		for(var section in array) {
 			section = array[section];
