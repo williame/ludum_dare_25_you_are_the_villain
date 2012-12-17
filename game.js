@@ -25,6 +25,8 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 		z: layerNames.indexOf(layer),
 		scale: scale||1,
 		animSpeed: animSpeed||1000,
+		animStart: Math.random()*5000,
+		animOnce: false,
 		asset: asset,
 		ready: false,
 		x: NaN, y:NaN,
@@ -318,9 +320,13 @@ function loadLevel(filename) {
 			for(var section in data.sections[layer]) {
 				section = data.sections[layer][section];
 				var asset = getAsset(section.asset);
-				if(asset)
-					Section(layer,asset,section.x,section.y,section.scale,section.animSpeed);
-				else {
+				if(asset) {
+					var s = Section(layer,asset,section.x,section.y,section.scale,section.animSpeed);
+					if(section.asset == "data/castle1start.g3d") {
+						s.animOnce = true;
+						s.animStart = 0;
+					}
+				} else {
 					console.log("cannot get "+section.asset);
 					incomplete = true;
 				}
@@ -387,6 +393,8 @@ function start() {
 	modding = false;
 	playing = true;
 	newGame = true;
+	startTime = now();
+	lastTick = 0;
 }
 
 function resetLevel() {
@@ -538,7 +546,10 @@ function render() {
 				section.getMvMatrix(pathTime);
 			nMatrix = mat4_inverse(mat4_transpose(mvMatrix));
 			colour = section == modMenu.active? [1,0,0,0.8]: [1,1,1,1];
-			animTime = (t % section.animSpeed) / section.animSpeed;
+			if(section.animOnce)
+				animTime = Math.min(1,Math.max(0,t-section.startTime)/section.animSpeed); //### broken
+			else
+				animTime = ((t+section.animStart) % section.animSpeed) / section.animSpeed;
 			section.asset.art.draw(animTime,pMatrix,mvMatrix,nMatrix,false,false,colour);
 		}
 	}
