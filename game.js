@@ -15,6 +15,7 @@ var	winOrigin = [0,0],
 	surfaceNames = ["ceiling","floor","wall"],
 	surfaces,
 	tree,
+	lives = 9,
 	player = null;
 
 function Section(layer,asset,x,y,scale,animSpeed) {
@@ -373,7 +374,7 @@ function game() {
 
 function start() {
 	if(!audio)
-		addMessage(20,"sorry","the new HTML5 audio API is not supported by your browser");
+		addMessage(20,"sorry, the new HTML5 audio API is not supported by your browser;","sound effects won\'t play :(");
 	if(!sections.player.length ) {
 		addMessage(10,null,"cannot play: we don\'t have a player!");
 		return;
@@ -393,11 +394,13 @@ function start() {
 	modding = false;
 	playing = true;
 	newGame = true;
-	startTime = now();
-	lastTick = 0;
+	lives = 9;
+	updateScoreUI();
 	var soundtrack = document.getElementById("soundtrack_control");
 	soundtrack.style.display = "block";
 	soundtrack.play();
+	startTime = now();
+	lastTick = 0;
 }
 
 function resetLevel() {
@@ -502,6 +505,7 @@ function render() {
 						if(aabb_circle_intersects(player.aabb,[hit.x+r,hit.y+r],r)) {
 							doEffect("collect",player.defaultEffectPos());
 							hit.dead = true;
+							updateScoreUI();
 						}
 					}
 				}
@@ -565,6 +569,71 @@ function render() {
 		debugCtx.draw(pMatrix);
 	}
 }
+
+function updateScoreUI() {
+	console.log("updateScoreUI");
+	updateScoreUI.collected = 0;
+	updateScoreUI.remaining = 0;
+	if(!updateScoreUI.win) {
+		updateScoreUI.ctrl = UIComponent();
+		updateScoreUI.ctrl.draw = function(ctx) {
+			var	swagbag = getFile("image","data/swagbag.png"),
+				cat = getFile("image","data/cats_life.png");
+				left = 10,
+				bottom = 10,
+				height = 48,
+				font = updateScoreUI.ctrl.getFont();
+			if(swagbag) {
+				ctx.drawRect(swagbag,[1,1,1,1],
+					left,canvas.height-bottom-height,left+height,canvas.height-bottom,
+					0,0,1,1);
+			}
+			if(font) {
+				var	text = "swag: "+updateScoreUI.collected,
+					x = 2*left+height,
+					y = canvas.height-bottom-(height-font.lineHeight)/2-font.lineHeight;
+				ctx.drawText(font,[0,0,0,1],x-1,y,  text);
+				ctx.drawText(font,[0,0,0,1],x,  y-1,text);
+				ctx.drawText(font,[0,0,0,1],x,  y+1,text);
+				ctx.drawText(font,[0,0,0,1],x+1,y,  text);
+				ctx.drawText(font,[1,1,1,1],x,  y,  text);
+			}
+			if(cat) {
+				left = 150;
+				height = 64;
+				var width = cat.width/cat.height * height;
+				console.log("cat",cat,width);
+				ctx.drawRect(cat,[1,1,1,1],
+					left,canvas.height-bottom-height,left+width*lives,canvas.height-bottom,
+					0,0,lives,1);
+			}	
+		};
+		updateScoreUI.win = UIWindow(false,updateScoreUI.ctrl);
+	}
+	if(playing)
+		updateScoreUI.win.show();
+	else
+		updateScoreUI.win.hide();
+	// count treasure
+	if(sections) {
+		for(var t in sections.treasure)
+			if(sections.treasure[t].dead)
+				updateScoreUI.collected++;
+			else
+				updateScoreUI.remaining++;
+		//done
+		updateScoreUI.ctrl.dirty();
+	}
+}
+
+loadFile("image","data/swagbag.png",updateScoreUI);
+loadFile("image","data/cats_life.png",function(tex) {
+	gl.bindTexture(gl.TEXTURE_2D,tex);
+	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);
+	gl.bindTexture(gl.TEXTURE_2D,null);
+	updateScoreUI();
+});
 
 function doEffect(cause,pt) {
 	console.log(cause,pt);
