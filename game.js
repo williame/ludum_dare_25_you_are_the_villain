@@ -11,6 +11,7 @@ var	winOrigin = [0,0],
 	sections,
 	surfaceNames = ["ceiling","floor","wall"],
 	surfaces,
+	treeCeiling,treeFloor,treeWall,
 	player = null;
 
 function Section(layer,asset,x,y,scale,animSpeed) {
@@ -213,7 +214,8 @@ function getFloor(x,y,w) {
 		centre = x+w*0.5,
 		right = x+w*0.75,
 		nearest = null,
-		floor = surfaces.floor;
+		floor = [];
+	treeFloor.find([left,treeFloor.box[1],right,treeFloor.box[3]],floor);
 	for(var line in floor) {
 		line = floor[line];
 		var a = Math.min(line[0][0],line[1][0]);
@@ -235,7 +237,8 @@ function getCeiling(x,y,w) {
 		centre = x+w*0.5,
 		right = x+w*0.75,
 		nearest = null,
-		ceiling = surfaces.ceiling;
+		ceiling = [];
+	treeCeiling.find([left,treeCeiling.box[1],right,treeCeiling.box[3]],ceiling);
 	for(var line in ceiling) {
 		line = ceiling[line];
 		var a = Math.min(line[0][0],line[1][0]);
@@ -257,16 +260,8 @@ function hitsWall(x,y,w,h) {
 		right = x+w*0.75,
 		walls = surfaces.wall,
 		box = [left,y,right,y+h],
-		line;
-	for(line in walls) {
-		line = walls[line];
-		if(aabb_intersects(box,aabb(line[0],line[1])) &&
-			aabb_line_intersects(box,line)) {
-			console.log("straight down!",box,line);
-			return true;
-		}
-	}
-	return false;
+		check = function(line) { return aabb_line_intersects(box,line); };
+	return treeWall.findOne(box,check);
 }
 
 var levelLoaded = false, levelFilename = "data/level1.json";
@@ -348,6 +343,9 @@ function start() {
 	player = sections.player[0];
 	player.path = [[0,player.x,player.y],[1,player.x,player.y]]; // start stationary
 	player.zone = "floor";
+	treeFloor = make_tree(surfaces.floor || []);
+	treeCeiling = make_tree(surfaces.ceiling || []);
+	treeWall = make_tree(surfaces.wall || []);
 	modding = false;
 }
 

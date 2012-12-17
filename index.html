@@ -110,16 +110,20 @@ function init() {
 			window.focus();
 			// splash
 			var splashCtrl = UIComponent();
+			loadFile("image","data/logo_flat.png",function() { splashCtrl.dirty(); });
 			splashCtrl.setSize([canvas.width,canvas.height]);
 			splashCtrl.draw = function(ctx) {
 				var 	logo = getFile("image","data/logo_flat.png"),
-					x = (canvas.width-logo.width)/2,
+					x, y;
+				if(logo) {
+					x = (canvas.width-logo.width)/2;
 					y = (canvas.height-logo.height)/2;
-				ctx.drawRect(logo,[1,1,1,1],
-					Math.max(x,0),Math.max(y,0),
-					Math.min(x+logo.width,canvas.width),
-					Math.min(y+logo.height,canvas.height),
-					0,0,1,1);
+					ctx.drawRect(logo,[1,1,1,1],
+						Math.max(x,0),Math.max(y,0),
+						Math.min(x+logo.width,canvas.width),
+						Math.min(y+logo.height,canvas.height),
+						0,0,1,1);
+				}
 				var font = splashCtrl.getFont();
 				if(!font) return;
 				var	label = "loading...",
@@ -143,7 +147,6 @@ function init() {
 	loadFile("javascript","glutil.js",loaded());
 	loadFile("javascript","ui.js",loaded());
 	loadFile("javascript","g3d.js",loaded());
-	loadFile("image","data/logo_flat.png",loaded());
 }
 
 function addMessage(secs,from,text,tag) {
