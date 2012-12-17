@@ -1,1 +1,490 @@
-{}
+{
+	"surfaces": {
+		"ceiling": [],
+		"floor": [],
+		"wall": []
+	},
+	"sections": {
+		"parallax1": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 117,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 1145,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 2173,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 3201,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 4228,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 5256,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 6284,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynight.png",
+				"x": 7312,
+				"y": 1232.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 7312,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 6284,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 7312,
+				"y": 2255.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 6284,
+				"y": 2255.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 5256,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 5256,
+				"y": 2256.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 4228,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 4228,
+				"y": 2256.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 3201,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 3201,
+				"y": 2256.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 2173,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 2173,
+				"y": 2255.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 1145,
+				"y": 1743.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 1145,
+				"y": 2255.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 117,
+				"y": 1744.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightupper.png",
+				"x": 117,
+				"y": 2255.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 117,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 1145,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 2173,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 3200,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 4228,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 5256,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 6284,
+				"y": 720.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/skynightlower.png",
+				"x": 7312,
+				"y": 720.8
+			}
+		],
+		"parallax0": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 117,
+				"y": 765.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 1145,
+				"y": 765.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 2173,
+				"y": 766.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 3201,
+				"y": 767.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 4228,
+				"y": 768.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 5256,
+				"y": 769.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 6284,
+				"y": 767.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 7312,
+				"y": 768.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": -239,
+				"y": 633.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 789,
+				"y": 634.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 1817,
+				"y": 634.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 2844,
+				"y": 634.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 3872,
+				"y": 635.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 4899,
+				"y": 635.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 5927,
+				"y": 635.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background1.png",
+				"x": 6955,
+				"y": 636.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/background2.png",
+				"x": 7982,
+				"y": 636.8
+			}
+		],
+		"behind": [
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": -98,
+				"y": 494.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 414,
+				"y": 494.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": -95,
+				"y": 239.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 419,
+				"y": 240.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 928,
+				"y": 494.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 931,
+				"y": 239.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 1441,
+				"y": 494.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 1445,
+				"y": 238.8
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 415,
+				"y": -13.199999999999989
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": -99,
+				"y": -14.199999999999989
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 926,
+				"y": -10.199999999999989
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 924,
+				"y": -264.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 415,
+				"y": -265.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": -98,
+				"y": -268.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 414,
+				"y": -519.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": -98,
+				"y": -524.2
+			},
+			{
+				"scale": 0.05,
+				"animSpeed": 1000,
+				"asset": "data/earth.png",
+				"x": 928,
+				"y": -518.2
+			}
+		],
+		"scene": [
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/castle1start.g3d",
+				"x": 840,
+				"y": -141.2
+			}
+		],
+		"treasure": [],
+		"enemy": [],
+		"player": [],
+		"in-front": []
+	}
+}
