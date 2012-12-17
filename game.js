@@ -395,6 +395,9 @@ function start() {
 	newGame = true;
 	startTime = now();
 	lastTick = 0;
+	var soundtrack = document.getElementById("soundtrack_control");
+	soundtrack.style.display = "block";
+	soundtrack.play();
 }
 
 function resetLevel() {
