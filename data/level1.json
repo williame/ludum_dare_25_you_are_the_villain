@@ -6468,6 +6468,20 @@
 				"asset": "data/goatrun.g3d",
 				"x": 6450,
 				"y": 353.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 3485,
+				"y": 690.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 1571,
+				"y": 147.8
 			}
 		],
 		"player": [
