@@ -12,7 +12,7 @@ var	winOrigin = [0,0],
 	debugCtx,
 	layerNames = ["parallax1","parallax0","behind","scene","treasure","enemy","player","in-front"],
 	sections,
-	surfaceNames = ["ceiling","floor","wall"],
+	surfaceNames = ["ceiling","floor","wall","spike"],
 	surfaces,
 	tree,
 	lives = 9,
@@ -287,7 +287,15 @@ function loadLevel(filename) {
 	levelFilename = filename;
 	levelLoaded = false;
 	sections = null;
-	loadFile("json",filename,function(data) {
+	var loader = function(data) {
+		if(loadLevel.retry) {
+			clearTimeout(loadLevel.retry);
+			loadLevel.retry = null;
+		}
+		if(!window.modMenu) {
+			loadLevel.retry = setTimeout(function() { loader(data); },200);
+			return;
+		}
 		modMenu.newLineStart = null;
 		modMenu.editLinePoint = null;
 		modMenu.active = null;
@@ -340,7 +348,8 @@ function loadLevel(filename) {
 			levelLoaded = true;
 			modOnLevelLoaded();
 		}
-	});
+	};
+	loadFile("json",filename,loader);
 }
 
 function isLoadingComplete() {
@@ -502,6 +511,7 @@ function render() {
 			player.move(vector);
 			if(newGame) return;
 
+			// collect treasure
 			if(tree.treasure) {
 				var treasure = [];
 				tree.treasure.find(player.aabb,treasure);
@@ -514,6 +524,24 @@ function render() {
 							doEffect("collect",player.defaultEffectPos());
 							hit.dead = true;
 							updateScore();
+						}
+					}
+				}
+			}
+			
+			// get hurt on spikes
+			if(tree.spike && (!tree.spike.lastAttack || tree.spike.lastAttack < lastTick)) {
+				var spikes = [];
+				tree.spike.find(player.aabb,spikes);
+				if(spikes.length) {
+					for(var spike in spikes) {
+						spike = spikes[spike];
+						if(aabb_line_intersects(player.aabb,spike)) {
+							doEffect("hurt",player.defaultEffectPos());
+							tree.spike.lastAttack = lastTick + 3000; // don't hurt more than every 3 seconds
+							lives--;
+							updateScore();
+							break;
 						}
 					}
 				}

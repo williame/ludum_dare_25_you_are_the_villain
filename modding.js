@@ -8,6 +8,7 @@ var	surfaceColours = {
 		ceiling: [0.6,0.8,0,1],
 		floor: [0.8,1,0,1],
 		wall: [1,0.6,0.6,1],
+		spike: [0.9,0.3,0.3,1],
 	},
 	modLineWidth = 2,
 	modMenuMode = UIPanel([UILabel("tool"),
@@ -90,7 +91,7 @@ modMenu.drawLines = function() {
 			modMenu.linesCtx.drawLine(surfaceColours[surface],line[0][0],line[0][1],line[1][0],line[1][1],modLineWidth);
 		}
 };
-modMenu.ctrl.setPos([10,60]);
+modMenu.ctrl.setPosVisible([10,60]);
 
 function startModding() {
 	console.log("startModding");
