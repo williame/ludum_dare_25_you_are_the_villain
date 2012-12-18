@@ -374,18 +374,19 @@ function game() {
 					startMenuWin.hide();
 					start();
 			}),
-			UIButton("Level Editor!",function() {
+			UILabel(""),
+			UIButton("Level Editor! <-- cooler than the game!",function() {
 					startMenuWin.hide();
 					startModding();
 			}),
 			UIButton("Vote for us on Ludum Dare!",function() {
-				window.location.href = "http://www.ludumdare.com/compo";
+				window.location.href = "http://www.ludumdare.com/compo/ludum-dare-25/?action=preview&uid=10313";
 			}),
 		],UILayoutRows),
 		startMenuWin = UIWindow(true,startMenu);
 	startMenu.draw = drawLogo;
 	startMenu.layout();
-	startMenu.setPosVisible([(canvas.width-startMenu.width())*0.4, (canvas.height-startMenu.height())*0.75]);
+	startMenu.setPosVisible([(canvas.width-startMenu.width())*0.4, (canvas.height-startMenu.height())*0.8]);
 	startMenuWin.show();
 }
 
@@ -528,9 +529,10 @@ function render() {
 						if(hit.dead) continue;
 						var r = Math.min(hit.w/2,hit.h/2);
 						if(aabb_circle_intersects(player.aabb,[hit.x+r,hit.y+r],r)) {
-							doEffect("collect",player.defaultEffectPos());
 							hit.dead = true;
-							updateScore();
+							if(hit.asset.filename = "data/first_aid.g3d")
+								lives = Math.min(9,lives+1);
+							doEffect("collect",player.defaultEffectPos());
 						}
 					}
 				}
