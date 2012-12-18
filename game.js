@@ -757,6 +757,7 @@ function AIBasic(unit,zone) {
 	unit.lastAttack = 0;
 	// make it move each tick
 	activeEnemy.push(function(t) {
+		if(unit.dead) return;
 		// do we want to go left or right?
 		var dir = player.tx - unit.tx;
 		dir = dir<0? -1: dir>0? 1: 0;
@@ -787,7 +788,7 @@ function activateAI(unit) {
 		unit.lastAttack = 0;
 		unit.patrol_vector = 1 + Math.random() * 1;
 		unit.patrol_time = 0 ;//+ ();
-		unit.patrol_max_time = 30 + Math.random() * 5;
+		unit.patrol_max_time = 100 + Math.random() * 20;
 		// make it move each tick
 		activeEnemy.push(function(t) {
 			// do we want to go left or right?
