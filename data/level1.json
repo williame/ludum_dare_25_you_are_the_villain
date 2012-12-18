@@ -4258,8 +4258,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth.png",
-				"x": 676,
-				"y": -14.199999999999989
+				"x": 446,
+				"y": -13.199999999999989
 			},
 			{
 				"scale": 0.05,
@@ -4575,13 +4575,6 @@
 				"asset": "data/stainglass.png",
 				"x": 3762,
 				"y": 756.8
-			},
-			{
-				"scale": 1,
-				"animSpeed": 1000,
-				"asset": "data/wall_simple.g3d",
-				"x": 932,
-				"y": 58.80000000000001
 			}
 		],
 		"scene": [
@@ -5830,6 +5823,13 @@
 				"asset": "data/step_stone.g3d",
 				"x": 6151,
 				"y": 401.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/castle1start2.g3d",
+				"x": 841,
+				"y": 56.80000000000001
 			}
 		],
 		"treasure": [
