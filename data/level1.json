@@ -6618,6 +6618,69 @@
 				"asset": "data/spider.g3d",
 				"x": 3068,
 				"y": 702.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 3483,
+				"y": -136.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 5084,
+				"y": -81.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 6447,
+				"y": 119.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/sgt1_run.g3d",
+				"x": 6537,
+				"y": -186.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/sgt1_run.g3d",
+				"x": 6284,
+				"y": 359.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/sgt1_run.g3d",
+				"x": 5066,
+				"y": 1343.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 4036,
+				"y": 911.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 2685,
+				"y": 1079.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/guard_run.g3d",
+				"x": 3365,
+				"y": 326.8
 			}
 		],
 		"player": [
