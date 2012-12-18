@@ -6525,6 +6525,223 @@
 				"asset": "data/first_aid.g3d",
 				"x": 3831,
 				"y": -120.69999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 2968,
+				"y": 975.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 2968,
+				"y": 944.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 2873,
+				"y": 1292.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 2872,
+				"y": 1262.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 2840,
+				"y": 1259.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3774,
+				"y": 1050.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/coin_simple.g3d",
+				"x": 3835,
+				"y": 1051.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4123,
+				"y": 1079.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4274,
+				"y": 1084.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4409,
+				"y": 1082.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4895,
+				"y": 1530.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4898,
+				"y": 1577.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5040,
+				"y": 1525.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 5040,
+				"y": 1580.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4578,
+				"y": 1344.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4552,
+				"y": 1255.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/orb.g3d",
+				"x": 4535,
+				"y": 1174.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown2.g3d",
+				"x": 4787,
+				"y": 681.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 3031,
+				"y": 582.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 3174,
+				"y": 572.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 3103,
+				"y": 624.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 3277,
+				"y": 637.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 2994,
+				"y": 358.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 4472,
+				"y": 133.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 4552,
+				"y": 54.80000000000001
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 5565,
+				"y": 143.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 5626,
+				"y": 145.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/crown1.g3d",
+				"x": 5695,
+				"y": 143.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 6639,
+				"y": 350.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 1374,
+				"y": 910.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/treasure_chest.g3d",
+				"x": 1737,
+				"y": -366.2
 			}
 		],
 		"enemy": [
