@@ -625,6 +625,26 @@ function updateScore() {
 	if(!updateScore.win) {
 		updateScore.ctrl = UIComponent();
 		updateScore.ctrl.draw = function(ctx) {
+			if(updateScore.dead || updateScore.won) {
+				var soundtrack = document.getElementById("soundtrack_control");
+				soundtrack.style.display = "none";
+				soundtrack.pause();
+				ctx.clear();
+				ctx.fillRect([0,0,0,1],0,0,canvas.width,canvas.height);
+				var ending = getFile("image",updateScore.dead? "data/gaol.png": "data/success.png");
+				if(ending) {
+					var	x = (canvas.width-ending.width)/2,
+						y = (canvas.height-ending.height)/2;
+					ctx.drawRect(ending,[1,1,1,1],
+						Math.max(x,0),Math.max(y,0),
+						Math.min(x+ending.width,canvas.width),
+						Math.min(y+ending.height,canvas.height),
+						0,0,1,1);
+				}
+				return;
+			} else if(updateScore.won) {
+				return;
+			}
 			var	swagbag = getFile("image","data/swagbag.png"),
 				cat = getFile("image","data/cats_life.png");
 				left = 10,
@@ -666,8 +686,7 @@ function updateScore() {
 	// dead? LOSE
 	if(lives <= 0) {
 		playing = false;
-		addMessage(0,"###","you died!");
-		//### end screen
+		updateScore.dead = true;
 	}
 	// count treasure
 	if(sections) {
@@ -680,13 +699,14 @@ function updateScore() {
 	// and we've collected it all? WIN
 	if(updateScore.collected && !updateScore.remaining) {
 		playing = false;
-		addMessage(0,"###","you won!");
-		//### end screen
+		updateScore.won = true;
 	}
 	//done
 	updateScore.ctrl.dirty();
 }
 
+loadFile("image","data/gaol.png",updateScore);
+loadFile("image","data/success.png",updateScore);
 loadFile("image","data/swagbag.png",updateScore);
 loadFile("image","data/cats_life.png",function(tex) {
 	gl.bindTexture(gl.TEXTURE_2D,tex);
@@ -723,7 +743,7 @@ loadFile("audio","data/Pickup_Coin12.wav.ogg");
 function AIBasic(unit,zone) {
 	// things we have to do to make it moveable
 	unit.zone = zone;
-	unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.y]];
+	unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.ty]];
 	// and we want to track our last attack time
 	unit.lastAttack = 0;
 	// make it move each tick
