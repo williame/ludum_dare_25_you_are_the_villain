@@ -775,7 +775,35 @@ function activateAI(unit) {
 	console.log("activating AI",unit.asset.filename);
 	if(unit.asset.filename == "data/goatrun.g3d") {
 		AIBasic(unit,"floor");
-	} else if(unit.asset.filename == "data/spider.g3d") {
+	} else /*if(unit.asset.filename == "data/spider.g3d") {
 		AIBasic(unit,"ceiling");
+	} else*/ if(unit.asset.filename == "data/guard_run.g3d" || unit.asset.filename == "data/sgt1_run.g3d") {
+		// things we have to do to make it moveable
+		unit.zone = "floor";
+		unit.path = [[0,unit.tx,unit.ty],[1,unit.tx,unit.y]];
+		// and we want to track our last attack time
+		unit.lastAttack = 0;
+		unit.patrol_vector = 1 + Math.random() * 1;
+		unit.patrol_time = 0 ;//+ ();
+		unit.patrol_max_time = 30 + Math.random() * 5;
+		// make it move each tick
+		activeEnemy.push(function(t) {
+			// do we want to go left or right?
+			if(unit.patrol_time > unit.patrol_max_time) {
+				unit.patrol_vector *= -1;
+				unit.patrol_time = 0;
+			}
+			unit.patrol_time += 1;			
+			// have we collided with the player?
+			if(aabb_intersects(player.aabb,unit.aabb)) {
+				if(unit.lastAttack<t) {
+					unit.lastAttack = t + 3000; // one life taken every 3 seconds
+					doEffect("hurt",player.defaultEffectPos(unit.patrol_direction < 0));
+				}
+			} else {
+				// go that way
+				unit.move([unit.patrol_vector,-gravity]);
+			}
+		});
 	} // else if...
-}
+	}
