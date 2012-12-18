@@ -6481,7 +6481,63 @@
 				"animSpeed": 1000,
 				"asset": "data/spider.g3d",
 				"x": 1571,
-				"y": 147.8
+				"y": 159.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 2286,
+				"y": -94.19999999999999
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 1989,
+				"y": -265.2
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 3068,
+				"y": 702.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 3885,
+				"y": 1074.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 5343,
+				"y": 1487.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 5864,
+				"y": 708.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 5759,
+				"y": 228.8
+			},
+			{
+				"scale": 1,
+				"animSpeed": 1000,
+				"asset": "data/spider.g3d",
+				"x": 4824,
+				"y": 9.800000000000011
 			}
 		],
 		"player": [
