@@ -4237,8 +4237,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth.png",
-				"x": 931,
-				"y": 239.8
+				"x": 957,
+				"y": -16.19999999999999
 			},
 			{
 				"scale": 0.05,
@@ -4258,8 +4258,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth.png",
-				"x": 415,
-				"y": -13.199999999999989
+				"x": 676,
+				"y": -14.199999999999989
 			},
 			{
 				"scale": 0.05,
@@ -4272,8 +4272,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth.png",
-				"x": 926,
-				"y": -10.199999999999989
+				"x": 910,
+				"y": 239.8
 			},
 			{
 				"scale": 0.05,
@@ -4503,8 +4503,8 @@
 				"scale": 0.05,
 				"animSpeed": 1000,
 				"asset": "data/earth_big.png",
-				"x": 389,
-				"y": -155.20000000000005
+				"x": -337,
+				"y": -134.20000000000005
 			},
 			{
 				"scale": 0.05,
@@ -4575,16 +4575,16 @@
 				"asset": "data/stainglass.png",
 				"x": 3762,
 				"y": 756.8
-			}
-		],
-		"scene": [
+			},
 			{
 				"scale": 1,
 				"animSpeed": 1000,
-				"asset": "data/castle1start.g3d",
-				"x": 840,
-				"y": -141.2
-			},
+				"asset": "data/wall_simple.g3d",
+				"x": 932,
+				"y": 58.80000000000001
+			}
+		],
+		"scene": [
 			{
 				"scale": 1,
 				"animSpeed": 1000,
@@ -5830,13 +5830,6 @@
 				"asset": "data/step_stone.g3d",
 				"x": 6151,
 				"y": 401.8
-			},
-			{
-				"scale": 1,
-				"animSpeed": 1000,
-				"asset": "data/castle1start.g3d",
-				"x": 839,
-				"y": 56.80000000000001
 			}
 		],
 		"treasure": [
