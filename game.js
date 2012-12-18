@@ -99,7 +99,11 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			assert(pathTime >= 0 && pathTime < 1,pathTime);
 			var start = section.path[0], prev = start, mvMatrix = null, rotation;
 			assert(start[0] == 0);
-			assert(section.path[section.path.length-1][0] == 1,section.path);
+			if(section.path[section.path.length-1][0] != 1) {
+				console.log("bad path",section);
+				restartGame();
+				return;
+			}
 			if(section.facing)
 				rotation = mat4_rotation(section.facing*Math.PI/2,[0,1,0]);
 			else
@@ -170,7 +174,10 @@ function Section(layer,asset,x,y,scale,animSpeed) {
 			} else {
 				var ceilingLevel = getCeiling(section.moveBox,Math.min(from_y,to_y)+section.h);
 				if(section.zone == "ceiling") {
-					if(ceilingLevel != null)
+					if(ceilingLevel == null) {
+						section.dead = true;
+						return;
+					} else
 						section.path.push([1,to_x,Math.min(ceilingLevel-section.h,to_y)]);
 				} else {
 					assert(section.zone == "air");
@@ -646,7 +653,7 @@ function updateScore() {
 				return;
 			}
 			var	swagbag = getFile("image","data/swagbag.png"),
-				cat = getFile("image","data/cats_life.png");
+				cat = getFile("image","data/cats_life.png"),
 				left = 10,
 				bottom = 10,
 				height = 48,
